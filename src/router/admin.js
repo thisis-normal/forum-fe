@@ -13,11 +13,18 @@ const admin = [{
         path: "users",
         name: "admin-users",
         component: () => import("../views/admin/users/index.vue"),
-    },
+    }
+
+        ,
     {
         path: "userEdit",
         name: "admin-users-edit",
         component: () => import("../views/admin/users/edit.vue"),
+    },
+    {
+        path: "userAdd",
+        name: "admin-users-add",
+        component: () => import("../views/admin/users/add.vue"),
     }
         ,
     {
@@ -32,6 +39,7 @@ const admin = [{
         component: () => import("../views/admin/pinnedPost/index.vue"),
 
     }
-    ]
+    ],
 }];
+
 export default admin;
