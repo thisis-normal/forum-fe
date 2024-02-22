@@ -23,10 +23,10 @@
           />
         </a-space>
       </div>
-      <div
-        class="col-sm-3 d-none d-sm-flex justify-content-sm-end align-items-center text-black"
-      >
-        user
+      <div class="col-sm-3 d-none d-sm-flex align-items-center text-black">
+        <a-button type="primary" shape="circle" @click="showAddPost()"
+          ><PlusOutlined
+        /></a-button>
       </div>
       <div
         class="col-1 d-flex d-sm-none justify-content-center align-items-center"
@@ -44,16 +44,23 @@
     <p>Some contents...</p>
   </a-drawer>
 </template>
-
 <script setup>
 import {
   BarsOutlined,
   UserOutlined,
   LoadingOutlined,
+  PlusOutlined,
 } from "@ant-design/icons-vue";
 import { ref } from "vue";
+import { defineEmits } from "vue";
 
+const emit = defineEmits(["showAddPost"]);
+
+const showAddPost = () => {
+  emit("showAddPost");
+};
 const value = ref("");
+
 const onSearch = (searchValue) => {
   console.log("use value", searchValue);
   console.log("or use this.value", value.value);
