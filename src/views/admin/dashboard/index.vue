@@ -1,11 +1,9 @@
-<template>
-    Dashboard
-</template>
+<template>Dashboard</template>
 <script>
-import {useMenu} from "../../../store/useMenu.js"
+import { useMenu } from "../../../store/useMenu.js";
 export default {
-    setup() {
-        useMenu().onSelectedKeys("admin-dashboard")
-    },
-}
+  setup() {
+    useMenu().onSelectedKeys("admin-dashboard");
+  },
+};
 </script>

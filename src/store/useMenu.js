@@ -9,7 +9,8 @@ export const useMenu = defineStore('menuId', {
     }),
     actions: {
         onSelectedKeys(data) {
-            this.selectedKeys = data;
+            this.selectedKeys[1] = data;
+            console.log(this.selectedKeys)
         },
         onOpenKeys(data) {
             this.openKeys = data;
