@@ -17,7 +17,7 @@ const admin = [{
 
         ,
     {
-        path: "userEdit",
+        path: "users/:id/edit",
         name: "admin-users-edit",
         component: () => import("../views/admin/users/edit.vue"),
     },
