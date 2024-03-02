@@ -23,7 +23,7 @@
       <div
         class="col-6 d-flex flex-column justify-content-center align-items-center"
       >
-        <h1>Login</h1>
+        <h1>Đăng nhập</h1>
         <a-form
           :model="formState"
           name="normal_login"
@@ -35,10 +35,13 @@
             class="m-0 mb-2"
             name="username"
             :rules="[
-              { required: true, message: 'Please input your username!' },
+              {
+                required: true,
+                message: 'Vui lòng nhập tên tài khoản của bạn!',
+              },
             ]"
           >
-            <label for="">Username</label>
+            <label for="">Tài khoản</label>
             <a-input v-model:value="formState.username" size="large">
               <template #prefix>
                 <UserOutlined class="site-form-item-icon" />
@@ -50,10 +53,10 @@
             class="m-0 mb-2"
             name="password"
             :rules="[
-              { required: true, message: 'Please input your password!' },
+              { required: true, message: 'vui lòng nhập mật khẩu của bạn!' },
             ]"
           >
-            <label for="">Password</label>
+            <label for="">Mật khẩu</label>
             <a-input-password v-model:value="formState.password" size="large">
               <template #prefix>
                 <LockOutlined class="site-form-item-icon" />
@@ -63,11 +66,11 @@
           <div class="d-flex" style="justify-content: space-between">
             <div>
               <a-checkbox v-model:checked="formState.remember"
-                >Remember me</a-checkbox
+                >Ghi nhớ tôi</a-checkbox
               >
             </div>
             <div>
-              <a class="login-form-forgot" href="">Forgot password</a>
+              <a class="login-form-forgot" href="">Quên mật khẩu</a>
             </div>
           </div>
 
@@ -84,24 +87,25 @@
             </a-button>
             <div class="">
               <div style="color: rgba(0, 0, 0, 0.5)">
-                Or login with social network
+                Hoặc đăng nhập với tài khoản khác
               </div>
             </div>
-            <a-button
-              type="primary"
-              html-type="submit"
-              class="login-form-button my-2"
-              style="width: 100%"
-              size="large"
-            >
-              Đăng nhập với ULSA
-            </a-button>
+            <router-link to="/login/ulsa">
+              <a-button
+                type="primary"
+                class="login-form-button my-2"
+                style="width: 100%"
+                size="large"
+              >
+                Đăng nhập với ULSA
+              </a-button>
+            </router-link>
             <br />
 
             <span style="color: rgba(0, 0, 0, 0.5)">
-              Don’t have an account?
+              Bạn chưa có tài khoản ?
             </span>
-            <a href="">register now!</a>
+            <a href="/register">Đăng ký ngay!</a>
           </a-form-item>
         </a-form>
       </div>
@@ -114,16 +118,38 @@
   </div>
 </template>
 <script setup>
-import { reactive, computed } from "vue";
+import { reactive, computed, ref } from "vue";
 import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
 const formState = reactive({
   username: "",
   password: "",
   remember: true,
 });
-const onFinish = (values) => {
-  console.log("Success:", values);
+const users = ref([]);
+const onFinish = () => {
+  axios
+    .get("http://127.0.0.1:5173/user.json")
+    .then(function (response) {
+      users.value = response.data;
+      const userArray = users.value;
+      const foundUser = userArray.find(
+        (user) =>
+          user.username === formState.username &&
+          user.password === formState.password
+      );
+      if (!foundUser) {
+        alert(`Username or Password is incorrect.`);
+      } else {
+        sessionStorage.setItem("loggedIn", JSON.stringify(true));
+        window.location.href = "/";
+      }
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    });
 };
+
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };

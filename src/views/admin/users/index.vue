@@ -10,10 +10,12 @@
     <div class="row">
       <div class="col-12">
         <a-table :dataSource="users" :columns="columns" :scroll="{ x: 576 }">
-          <template #bodyCell="{ column }">
+          <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'action'">
-              <router-link :to="{ name: 'admin-users-edit' }">
-                <BtnEdit/>
+              <router-link
+                :to="{ name: 'admin-users-edit', params: { id: record.id } }"
+              >
+                <BtnEdit />
               </router-link>
 
               <BtnDel/>

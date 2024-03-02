@@ -5,6 +5,12 @@ const login = [
 
     },
     {
+        path: "/login/ulsa",
+        component: () => import("../views/frontend/login/ulsa.vue"),
+
+    }
+    ,
+    {
         path: "/register",
         component: () => import("../views/frontend/register/index.vue"),
 

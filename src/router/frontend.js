@@ -4,7 +4,7 @@ const frontend = [
         component: () => import("../layout/frontend.vue"),
         children: [
             {
-                path: "content",
+                path: ":id",
                 name: "content",
                 component: () => import("../views/frontend/content/index.vue")
             },
