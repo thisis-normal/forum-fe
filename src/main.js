@@ -3,7 +3,7 @@
 import { createApp } from 'vue';
 import router from './router';
 import { createPinia } from 'pinia'
-import { Menu, List, Drawer, Button, message, Card, Table, Input, Form, Select, Checkbox, Upload } from 'ant-design-vue';
+import { Menu, List, Drawer, Button, message, Card, Table, InputNumber, Input, Form, Select, Checkbox, Upload } from 'ant-design-vue';
 import App from './App.vue';
 import 'ant-design-vue/dist/reset.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css'
@@ -19,6 +19,7 @@ app.use(Button);
 app.use(Select);
 app.use(Card);
 app.use(Input);
+app.use(InputNumber)
 app.use(Table);
 app.use(Menu);
 app.use(List);

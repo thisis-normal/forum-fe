@@ -17,7 +17,7 @@ const admin = [{
 
         ,
     {
-        path: "userEdit",
+        path: "users/:id/edit",
         name: "admin-users-edit",
         component: () => import("../views/admin/users/edit.vue"),
     },
@@ -32,6 +32,16 @@ const admin = [{
         name: "admin-categorys",
         component: () => import("../views/admin/category/index.vue"),
 
+    },
+    {
+        path: "categoryAdd",
+        name: "admin-category-add",
+        component: () => import("../views/admin/category/add.vue"),
+    },
+    {
+        path: "categoryEdit",
+        name: "admin-category-edit",
+        component: () => import("../views/admin/category/edit.vue"),
     },
     {
         path: "pinnedPost",

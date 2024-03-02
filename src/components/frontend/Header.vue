@@ -23,7 +23,26 @@
           />
         </a-space>
       </div>
-      <div class="col-sm-3 d-none d-sm-flex align-items-center text-black">
+      <div
+        class="col-sm-3 d-none d-sm-flex align-items-center text-black justify-content-end"
+        v-if="!isLogin"
+      >
+        <router-link to="/login" style="text-decoration: none; color: black">
+          <span
+            style="
+              border-right: 1px solid rgba(0, 0, 0);
+              margin-right: 12px;
+              padding-right: 8px;
+            "
+            >Đăng nhập</span
+          >
+        </router-link>
+        <span>Đăng ký</span>
+      </div>
+      <div
+        class="col-sm-3 d-none d-sm-flex align-items-center text-black"
+        v-else
+      >
         <a-button type="primary" shape="circle" @click="showAddPost()"
           ><PlusOutlined
         /></a-button>
@@ -54,6 +73,7 @@ import {
 import { ref } from "vue";
 import { defineEmits } from "vue";
 
+const isLogin = sessionStorage.getItem("loggedIn");
 const emit = defineEmits(["showAddPost"]);
 
 const showAddPost = () => {

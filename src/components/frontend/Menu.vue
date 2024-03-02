@@ -9,7 +9,8 @@
   />
 </template>
 <script setup>
-import { h, ref } from "vue";
+import { h, ref, onMounted } from "vue";
+import axios from "axios";
 import {
   MailOutlined,
   CalendarOutlined,
@@ -21,56 +22,37 @@ import {
   ShoppingOutlined,
   GiftOutlined,
 } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const selectedKeys = ref([]);
 const openKeys = ref([]);
-const items = ref([
-  {
-    key: "1",
-    icon: () => h(HomeOutlined),
-    label: "Trang chủ",
-    title: "Trang chủ",
-  },
-  {
-    key: "2",
-    icon: () => h(TrophyOutlined),
-    label: "Học tập và sự nghiệp",
-    title: "Học tập và sự nghiệp",
-  },
-  {
-    key: "3",
-    icon: () => h(NumberOutlined),
-    label: "Sản phẩm công nghệ",
-    title: "Sản phẩm công nghệ",
-  },
-  ,
-  {
-    key: "4",
-    icon: () => h(AppstoreOutlined),
-    label: "Phần mềm và game",
-    title: "Phần mềm và game",
-  },
-  {
-    key: "5",
-    icon: () => h(LaptopOutlined),
-    label: "Máy tính",
-    title: "Máy tính",
-  },
-  ,
-  {
-    key: "6",
-    icon: () => h(GiftOutlined),
-    label: "Khu vui chơi giải trí",
-    title: "Khu vui chơi giải trí",
-  },
-  ,
-  {
-    key: "7",
-    icon: () => h(ShoppingOutlined),
-    label: "Khu thương mại",
-    title: "Khu thương mại",
-  },
-]);
+const items = ref([]);
+const getCategory = () => {
+  axios
+    .get("http://127.0.0.1:5173/category.json")
+    .then(function (response) {
+      items.value = response.data;
+    })
+    .catch(function (error) {
+      // Xử lý lỗi
+      console.log(error);
+    });
+};
+onMounted(() => {
+  getCategory();
+});
 const handleClick = (menuInfo) => {
-  console.log("click ", menuInfo);
+  if (menuInfo && menuInfo.item.id) {
+    const { id } = menuInfo.item;
+    const menuItem = items.value.find((item) => item.id === id);
+    console.log(menuItem.categoryId);
+    if (menuItem && menuItem.categoryId) {
+      router.push({
+        name: "content",
+        params: { id: menuItem.categoryId },
+      });
+    }
+  }
 };
 </script>

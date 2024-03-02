@@ -23,7 +23,7 @@
       <div
         class="col-6 d-flex flex-column justify-content-center align-items-center"
       >
-        <h1>Đăng nhập</h1>
+        <h1>Đăng nhập với ULSA</h1>
         <a-form
           :model="formState"
           name="normal_login"
@@ -41,32 +41,14 @@
               },
             ]"
           >
-            <label for="">Tài khoản</label>
-            <a-input
-              v-model:value="formState.username"
-              placeholder="Tài khoản"
-              size="large"
-            >
+            <label for="">Mã sinh viên</label>
+            <a-input v-model:value="formState.username" size="large">
+              <template #prefix>
+                <UserOutlined class="site-form-item-icon" />
+              </template>
             </a-input>
           </a-form-item>
-          <a-form-item
-            class="m-0 mb-2"
-            name="username"
-            :rules="[
-              {
-                required: true,
-                message: 'Vui lòng nhập họ và tên của bạn!',
-              },
-            ]"
-          >
-            <label for="">Họ và tên </label>
-            <a-input
-              v-model:value="formState.fullname"
-              placeholder="Họ và tên"
-              size="large"
-            >
-            </a-input>
-          </a-form-item>
+
           <a-form-item
             class="m-0 mb-2"
             name="password"
@@ -75,49 +57,48 @@
             ]"
           >
             <label for="">Mật khẩu</label>
-            <a-input-password
-              v-model:value="formState.password"
-              placeholder="Mật khẩu"
-              size="large"
-            >
+            <a-input-password v-model:value="formState.password" size="large">
+              <template #prefix>
+                <LockOutlined class="site-form-item-icon" />
+              </template>
             </a-input-password>
           </a-form-item>
-          <a-form-item
-            class="m-0 mb-2"
-            name="password"
-            :rules="[
-              {
-                required: true,
-                message: 'vui lòng nhập lại mật khẩu của bạn!',
-              },
-            ]"
-          >
-            <label for="">Xác nhận mật khẩu</label>
-            <a-input-password
-              v-model:value="formState.password"
-              placeholder="Xác nhận mật khẩu"
-              size="large"
-            >
-            </a-input-password>
-          </a-form-item>
+          <div class="d-flex" style="justify-content: space-between">
+            <div>
+              <a-checkbox v-model:checked="formState.remember"
+                >Ghi nhớ tôi</a-checkbox
+              >
+            </div>
+          </div>
+
           <a-form-item>
             <a-button
               :disabled="disabled"
               type="primary"
               html-type="submit"
-              class="login-form-button my-3"
+              class="login-form-button my-2"
               style="width: 100%"
               size="large"
             >
-              Đăng ký
+              Đăng nhập
             </a-button>
 
             <br />
-
-            <span style="color: rgba(0, 0, 0, 0.5)">
-              Bạn đã có tài khoản ?
-            </span>
-            <a href="/login">Đăng nhập ngay!</a>
+            <div class="">
+              <div style="color: rgba(0, 0, 0, 0.5)">
+                Hoặc đăng nhập với tài khoản khác
+              </div>
+            </div>
+            <router-link to="/login">
+              <a-button
+                type="primary"
+                class="login-form-button my-2"
+                style="width: 100%"
+                size="large"
+              >
+                Đăng nhập thường
+              </a-button>
+            </router-link>
           </a-form-item>
         </a-form>
       </div>
