@@ -4,9 +4,14 @@
     v-model:selectedKeys="selectedKeys"
     style="width: 256px; background-color: rgba(0, 0, 0, 0); border: none"
     mode="vertical"
-    :items="items"
     @click="handleClick"
-  />
+  >
+    <a-menu-item v-for="item in items" :key="item.id" :item="item">
+      <MailOutlined class="mx-3" style="font-size: 20px" />
+
+      {{ item.name }}
+    </a-menu-item>
+  </a-menu>
 </template>
 <script setup>
 import { h, ref, onMounted } from "vue";
@@ -30,7 +35,7 @@ const openKeys = ref([]);
 const items = ref([]);
 const getCategory = () => {
   axios
-    .get("http://127.0.0.1:5173/category.json")
+    .get("http://127.0.0.1:8000/api/image")
     .then(function (response) {
       items.value = response.data;
     })
@@ -43,8 +48,9 @@ onMounted(() => {
   getCategory();
 });
 const handleClick = (menuInfo) => {
-  if (menuInfo && menuInfo.item.id) {
-    const { id } = menuInfo.item;
+  console.log(menuInfo);
+  if (menuInfo && menuInfo.item.item.id) {
+    const { id } = menuInfo.item.item;
     const menuItem = items.value.find((item) => item.id === id);
     console.log(menuItem.categoryId);
     if (menuItem && menuItem.categoryId) {

@@ -23,7 +23,7 @@
       <div
         class="col-6 d-flex flex-column justify-content-center align-items-center"
       >
-        <h1>Đăng nhập</h1>
+        <h2>Đăng nhập</h2>
         <a-form
           :model="formState"
           name="normal_login"

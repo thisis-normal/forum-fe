@@ -14,7 +14,7 @@
               border-radius: 30px;
               width: 40px;
               height: 40px;
-              background-color: aqua;
+              background-color: rgb(94, 255, 0);
             "
           ></div>
         </div>
