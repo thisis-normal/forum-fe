@@ -33,9 +33,11 @@ const router = useRouter();
 const selectedKeys = ref([]);
 const openKeys = ref([]);
 const items = ref([]);
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
 const getCategory = () => {
   axios
-    .get("http://127.0.0.1:8000/api/image")
+    .get(urlApi + "image")
     .then(function (response) {
       items.value = response.data;
     })

@@ -12,9 +12,7 @@
         <a-table :dataSource="users" :columns="columns" :scroll="{ x: 576 }">
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'action'">
-              <router-link
-                :to="{ name: 'admin-users-edit', params: { id: record.id } }"
-              >
+              <router-link :to="{ name: 'admin-users-edit', params: { id: record.id } }">
                 <BtnEdit />
               </router-link>
 
@@ -44,6 +42,8 @@ export default {
     BtnDel,
   },
   setup() {
+    const urlApi = import.meta.env.VITE_URL_API;
+    const urlTest = import.meta.env.VITE_URL_TEST;
     useMenu().onSelectedKeys("admin-users");
     const users = ref([]);
     const columns = [

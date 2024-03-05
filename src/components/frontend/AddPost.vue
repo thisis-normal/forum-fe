@@ -33,7 +33,7 @@
       style="max-width: 600px; width: 100%"
     >
       <div class="title d-flex justify-content-center">
-        <h1 class="text-center mt-3">Bài viết</h1>
+        <h1 class="text-center mt-3">Tạo bài viết</h1>
         <a-button
           @click="closeAddPost()"
           shape="circle"
@@ -49,7 +49,18 @@
       <a-form-item>
         <label for="">Tiêu đề bài viết</label>
         <br />
-        <a-input placeholder="Tiêu đề bài viết" size="large" />
+        <div class="d-flex">
+          <a-select
+            v-model:value="value"
+            label-in-value
+            style="width: 120px"
+            :options="options"
+            size="large"
+            @change="handleChange"
+            placeholder="Thể loại"
+          ></a-select>
+          <a-input placeholder="Tiêu đề bài viết" size="large" />
+        </div>
       </a-form-item>
       <a-form-item>
         <label for="">Danh mục bài viết</label>
@@ -67,7 +78,11 @@
       <a-form-item>
         <label for="">Nội dung</label>
         <br />
-        <a-textarea :rows="4" placeholder="Nội dung" />
+        <a-textarea
+          :rows="4"
+          style="max-height: min-content"
+          placeholder="Nội dung"
+        />
       </a-form-item>
 
       <a-form-item>
@@ -103,7 +118,8 @@ import { CloseOutlined } from "@ant-design/icons-vue";
 import { defineEmits } from "vue";
 
 const emit = defineEmits(["closeAddPost"]);
-
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
 const closeAddPost = () => {
   emit("closeAddPost");
 };

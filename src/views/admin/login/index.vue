@@ -20,9 +20,7 @@
       "
       class="row"
     >
-      <div
-        class="col-6 d-flex flex-column justify-content-center align-items-center"
-      >
+      <div class="col-6 d-flex flex-column justify-content-center align-items-center">
         <h2>Đăng nhập với Admin</h2>
         <a-form
           :model="formState"
@@ -52,9 +50,7 @@
           <a-form-item
             class="m-0 mb-2"
             name="password"
-            :rules="[
-              { required: true, message: 'vui lòng nhập mật khẩu của bạn!' },
-            ]"
+            :rules="[{ required: true, message: 'vui lòng nhập mật khẩu của bạn!' }]"
           >
             <label for="">Mật khẩu</label>
             <a-input-password v-model:value="formState.password" size="large">
@@ -79,9 +75,7 @@
         </a-form>
       </div>
       <div class="col-6" style="display: flex; align-items: center">
-        <div
-          style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"
-        ></div>
+        <div style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"></div>
       </div>
     </div>
   </div>
@@ -94,6 +88,8 @@ const formState = reactive({
   password: "",
   remember: true,
 });
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
 const users = ref([]);
 const onFinish = () => {
   axios
@@ -103,8 +99,7 @@ const onFinish = () => {
       const userArray = users.value;
       const foundUser = userArray.find(
         (user) =>
-          user.username === formState.username &&
-          user.password === formState.password
+          user.username === formState.username && user.password === formState.password
       );
       if (!foundUser) {
         alert(`Username or Password is incorrect.`);

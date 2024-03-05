@@ -120,33 +120,70 @@
 <script setup>
 import { reactive, computed, ref } from "vue";
 import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
+import router from "@/router";
 const formState = reactive({
   username: "",
   password: "",
   remember: true,
 });
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
+// const router = useRouter();
 const users = ref([]);
 const onFinish = () => {
   axios
-    .get("http://127.0.0.1:5173/user.json")
+    .post(
+      urlApi + "login",
+      {
+        username: formState.username,
+        password: formState.password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    )
     .then(function (response) {
-      users.value = response.data;
-      const userArray = users.value;
-      const foundUser = userArray.find(
-        (user) =>
-          user.username === formState.username &&
-          user.password === formState.password
-      );
-      if (!foundUser) {
-        alert(`Username or Password is incorrect.`);
+      const status = response.status;
+      console.log(response);
+      if (status === 200) {
+        router.push("/");
+        localStorage.setItem("token", response.data.token);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Đăng nhập thành công!",
+        });
       } else {
-        sessionStorage.setItem("loggedIn", JSON.stringify(true));
-        window.location.href = "/";
+        Swal.fire({
+          title: "Đăng nhập thất bại!",
+          text: "Thông tin tài khoản hoặc mật khẩu không chính xác",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     })
     .catch(function (error) {
-      // handle error
-      console.log(error);
+      Swal.fire({
+        title: "Đăng nhập thất bại!",
+        text: "Thông tin tài khoản hoặc mật khẩu không chính xác",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     });
 };
 

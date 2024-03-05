@@ -118,6 +118,8 @@ const formState = reactive({
   password: "",
   remember: true,
 });
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
 const users = ref([]);
 const onFinish = () => {
   axios

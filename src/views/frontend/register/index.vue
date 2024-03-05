@@ -139,12 +139,18 @@
 <script setup>
 import { reactive, computed, ref } from "vue";
 import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
+import router from "@/router";
 const formState = reactive({
   username: "",
+  fullname: "",
+  email: "",
   password: "",
   confirmPassword: "",
-  remember: true,
 });
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
 const users = ref([]);
 const layout = {
   labelCol: {
@@ -156,25 +162,58 @@ const layout = {
 };
 const onFinish = () => {
   axios
-    .get("http://127.0.0.1:5173/user.json")
+    .post(
+      urlApi + "register",
+      {
+        username: formState.username,
+        fullname: formState.fullname,
+        email: formState.email,
+        password: formState.password,
+        confirmPassword: formState.confirmPassword,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    )
     .then(function (response) {
-      users.value = response.data;
-      const userArray = users.value;
-      const foundUser = userArray.find(
-        (user) =>
-          user.username === formState.username &&
-          user.password === formState.password
-      );
-      if (!foundUser) {
-        alert(`Username or Password is incorrect.`);
+      console.log(response.data, response.status);
+      if (response.status === 201) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Đăng ký thành công!",
+        });
+        router.push("/login");
       } else {
-        sessionStorage.setItem("loggedIn", JSON.stringify(true));
-        window.location.href = "/";
+        Swal.fire({
+          title: "Đăng ký thất bại!",
+          text: "Tài khoản đã tồn tại!",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     })
     .catch(function (error) {
-      // handle error
-      console.log(error);
+      console.error(error);
+      Swal.fire({
+        title: "Đăng ký thất bại!",
+        text: "Tài khoản đã tồn tại!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     });
 };
 
@@ -229,7 +268,11 @@ const validateConfirmPassword = (rule, value, callback) => {
   }
 };
 const validateFullname = (rule, value, callback) => {
-  if (!/^[a-zA-Z0-9\s]*$/.test(value)) {
+  if (
+    !/^[a-zA-Z0-9\sàáạãảăắằẵặẳâấầẫậẩèéẹẽẻêềếễểệìíịĩỉòóọõỏôốồỗộổơớờợỡởùúụũủưứừựữửỳýỵỹỷđÀÁẠÃẢĂẮẰẴẶẲÂẤẦẪẬẨÈÉẸẼẺÊỀẾỄỂỆÌÍỊĨỈÒÓỌÕỎÔỐỒỖỘỔƠỚỜỢỠỞÙÚỤŨỦƯỨỪỰỮỬỲÝỴỸỶĐ]*$/.test(
+      value
+    )
+  ) {
     callback(new Error("Họ và tên không được chứa ký tự đặc biệt!"));
   } else {
     callback();

@@ -45,7 +45,8 @@ export default defineComponent({
   },
   setup() {
     const store = useMenu();
-
+    const urlApi = import.meta.env.VITE_URL_API;
+    const urlTest = import.meta.env.VITE_URL_TEST;
     return {
       ...storeToRefs(store),
     };

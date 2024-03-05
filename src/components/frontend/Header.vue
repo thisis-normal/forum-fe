@@ -25,7 +25,7 @@
       </div>
       <div
         class="col-sm-3 d-none d-sm-flex align-items-center text-black justify-content-end"
-        v-if="!isLogin"
+        v-if="!token"
       >
         <router-link to="/login" style="text-decoration: none; color: black">
           <span
@@ -56,7 +56,7 @@
             ><PlusOutlined
           /></a-button>
         </div>
-        <a-dropdown :trigger="['click']" class="col-5">
+        <a-dropdown :trigger="['click']" style="" class="col-5 hover">
           <a class="ant-dropdown-link" @click.prevent>
             NTC
             <DownOutlined />
@@ -66,7 +66,7 @@
               <a-menu-item key="0"> Thông tin tài khoản </a-menu-item>
 
               <a-menu-divider />
-              <a-menu-item key="2">Log out</a-menu-item>
+              <a-menu-item key="2" @click="logout">Đăng xuất</a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
@@ -99,15 +99,38 @@ import {
 } from "@ant-design/icons-vue";
 import { ref } from "vue";
 import { defineEmits } from "vue";
-
-const isLogin = sessionStorage.getItem("loggedIn");
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
+const token = localStorage.getItem("token");
 const emit = defineEmits(["showAddPost"]);
-
+const router = useRouter();
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
 const showAddPost = () => {
   emit("showAddPost");
 };
 const value = ref("");
-
+console.log(token);
+const logout = () => {
+  axios
+    .post(urlApi + "logout", null, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+    .then(function (response) {
+      console.log(response);
+      if (response.status === 200) {
+        localStorage.removeItem("token");
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  router.push("/login");
+};
 const onSearch = (searchValue) => {
   console.log("use value", searchValue);
   console.log("or use this.value", value.value);

@@ -1,54 +1,85 @@
 <template>
-  <div>{{ route.params.id }}</div>
+  <a-list size="large" :data-source="data">
+    <template #renderItem="{ item }">
+      <a-list-item>
+        <div class="row" style="width: 100%">
+          <div
+            class="col-7 d-flex align-items-center"
+            style="justify-content: space-between"
+          >
+            <CommentOutlined />
+            {{ item.title }}
+            {{ item.description }}
+            {{ item.date }}
+          </div>
+          <div class="col-5">ss</div>
+        </div>
 
-  <div v-for="item in categorys.subcategories" :key="item.id">
-    {{ item.name }}
-  </div>
-
-  {{ categorys.img }}
-  <TextEditor />
+        <!-- Thêm các thuộc tính khác của đối tượng vào đây -->
+      </a-list-item>
+    </template>
+    <template #header>
+      <div>Header</div>
+    </template>
+  </a-list>
 </template>
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
+import { CommentOutlined } from "@ant-design/icons-vue";
 import axios from "axios";
 import { ref, watch } from "vue";
-import TextEditor from "../../../components/frontend/TextEditor.vue";
-// import {}
+
 const route = useRoute();
 const router = useRouter();
-const categorys = ref([]);
-const img = ref([]);
+const urlApi = import.meta.env.VITE_URL_API;
+
+const data = ref([
+  {
+    title: "Title 1",
+    description: "Description 1",
+    date: "2024-01-15",
+    // Thêm các thuộc tính khác của đối tượng vào đây
+  },
+  {
+    title: "Title 2",
+    description: "Description 2",
+    date: "2024-01-16",
+    // Thêm các thuộc tính khác của đối tượng vào đây
+  },
+  // Thêm các đối tượng khác vào đây
+]);
+
 const getImg = () => {
   axios
-    .get("http://127.0.0.1:8000/api/view-image")
+    .get(urlApi + "view-image")
     .then((response) => {
-      img.value = response.data;
-      console.log(response);
+      // Xử lý dữ liệu từ API nếu cần
     })
     .catch((error) => {
       console.log(error);
     });
 };
+
 const getCategory = (categoryId) => {
   axios
-    .get("http://127.0.0.1:8000/api/image")
+    .get(urlApi + "image")
     .then((response) => {
-      categorys.value = response.data.find(
-        (category) => category.categoryId === categoryId
-      );
+      // Xử lý dữ liệu từ API nếu cần
     })
     .catch((error) => {
       console.log(error);
     });
 };
+
+const categoryId = route.params.id;
 watch(
   () => route.params.id,
   (newId, oldId) => {
     getCategory(newId);
   }
 );
-const categoryId = route.params.id;
+
 getCategory(categoryId);
 getImg();
 </script>
