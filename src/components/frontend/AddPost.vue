@@ -54,11 +54,19 @@
             v-model:value="value"
             label-in-value
             style="width: 120px"
-            :options="options"
             size="large"
             @change="handleChange"
             placeholder="Thể loại"
-          ></a-select>
+          >
+            <a-select-option
+              v-for="option in options"
+              :key="option.value"
+              :value="option.value"
+              :style="{ background: option.color }"
+            >
+              <span>{{ option.label }}</span>
+            </a-select-option>
+          </a-select>
           <a-input placeholder="Tiêu đề bài viết" size="large" />
         </div>
       </a-form-item>
@@ -78,22 +86,7 @@
       <a-form-item>
         <label for="">Nội dung</label>
         <br />
-        <a-textarea
-          :rows="4"
-          style="max-height: min-content"
-          placeholder="Nội dung"
-        />
-      </a-form-item>
-
-      <a-form-item>
-        <label for="">Upload</label>
-        <br />
-        <a-upload action="/upload.do" list-type="picture-card">
-          <div>
-            <PlusOutlined />
-            <div style="margin-top: 8px">Upload</div>
-          </div>
-        </a-upload>
+        <TextEditor style="height: 150px" />
       </a-form-item>
       <a-form-item>
         <a-button
@@ -116,7 +109,8 @@ import { ref, reactive } from "vue";
 const componentDisabled = ref(true);
 import { CloseOutlined } from "@ant-design/icons-vue";
 import { defineEmits } from "vue";
-
+import TextEditor from "./TextEditor.vue";
+// import { TextEditor } from "./TextEditor.vue";
 const emit = defineEmits(["closeAddPost"]);
 const urlApi = import.meta.env.VITE_URL_API;
 const urlTest = import.meta.env.VITE_URL_TEST;
@@ -130,10 +124,12 @@ const options = ref([
   {
     value: "jack",
     label: "Jack",
+    color: "#7392ff",
   },
   {
     value: "lucy",
     label: "Lucy",
+    color: "#439222",
   },
   {
     value: "tom",

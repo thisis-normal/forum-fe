@@ -1,9 +1,7 @@
 <template>
   <div class="container-fuild">
     <div class="row align-items-center" style="padding: 1rem">
-      <div
-        class="col-1 d-flex d-sm-none justify-content-center align-items-center"
-      >
+      <div class="col-1 d-flex d-sm-none justify-content-center align-items-center">
         <span @click="showDrawer()"><BarsOutlined /></span>
       </div>
       <div
@@ -41,23 +39,19 @@
           <span>Đăng ký</span>
         </router-link>
       </div>
-      <div
-        class="col-sm-3 d-none d-sm-flex align-items-center text-black row"
-        v-else
-      >
+      <div class="col-sm-3 d-none d-sm-flex align-items-center text-black row" v-else>
         <div class="col-5 d-flex justify-content-end align-items-center">
           <CommentOutlined style="font-size: 20px" />
           <BellOutlined style="font-size: 20px" class="mx-2" />
-          <a-button
-            class=""
-            type="primary"
-            shape="circle"
-            @click="showAddPost()"
+          <a-button class="" type="primary" shape="circle" @click="showAddPost()"
             ><PlusOutlined
           /></a-button>
         </div>
         <a-dropdown :trigger="['click']" style="" class="col-5 hover">
           <a class="ant-dropdown-link" @click.prevent>
+            <a-avatar>
+              <template #icon><UserOutlined /></template>
+            </a-avatar>
             NTC
             <DownOutlined />
           </a>
@@ -71,9 +65,7 @@
           </template>
         </a-dropdown>
       </div>
-      <div
-        class="col-1 d-flex d-sm-none justify-content-center align-items-center"
-      >
+      <div class="col-1 d-flex d-sm-none justify-content-center align-items-center">
         <span @click="showDrawerTk()"><UserOutlined /></span>
       </div>
     </div>

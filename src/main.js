@@ -4,7 +4,7 @@ import { createApp } from 'vue';
 import router from './router';
 import { createPinia } from 'pinia';
 import { QuillEditor } from '@vueup/vue-quill'
-import { Menu, List, Drawer, Dropdown, Button, message, Card, Table, InputNumber, Input, Form, Select, Checkbox, Upload } from 'ant-design-vue';
+import { Menu, List, Drawer, Dropdown, Avatar, Button, message, Card, Table, InputNumber, Input, Form, Select, Checkbox, Upload } from 'ant-design-vue';
 import App from './App.vue';
 
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
@@ -20,6 +20,7 @@ app.component('QuillEditor', QuillEditor)
 app.use(router);
 app.use(createPinia())
 app.use(Button);
+app.use(Avatar);
 app.use(Select);
 app.use(Card);
 app.use(Input);

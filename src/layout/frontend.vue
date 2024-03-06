@@ -20,7 +20,13 @@
         </div>
         <div class="col-sm-6 col-12">
           <!-- <AddPost /> -->
-          <router-view> </router-view>
+          <div
+            class="directional pb-2"
+            style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)"
+          >
+            Trang chủ
+          </div>
+          <router-view style="height: 75vh; overflow: auto"> </router-view>
         </div>
         <div class="col-sm-3 d-none d-sm-flex">
           <a-list style="width: 100%">
