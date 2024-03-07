@@ -134,22 +134,13 @@ const urlTest = import.meta.env.VITE_URL_TEST;
 const users = ref([]);
 const onFinish = () => {
   axios
-    .post(
-      urlApi + "login",
-      {
-        username: formState.username,
-        password: formState.password,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }
-    )
+    .post("login", {
+      username: formState.username,
+      password: formState.password,
+    })
     .then(function (response) {
       const status = response.status;
-      console.log(response);
+      console.log(response.data);
       if (status === 200) {
         router.push("/");
         localStorage.setItem("token", response.data.token);
@@ -166,12 +157,12 @@ const onFinish = () => {
         });
         Toast.fire({
           icon: "success",
-          title: "Đăng nhập thành công!",
+          title: response.data.message,
         });
       } else {
         Swal.fire({
           title: "Đăng nhập thất bại!",
-          text: "Thông tin tài khoản hoặc mật khẩu không chính xác",
+          text: response.data.message,
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -180,7 +171,7 @@ const onFinish = () => {
     .catch(function (error) {
       Swal.fire({
         title: "Đăng nhập thất bại!",
-        text: "Thông tin tài khoản hoặc mật khẩu không chính xác",
+        text: error.response.data.message,
         icon: "error",
         confirmButtonText: "OK",
       });

@@ -39,9 +39,15 @@ const admin = [{
         component: () => import("../views/admin/category/add.vue"),
     },
     {
-        path: "categoryEdit",
+        path: "categorys/:id",
         name: "admin-category-edit",
         component: () => import("../views/admin/category/edit.vue"),
+    },
+
+    {
+        path: "categorys/:id/forum",
+        name: "admin-category-forum",
+        component: () => import("../views/admin/category/category.vue"),
     },
     {
         path: "pinnedPost",

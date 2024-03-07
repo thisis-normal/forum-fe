@@ -149,8 +149,7 @@ const formState = reactive({
   password: "",
   confirmPassword: "",
 });
-const urlApi = import.meta.env.VITE_URL_API;
-const urlTest = import.meta.env.VITE_URL_TEST;
+
 const users = ref([]);
 const layout = {
   labelCol: {
@@ -162,24 +161,15 @@ const layout = {
 };
 const onFinish = () => {
   axios
-    .post(
-      urlApi + "register",
-      {
-        username: formState.username,
-        fullname: formState.fullname,
-        email: formState.email,
-        password: formState.password,
-        confirmPassword: formState.confirmPassword,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }
-    )
+    .post("register", {
+      username: formState.username,
+      fullname: formState.fullname,
+      email: formState.email,
+      password: formState.password,
+      confirmPassword: formState.confirmPassword,
+    })
     .then(function (response) {
-      console.log(response.data, response.status);
+      console.log(response.data, response.message, response.status);
       if (response.status === 201) {
         const Toast = Swal.mixin({
           toast: true,
@@ -194,23 +184,26 @@ const onFinish = () => {
         });
         Toast.fire({
           icon: "success",
-          title: "Đăng ký thành công!",
+          title: response.data.message + "!",
         });
         router.push("/login");
       } else {
+        console.log(response.data.message);
         Swal.fire({
           title: "Đăng ký thất bại!",
-          text: "Tài khoản đã tồn tại!",
+          text: response.data.message + "!",
           icon: "error",
           confirmButtonText: "OK",
         });
       }
     })
     .catch(function (error) {
-      console.error(error);
+      // console.log(response.data.message);
+
+      console.error(error.response.data.message);
       Swal.fire({
         title: "Đăng ký thất bại!",
-        text: "Tài khoản đã tồn tại!",
+        text: error.response.data.message,
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -225,7 +218,9 @@ const disabled = computed(() => {
     formState.username &&
     formState.password &&
     formState.username.length >= 8 &&
-    formState.username.length <= 50
+    formState.username.length <= 50 &&
+    formState.email &&
+    formState.confirmPassword
   );
 });
 const validateUsername = (rule, value, callback) => {

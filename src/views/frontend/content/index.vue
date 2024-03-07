@@ -123,7 +123,7 @@ const data = ref([
 
 const getImg = () => {
   axios
-    .get(urlApi + "view-image")
+    .get("view-image")
     .then((response) => {
       // Xử lý dữ liệu từ API nếu cần
     })

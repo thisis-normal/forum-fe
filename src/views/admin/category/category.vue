@@ -1,5 +1,5 @@
 <template>
-  <a-card title="Danh mục" style="width: 100%">
+  <a-card :title="`Nhóm ${forum.name}`" style="width: 100%">
     <div class="row">
       <div class="col-12 d-flex justify-content-end align-items-center my-3">
         <router-link :to="{ name: 'admin-category-add' }">
@@ -23,17 +23,6 @@
               </router-link>
 
               <BtnDel @click="deleteCategory(record.id)" />
-
-              <router-link
-                :to="{
-                  name: 'admin-category-forum',
-                  params: { id: record.id },
-                }"
-              >
-                <a-button style="background-color: #009c10"
-                  ><UnorderedListOutlined style="color: #fff" />
-                </a-button>
-              </router-link>
             </template>
           </template>
         </a-table>
@@ -53,6 +42,7 @@ import BtnDel from "../../../components/BtnDel.vue";
 
 import { defineComponent, ref } from "vue";
 import { useMenu } from "../../../store/useMenu.js";
+import { useRoute } from "vue-router";
 
 export default {
   components: {
@@ -66,8 +56,9 @@ export default {
   setup() {
     useMenu().onSelectedKeys("admin-categorys");
     const forumGroups = ref([]);
-    const urlApi = import.meta.env.VITE_URL_API;
-    const urlTest = import.meta.env.VITE_URL_TEST;
+    const forum = ref([]);
+
+    const route = useRoute();
     const columns = [
       {
         title: "ID",
@@ -75,7 +66,7 @@ export default {
         key: "id",
       },
       {
-        title: "Tên danh mục",
+        title: "Tên diễn đàn",
         dataIndex: "name",
         key: "name",
       },
@@ -94,6 +85,17 @@ export default {
         fixed: "right",
       },
     ];
+    const getforums = () => {
+      axios
+        .get(`forum-group/${route.params.id}`)
+        .then(function (response) {
+          forum.value = response.data;
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    };
     const getforumGroups = () => {
       axios
         .get("forum-group")
@@ -117,10 +119,15 @@ export default {
         });
     };
     getforumGroups();
+    getforums();
+
     return {
+      getforums,
       forumGroups,
       columns,
       deleteCategory,
+      forum,
+      route,
     };
   },
 };

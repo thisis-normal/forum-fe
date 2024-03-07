@@ -12,7 +12,9 @@
         <a-table :dataSource="users" :columns="columns" :scroll="{ x: 576 }">
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'action'">
-              <router-link :to="{ name: 'admin-users-edit', params: { id: record.id } }">
+              <router-link
+                :to="{ name: 'admin-users-edit', params: { id: record.id } }"
+              >
                 <BtnEdit />
               </router-link>
 
@@ -88,7 +90,7 @@ export default {
     ];
     const getUsers = () => {
       axios
-        .get("http://127.0.0.1:5173/user.json")
+        .get("")
         .then(function (response) {
           users.value = response.data;
         })
