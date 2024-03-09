@@ -13,7 +13,12 @@
       <a-form-item label="Mô tả" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.description" />
       </a-form-item>
-
+      <a-form-item label="Icon" :rules="[{ required: true }]">
+        <a-input v-model:value="formState.forumGroups.icon" />
+      </a-form-item>
+      <a-form-item label="Lấy tên icon">
+        <a href="https://www.antdv.com/components/icon" target="_blank">Tại đây !</a>
+      </a-form-item>
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
         <a-button type="primary" html-type="submit">Thêm mới</a-button>
       </a-form-item>
@@ -24,7 +29,7 @@
 import { reactive } from "vue";
 import router from "@/router";
 import Swal from "sweetalert2";
-
+import { useMenu } from "../../../store/useMenu.js";
 const layout = {
   labelCol: {
     span: 6,
@@ -40,6 +45,7 @@ const formState = reactive({
   forumGroups: {
     name: "",
     description: "",
+    icon: "",
   },
 });
 const onFinish = (values) => {

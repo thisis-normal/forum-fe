@@ -11,5 +11,20 @@
       'video',
       'formula',
     ]"
+    v-model:content="quillContent"
+    @input="handleInput"
   />
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { QuillEditor } from "@vueup/vue-quill";
+
+// Không cần tạo đối tượng Quill tại đây, QuillEditor sẽ tự quản lý
+
+const quillContent = ref(""); // Sử dụng ref để tạo reactive variable cho v-model
+
+const handleInput = () => {
+  console.log(quillContent.value); // Giá trị của nội dung khi có sự thay đổi
+};
+</script>

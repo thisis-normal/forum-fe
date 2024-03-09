@@ -17,7 +17,10 @@ import axios from 'axios';
 window.axios = axios;
 
 axios.defaults.baseURL = import.meta.env.VITE_URL_API;
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+const token = localStorage.getItem("token") || "";
+
+
+axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Content-Type'] = 'application/json';

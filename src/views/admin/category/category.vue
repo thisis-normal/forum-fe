@@ -9,11 +9,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <a-table
-          :dataSource="forumGroups"
-          :columns="columns"
-          :scroll="{ x: 576 }"
-        >
+        <a-table :dataSource="forumGroups" :columns="columns" :scroll="{ x: 576 }">
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'action'">
               <router-link
@@ -31,11 +27,8 @@
   </a-card>
 </template>
 <script>
-import {
-  PlusOutlined,
-  EditOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons-vue";
+import { PlusOutlined, EditOutlined, UnorderedListOutlined } from "@ant-design/icons-vue";
+
 import BtnCreate from "../../../components/BtnCreate.vue";
 import BtnEdit from "../../../components/BtnEdit.vue";
 import BtnDel from "../../../components/BtnDel.vue";

@@ -28,16 +28,16 @@ import {
   GiftOutlined,
 } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
-
+import { useMenuFront } from "../../store/useMenuFront.js";
 const router = useRouter();
-const selectedKeys = ref([]);
-const openKeys = ref([]);
+
 const items = ref([]);
-const urlApi = import.meta.env.VITE_URL_API;
-const urlTest = import.meta.env.VITE_URL_TEST;
+const store = useMenuFront();
+const { selectedKeys, openKeys } = store;
+
 const getCategory = () => {
   axios
-    .get(urlApi + "image")
+    .get("forum-group")
     .then(function (response) {
       items.value = response.data;
     })
@@ -54,11 +54,11 @@ const handleClick = (menuInfo) => {
   if (menuInfo && menuInfo.item.item.id) {
     const { id } = menuInfo.item.item;
     const menuItem = items.value.find((item) => item.id === id);
-    console.log(menuItem.categoryId);
-    if (menuItem && menuItem.categoryId) {
+    console.log(menuItem.id);
+    if (menuItem && menuItem.id) {
       router.push({
         name: "content",
-        params: { id: menuItem.categoryId },
+        params: { id: menuItem.id },
       });
     }
   }

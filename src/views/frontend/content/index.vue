@@ -1,5 +1,8 @@
 <template>
-  <a-list size="large" :data-source="data">
+  <div class="directional pb-2" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)">
+    {{ nameCategory }}<RightOutlined />
+  </div>
+  <a-list size="large" :data-source="data" style="height: 75vh; overflow: auto">
     <template #renderItem="{ item }">
       <a-list-item class="p-0">
         <div class="row" style="width: 100%">
@@ -20,15 +23,11 @@
               <CommentOutlined class="me-3" />
               máy tính siêu mỏng chỉ 1mmdddddddd
             </div>
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
-            >
+            <div class="d-flex flex-column justify-content-center align-items-center">
               <span> Chủ đề </span>
               {{ item.title }}
             </div>
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
-            >
+            <div class="d-flex flex-column justify-content-center align-items-center">
               <span> Tin nhắn </span>
               {{ item.title }}
             </div>
@@ -39,11 +38,7 @@
             </a-avatar>
             <div
               class="content"
-              style="
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-              "
+              style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
             >
               <div class="title">sssss</div>
               <div class="date">{{ item.date }}</div>
@@ -60,59 +55,62 @@
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { CommentOutlined, UserOutlined } from "@ant-design/icons-vue";
+import { CommentOutlined, UserOutlined, RightOutlined } from "@ant-design/icons-vue";
 import axios from "axios";
 import { ref, watch } from "vue";
-
+import { useMenuFront } from "../../../store/useMenuFront.js";
 const route = useRoute();
 const router = useRouter();
-const urlApi = import.meta.env.VITE_URL_API;
+
+const nameCategory = ref([]);
+
+useMenuFront().onSelectedKeys(route.params.id);
 
 const data = ref([
   {
-    title: "s",
+    title: "64",
     description: "Description 1",
     date: "2024-01-15",
     // Thêm các thuộc tính khác của đối tượng vào đây
   },
   {
-    title: "Title 2",
+    title: "64",
     description: "Description 2",
     date: "2024-01-16",
     // Thêm các thuộc tính khác của đối tượng vào đây
   },
   {
-    title: "Title 2",
+    title: "64",
     description: "Description 2",
     date: "2024-01-16",
     // Thêm các thuộc tính khác của đối tượng vào đây
   },
   {
-    title: "Title 2",
+    title: "64",
     description: "Description 2",
     date: "2024-01-16",
     // Thêm các thuộc tính khác của đối tượng vào đây
   },
   {
-    title: "Title 2",
+    title: "64",
     description: "Description 2",
     date: "2024-01-16",
     // Thêm các thuộc tính khác của đối tượng vào đây
   },
   {
-    title: "Title 2",
+    title: "64",
     description: "Description 2",
     date: "2024-01-16",
     // Thêm các thuộc tính khác của đối tượng vào đây
   },
   {
-    title: "Title 2",
+    title: "64",
     description: "Description 2",
     date: "2024-01-16",
     // Thêm các thuộc tính khác của đối tượng vào đây
   },
   {
-    title: "Title 2",
+    title: "64",
     description: "Description 2",
     date: "2024-01-16",
     // Thêm các thuộc tính khác của đối tượng vào đây
@@ -120,6 +118,17 @@ const data = ref([
 
   // Thêm các đối tượng khác vào đây
 ]);
+const getNameCategory = (id) => {
+  axios
+    .get(`forum-group/${id}`)
+    .then((response) => {
+      console.log(response.data);
+      nameCategory.value = response.data.name;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
 const getImg = () => {
   axios
@@ -132,25 +141,14 @@ const getImg = () => {
     });
 };
 
-const getCategory = (categoryId) => {
-  axios
-    .get(urlApi + "image")
-    .then((response) => {
-      // Xử lý dữ liệu từ API nếu cần
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
 const categoryId = route.params.id;
 watch(
   () => route.params.id,
   (newId, oldId) => {
-    getCategory(newId);
+    getNameCategory(newId);
   }
 );
+getNameCategory(route.params.id);
 
-getCategory(categoryId);
 getImg();
 </script>

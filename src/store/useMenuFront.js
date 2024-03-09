@@ -1,16 +1,15 @@
 import { defineStore } from 'pinia'
 
-export const useMenu = defineStore('menuId', {
+export const useMenuFront = defineStore('menuId', {
 
     state: () => ({
-
-        selectedKeys: [1],
+        selectedKeys: [],
         openKeys: [],
     }),
     actions: {
         onSelectedKeys(data) {
-            this.selectedKeys[0] = data;
-            console.log(this.selectedKeys)
+            this.selectedKeys = data;
+            console.log("aaaa:" + this.selectedKeys)
         },
         onOpenKeys(data) {
             this.openKeys = data;

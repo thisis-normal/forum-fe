@@ -21,7 +21,7 @@
       class="row"
     >
       <div
-        class="col-6 d-flex flex-column justify-content-center align-items-center"
+        class="col-sm-6 d-flex flex-column justify-content-center align-items-center"
       >
         <h2>Đăng nhập</h2>
         <a-form
@@ -109,7 +109,10 @@
           </a-form-item>
         </a-form>
       </div>
-      <div class="col-6" style="display: flex; align-items: center">
+      <div
+        class="col-sm-6 d-none d-sm-flex"
+        style="display: flex; align-items: center"
+      >
         <div
           style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"
         ></div>
@@ -128,8 +131,7 @@ const formState = reactive({
   password: "",
   remember: true,
 });
-const urlApi = import.meta.env.VITE_URL_API;
-const urlTest = import.meta.env.VITE_URL_TEST;
+
 // const router = useRouter();
 const users = ref([]);
 const onFinish = () => {

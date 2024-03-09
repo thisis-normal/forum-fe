@@ -1,5 +1,5 @@
 <template>
-  <a-card title="Thêm danh mục" style="width: 100%">
+  <a-card title="Cập nhật danh mục" style="width: 100%">
     <a-form
       :model="formState"
       v-bind="layout"
@@ -13,6 +13,12 @@
       <a-form-item label="Mô tả" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.description" />
       </a-form-item>
+      <a-form-item label="Icon" :rules="[{ required: true }]">
+        <a-input v-model:value="formState.forumGroups.icon" />
+      </a-form-item>
+      <a-form-item label="Lấy tên icon">
+        <a href="https://www.antdv.com/components/icon" target="_blank">Tại đây !</a>
+      </a-form-item>
 
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
         <a-button type="primary" html-type="submit">Cập nhật</a-button>
@@ -23,6 +29,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRoute } from "vue-router";
+import { useMenu } from "../../../store/useMenu.js";
 import router from "@/router";
 import Swal from "sweetalert2";
 
@@ -42,6 +49,7 @@ const formState = reactive({
   forumGroups: {
     name: "",
     description: "",
+    icon: "",
   },
 });
 const forumGroups = ref([]);
@@ -50,6 +58,8 @@ const onFinish = (values) => {
     .put(`forum-group/${route.params.id}`, {
       name: formState.forumGroups.name,
       description: formState.forumGroups.description,
+      icon_name: formState.forumGroups.icon,
+      // icon:
     })
     .then(function (response) {
       Swal.fire({
@@ -57,9 +67,9 @@ const onFinish = (values) => {
         //   text: response.data.message + "!",
         icon: "success",
         confirmButtonText: "OK",
+      }).then((result) => {
+        router.push("/admin/categorys");
       });
-
-      router.push("/admin/categorys");
     })
     .catch(function (error) {
       // handle error
@@ -80,6 +90,7 @@ const getCategory = (values) => {
 
       formState.forumGroups.name = forumGroups.value.name;
       formState.forumGroups.description = forumGroups.value.description;
+      formState.forumGroups.icon = forumGroups.value.icon_name;
     })
     .catch(function (error) {
       // handle error

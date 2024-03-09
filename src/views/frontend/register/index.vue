@@ -138,7 +138,7 @@
 </template>
 <script setup>
 import { reactive, computed, ref } from "vue";
-import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
+
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import router from "@/router";

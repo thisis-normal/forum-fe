@@ -115,11 +115,7 @@ const value = ref("");
 console.log(token);
 const logout = () => {
   axios
-    .post("logout", null, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    .post("logout", null)
     .then(function (response) {
       console.log(response);
       if (response.status === 200) {
