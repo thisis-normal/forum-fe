@@ -8,8 +8,8 @@ export const useMenuFront = defineStore('menuId', {
     }),
     actions: {
         onSelectedKeys(data) {
-            this.selectedKeys = data;
-            console.log("aaaa:" + this.selectedKeys)
+            this.selectedKeys[0] = data;
+            // console.log("aaaa:" + (data === "14"))
         },
         onOpenKeys(data) {
             this.openKeys = data;

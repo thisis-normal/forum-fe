@@ -1,5 +1,8 @@
 <template>
-  <div class="directional pb-2" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)">
+  <div
+    class="directional pb-2"
+    style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)"
+  >
     {{ nameCategory }}<RightOutlined />
   </div>
   <a-list size="large" :data-source="data" style="height: 75vh; overflow: auto">
@@ -23,11 +26,15 @@
               <CommentOutlined class="me-3" />
               máy tính siêu mỏng chỉ 1mmdddddddd
             </div>
-            <div class="d-flex flex-column justify-content-center align-items-center">
+            <div
+              class="d-flex flex-column justify-content-center align-items-center"
+            >
               <span> Chủ đề </span>
               {{ item.title }}
             </div>
-            <div class="d-flex flex-column justify-content-center align-items-center">
+            <div
+              class="d-flex flex-column justify-content-center align-items-center"
+            >
               <span> Tin nhắn </span>
               {{ item.title }}
             </div>
@@ -38,7 +45,11 @@
             </a-avatar>
             <div
               class="content"
-              style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
+              style="
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "
             >
               <div class="title">sssss</div>
               <div class="date">{{ item.date }}</div>
@@ -55,7 +66,11 @@
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { CommentOutlined, UserOutlined, RightOutlined } from "@ant-design/icons-vue";
+import {
+  CommentOutlined,
+  UserOutlined,
+  RightOutlined,
+} from "@ant-design/icons-vue";
 import axios from "axios";
 import { ref, watch } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";
@@ -63,8 +78,11 @@ const route = useRoute();
 const router = useRouter();
 
 const nameCategory = ref([]);
-
 useMenuFront().onSelectedKeys(route.params.id);
+
+watch(route, () => {
+  useMenuFront().onSelectedKeys(route.params.id);
+});
 
 const data = ref([
   {

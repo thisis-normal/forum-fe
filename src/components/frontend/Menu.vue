@@ -6,7 +6,7 @@
     mode="vertical"
     @click="handleClick"
   >
-    <a-menu-item v-for="item in items" :key="item.id" :item="item">
+    <a-menu-item v-for="item in items" :key="item.id.toString()" :item="item">
       <MailOutlined class="mx-3" style="font-size: 20px" />
 
       {{ item.name }}
@@ -27,10 +27,10 @@ import {
   ShoppingOutlined,
   GiftOutlined,
 } from "@ant-design/icons-vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useMenuFront } from "../../store/useMenuFront.js";
 const router = useRouter();
-
+const route = useRoute();
 const items = ref([]);
 const store = useMenuFront();
 const { selectedKeys, openKeys } = store;
@@ -40,12 +40,17 @@ const getCategory = () => {
     .get("forum-group")
     .then(function (response) {
       items.value = response.data;
+      console.log(route.params.id, items.value.length, items.value[0].id);
+      if (!route.params.id && items.value.length > 0) {
+        router.push(`/${items.value[0].id}`);
+      }
     })
     .catch(function (error) {
       // Xử lý lỗi
       console.log(error);
     });
 };
+
 onMounted(() => {
   getCategory();
 });
