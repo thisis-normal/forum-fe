@@ -20,9 +20,7 @@
       "
       class="row"
     >
-      <div
-        class="col-sm-6 d-flex flex-column justify-content-center align-items-center"
-      >
+      <div class="col-sm-6 d-flex flex-column justify-content-center align-items-center">
         <h2>Đăng nhập</h2>
         <a-form
           :model="formState"
@@ -52,9 +50,7 @@
           <a-form-item
             class="m-0 mb-2"
             name="password"
-            :rules="[
-              { required: true, message: 'vui lòng nhập mật khẩu của bạn!' },
-            ]"
+            :rules="[{ required: true, message: 'vui lòng nhập mật khẩu của bạn!' }]"
           >
             <label for="">Mật khẩu</label>
             <a-input-password v-model:value="formState.password" size="large">
@@ -65,9 +61,7 @@
           </a-form-item>
           <div class="d-flex" style="justify-content: space-between">
             <div>
-              <a-checkbox v-model:checked="formState.remember"
-                >Ghi nhớ tôi</a-checkbox
-              >
+              <a-checkbox v-model:checked="formState.remember">Ghi nhớ tôi</a-checkbox>
             </div>
             <div>
               <a class="login-form-forgot" href="">Quên mật khẩu</a>
@@ -102,20 +96,13 @@
             </router-link>
             <br />
 
-            <span style="color: rgba(0, 0, 0, 0.5)">
-              Bạn chưa có tài khoản ?
-            </span>
+            <span style="color: rgba(0, 0, 0, 0.5)"> Bạn chưa có tài khoản ? </span>
             <a href="/register">Đăng ký ngay!</a>
           </a-form-item>
         </a-form>
       </div>
-      <div
-        class="col-sm-6 d-none d-sm-flex"
-        style="display: flex; align-items: center"
-      >
-        <div
-          style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"
-        ></div>
+      <div class="col-sm-6 d-none d-sm-flex" style="display: flex; align-items: center">
+        <div style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"></div>
       </div>
     </div>
   </div>
@@ -138,6 +125,7 @@ const onFinish = () => {
   axios
     .post("login", {
       username: formState.username,
+      email: "nguyenthanhchung.06042002@gmail.com",
       password: formState.password,
     })
     .then(function (response) {

@@ -43,11 +43,20 @@ const admin = [{
         name: "admin-category-edit",
         component: () => import("../views/admin/category/edit.vue"),
     },
-
+    {
+        path: "forumAdd",
+        name: "admin-forum-add",
+        component: () => import("../views/admin/forums/add.vue"),
+    },
+    {
+        path: "forums/:id",
+        name: "admin-forum-edit",
+        component: () => import("../views/admin/forums/edit.vue"),
+    },
     {
         path: "categorys/:id/forum",
         name: "admin-category-forum",
-        component: () => import("../views/admin/category/category.vue"),
+        component: () => import("../views/admin/forums/index.vue"),
     },
     {
         path: "pinnedPost",

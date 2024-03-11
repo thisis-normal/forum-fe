@@ -163,7 +163,7 @@ const onFinish = () => {
   axios
     .post("register", {
       username: formState.username,
-      fullname: formState.fullname,
+      full_name: formState.fullname,
       email: formState.email,
       password: formState.password,
       confirmPassword: formState.confirmPassword,

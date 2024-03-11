@@ -9,14 +9,16 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <a-table :dataSource="forumGroups" :columns="columns" :scroll="{ x: 576 }">
+        <a-table
+          :dataSource="forumGroups"
+          :columns="columns"
+          :scroll="{ x: 576 }"
+        >
           <template #bodyCell="{ column, record, index }">
             <template v-if="column.key === 'id'">
               {{ index + 1 }}
             </template>
-            <template v-else-if="column.key === 'icon_name'">
-              <Icon type="{AudioOutlined}" />
-            </template>
+            <template v-else-if="column.key === 'icon_name'"> </template>
             <template v-if="column.key === 'action'">
               <router-link
                 :to="{ name: 'admin-category-edit', params: { id: record.id } }"
@@ -44,7 +46,11 @@
   </a-card>
 </template>
 <script>
-import { PlusOutlined, EditOutlined, UnorderedListOutlined } from "@ant-design/icons-vue";
+import {
+  PlusOutlined,
+  EditOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons-vue";
 
 import BtnCreate from "../../../components/BtnCreate.vue";
 import BtnEdit from "../../../components/BtnEdit.vue";
@@ -61,7 +67,6 @@ export default {
     BtnEdit,
     BtnDel,
     UnorderedListOutlined,
-    Icon,
   },
   setup() {
     useMenu().onSelectedKeys("admin-categorys");

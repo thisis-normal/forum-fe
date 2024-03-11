@@ -24,7 +24,7 @@
               "
             >
               <CommentOutlined class="me-3" />
-              máy tính siêu mỏng chỉ 1mmdddddddd
+              {{ data.name }}
             </div>
             <div
               class="d-flex flex-column justify-content-center align-items-center"
@@ -84,64 +84,15 @@ watch(route, () => {
   useMenuFront().onSelectedKeys(route.params.id);
 });
 
-const data = ref([
-  {
-    title: "64",
-    description: "Description 1",
-    date: "2024-01-15",
-    // Thêm các thuộc tính khác của đối tượng vào đây
-  },
-  {
-    title: "64",
-    description: "Description 2",
-    date: "2024-01-16",
-    // Thêm các thuộc tính khác của đối tượng vào đây
-  },
-  {
-    title: "64",
-    description: "Description 2",
-    date: "2024-01-16",
-    // Thêm các thuộc tính khác của đối tượng vào đây
-  },
-  {
-    title: "64",
-    description: "Description 2",
-    date: "2024-01-16",
-    // Thêm các thuộc tính khác của đối tượng vào đây
-  },
-  {
-    title: "64",
-    description: "Description 2",
-    date: "2024-01-16",
-    // Thêm các thuộc tính khác của đối tượng vào đây
-  },
-  {
-    title: "64",
-    description: "Description 2",
-    date: "2024-01-16",
-    // Thêm các thuộc tính khác của đối tượng vào đây
-  },
-  {
-    title: "64",
-    description: "Description 2",
-    date: "2024-01-16",
-    // Thêm các thuộc tính khác của đối tượng vào đây
-  },
-  {
-    title: "64",
-    description: "Description 2",
-    date: "2024-01-16",
-    // Thêm các thuộc tính khác của đối tượng vào đây
-  },
-
-  // Thêm các đối tượng khác vào đây
-]);
+const data = ref([]);
+// Lấy dữ liệu theo danh mục
 const getNameCategory = (id) => {
   axios
     .get(`forum-group/${id}`)
     .then((response) => {
-      console.log(response.data);
       nameCategory.value = response.data.name;
+      data.value = response.data.forums;
+      console.log(data.value.name);
     })
     .catch((error) => {
       console.log(error);

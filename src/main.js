@@ -22,6 +22,7 @@ const token = localStorage.getItem("token") || "";
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Content-Type'] = 'application/json';
 axios.defaults.headers.delete['Content-Type'] = 'application/json';
