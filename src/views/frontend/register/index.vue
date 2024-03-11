@@ -20,9 +20,7 @@
       "
       class="row"
     >
-      <div
-        class="col-12 d-flex flex-column justify-content-center align-items-center"
-      >
+      <div class="col-12 d-flex flex-column justify-content-center align-items-center">
         <h2 class="mt-3">Đăng ký</h2>
         <a-form
           style="width: 80%"
@@ -78,8 +76,7 @@
             ]"
           >
             <label for="">Email </label>
-            <a-input v-model:value="formState.email" placeholder="Email">
-            </a-input>
+            <a-input v-model:value="formState.email" placeholder="Email"> </a-input>
           </a-form-item>
           <a-form-item
             class="m-0 mb-2"
@@ -87,10 +84,7 @@
             :rules="[{ validator: validatePassword }]"
           >
             <label for="">Mật khẩu</label>
-            <a-input-password
-              v-model:value="formState.password"
-              placeholder="Mật khẩu"
-            >
+            <a-input-password v-model:value="formState.password" placeholder="Mật khẩu">
             </a-input-password>
           </a-form-item>
           <a-form-item
@@ -126,9 +120,7 @@
 
             <br />
 
-            <span style="color: rgba(0, 0, 0, 0.5)">
-              Bạn đã có tài khoản ?
-            </span>
+            <span style="color: rgba(0, 0, 0, 0.5)"> Bạn đã có tài khoản ? </span>
             <a href="/login">Đăng nhập ngay!</a>
           </a-form-item>
         </a-form>
@@ -234,14 +226,8 @@ const validatePassword = (rule, value, callback) => {
   if (value.length < 8) {
     callback(new Error("Mật khẩu phải có ít nhất 8 ký tự!"));
   } else if (!/^[a-zA-Z0-9!@#$%^&*()_+{}|:"<>?~`\-=[\]\\;',./]+$/.test(value)) {
-    callback(
-      new Error("Mật khẩu chỉ chứa các ký tự chữ cái, số và ký tự đặc biệt!")
-    );
-  } else if (
-    !/[a-z]/.test(value) ||
-    !/[A-Z]/.test(value) ||
-    !/\d/.test(value)
-  ) {
+    callback(new Error("Mật khẩu chỉ chứa các ký tự chữ cái, số và ký tự đặc biệt!"));
+  } else if (!/[a-z]/.test(value) || !/[A-Z]/.test(value) || !/\d/.test(value)) {
     callback(
       new Error(
         "Mật khẩu phải chứa ít nhất một ký tự viết thường, một ký tự viết hoa và một số!"
@@ -253,9 +239,7 @@ const validatePassword = (rule, value, callback) => {
 };
 const validateConfirmPassword = (rule, value, callback) => {
   if (value !== formState.password) {
-    callback(
-      "Mật khẩu xác nhận không khớp. Vui lòng nhập lại mật khẩu chính xác!"
-    );
+    callback("Mật khẩu xác nhận không khớp. Vui lòng nhập lại mật khẩu chính xác!");
   } else {
     callback();
   }

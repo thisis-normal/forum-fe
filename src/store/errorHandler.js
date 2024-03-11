@@ -13,7 +13,7 @@ export function handleRequestError(error) {
         // Xử lý lỗi khi không nhận được phản hồi từ server (mất kết nối)
         Swal.fire({
             title: "Lỗi!",
-            text: "Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn và thử lại sau.",
+            text: "Mất kết nối !",
             icon: "error",
             confirmButtonText: "OK",
         });
