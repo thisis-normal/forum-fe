@@ -142,6 +142,8 @@ import { reactive, computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import router from "@/router";
+import { handleRequestError } from "../../../store/errorHandler.js";
+
 const formState = reactive({
   username: "",
   fullname: "",
@@ -200,13 +202,7 @@ const onFinish = () => {
     .catch(function (error) {
       // console.log(response.data.message);
 
-      console.error(error.response.data.message);
-      Swal.fire({
-        title: "Đăng ký thất bại!",
-        text: error.response.data.message,
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      handleRequestError(error);
     });
 };
 
@@ -228,6 +224,8 @@ const validateUsername = (rule, value, callback) => {
     callback(new Error("Tài khoản phải có từ 8 đến 50 ký tự!"));
   } else if (/\s/.test(value)) {
     callback(new Error("Tài khoản không được chứa khoảng trắng!"));
+  } else if (/[\u0080-\uFFFF]/.test(value)) {
+    callback(new Error("Tài khoản không được chứa tiếng Việt!"));
   } else {
     callback();
   }

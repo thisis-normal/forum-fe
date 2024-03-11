@@ -13,14 +13,7 @@
       <a-form-item label="Mô tả" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.description" />
       </a-form-item>
-      <a-form-item label="Icon" :rules="[{ required: true }]">
-        <a-input v-model:value="formState.forumGroups.icon" />
-      </a-form-item>
-      <a-form-item label="Lấy tên icon">
-        <a href="https://www.antdv.com/components/icon" target="_blank"
-          >Tại đây !</a
-        >
-      </a-form-item>
+
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
         <a-button type="primary" html-type="submit">Thêm mới</a-button>
       </a-form-item>
@@ -48,12 +41,11 @@ const formState = reactive({
   forumGroups: {
     name: "",
     description: "",
-    icon: "",
   },
 });
 const onFinish = (values) => {
   axios
-    .post("forum-group", {
+    .post("forum", {
       name: formState.forumGroups.name,
       description: formState.forumGroups.description,
     })
@@ -65,7 +57,7 @@ const onFinish = (values) => {
         confirmButtonText: "OK",
       });
 
-      router.push("/admin/categorys");
+      router.push(`/admin/categorys/${response.data.id}/forum`);
     })
     .catch(function (error) {
       // handle error

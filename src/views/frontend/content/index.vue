@@ -5,62 +5,58 @@
   >
     {{ nameCategory }}<RightOutlined />
   </div>
-  <a-list size="large" :data-source="data" style="height: 75vh; overflow: auto">
-    <template #renderItem="{ item }">
-      <a-list-item class="p-0">
-        <div class="row" style="width: 100%">
+  <a-list size="large" style="height: 75vh; overflow: auto">
+    <a-list-item class="p-0" v-for="item in data" :key="item.id">
+      <div class="row" style="width: 100%">
+        <div
+          class="col-8 d-flex align-items-center"
+          style="justify-content: space-between"
+        >
           <div
-            class="col-8 d-flex align-items-center"
-            style="justify-content: space-between"
+            style="
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 60%;
+              padding-right: 24px;
+              font-size: 20px;
+            "
           >
-            <div
-              style="
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                width: 60%;
-                padding-right: 24px;
-                font-size: 20px;
-              "
-            >
-              <CommentOutlined class="me-3" />
-              {{ data.name }}
-            </div>
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
-            >
-              <span> Chủ đề </span>
-              {{ item.title }}
-            </div>
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
-            >
-              <span> Tin nhắn </span>
-              {{ item.title }}
-            </div>
+            <CommentOutlined class="me-3" />
+            {{ item.name }}
           </div>
-          <div class="col-4 d-flex align-items-center">
-            <a-avatar size="large" class="me-3">
-              <template #icon><UserOutlined /></template>
-            </a-avatar>
-            <div
-              class="content"
-              style="
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-              "
-            >
-              <div class="title">sssss</div>
-              <div class="date">{{ item.date }}</div>
-              <div class="art">Nguyễn thành chung</div>
-            </div>
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
+            <span> Chủ đề </span>
+            <!-- Hiển thị thông tin chủ đề -->
+          </div>
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
+            <span> Tin nhắn </span>
+            <!-- Hiển thị thông tin tin nhắn -->
           </div>
         </div>
-
-        <!-- Thêm các thuộc tính khác của đối tượng vào đây -->
-      </a-list-item>
-    </template>
+        <div class="col-4 d-flex align-items-center">
+          <a-avatar size="large" class="me-3">
+            <template #icon><UserOutlined /></template>
+          </a-avatar>
+          <div
+            class="content"
+            style="
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            "
+          >
+            <div class="title">sssss</div>
+            <div class="date">{{ item.date }}</div>
+            <div class="art">Nguyễn thành chung</div>
+          </div>
+        </div>
+      </div>
+    </a-list-item>
   </a-list>
 </template>
 
@@ -92,7 +88,7 @@ const getNameCategory = (id) => {
     .then((response) => {
       nameCategory.value = response.data.name;
       data.value = response.data.forums;
-      console.log(data.value.name);
+      console.log(data);
     })
     .catch((error) => {
       console.log(error);
