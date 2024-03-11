@@ -31,9 +31,7 @@ const admin = [{
         path: "categorys",
         name: "admin-categorys",
         component: () => import("../views/admin/category/index.vue"),
-        children: [{
 
-        }]
 
     },
     {
