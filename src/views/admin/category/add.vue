@@ -16,6 +16,9 @@
       <a-form-item label="Icon" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.icon" />
       </a-form-item>
+      <a-form-item label="Icon đã lấy:" id="icon" :rules="[{ required: true }]">
+        <DynamicIcon :name="formState.forumGroups.icon" />
+      </a-form-item>
       <a-form-item label="Lấy tên icon">
         <a href="https://www.antdv.com/components/icon" target="_blank"
           >Tại đây !</a
@@ -31,6 +34,7 @@
 import { reactive } from "vue";
 import router from "@/router";
 import Swal from "sweetalert2";
+import DynamicIcon from "../../../components/Icon.vue";
 import { useMenu } from "../../../store/useMenu.js";
 useMenu().onSelectedKeys("admin-categorys");
 const layout = {
