@@ -18,7 +18,9 @@
             <template v-if="column.key === 'id'">
               {{ index + 1 }}
             </template>
-            <template v-else-if="column.key === 'icon_name'"> </template>
+            <template v-else-if="column.key === 'icon_name'"
+              ><DynamicIcon :name="record.icon_name" />
+            </template>
             <template v-if="column.key === 'action'">
               <router-link
                 :to="{ name: 'admin-category-edit', params: { id: record.id } }"
@@ -51,7 +53,7 @@ import {
   EditOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons-vue";
-
+import DynamicIcon from "../../../components/Icon.vue";
 import BtnCreate from "../../../components/BtnCreate.vue";
 import BtnEdit from "../../../components/BtnEdit.vue";
 import BtnDel from "../../../components/BtnDel.vue";
@@ -67,6 +69,7 @@ export default {
     BtnEdit,
     BtnDel,
     UnorderedListOutlined,
+    DynamicIcon,
   },
   setup() {
     useMenu().onSelectedKeys("admin-categorys");

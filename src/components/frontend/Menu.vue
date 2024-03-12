@@ -6,15 +6,28 @@
     mode="vertical"
     @click="handleClick"
   >
-    <a-menu-item v-for="item in items" :key="item.id.toString()" :item="item">
-      <MailOutlined class="mx-3" style="font-size: 20px" />
-
-      {{ item.name }}
+    <a-menu-item
+      v-for="item in items"
+      :key="item.id.toString()"
+      :item="item"
+      style="height: 50px"
+    >
+      <div
+        class="d-flex align-items-center"
+        style="font-size: 16px; height: 50px"
+      >
+        <DynamicIcon
+          :name="item.icon_name"
+          style="font-size: 24px; margin-right: 12px"
+        />
+        {{ item.name }}
+      </div>
     </a-menu-item>
   </a-menu>
 </template>
 <script setup>
 import { h, ref, onMounted } from "vue";
+import DynamicIcon from "../Icon.vue";
 import axios from "axios";
 import {
   MailOutlined,

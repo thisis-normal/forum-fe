@@ -3,7 +3,7 @@
     class="directional pb-2"
     style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)"
   >
-    {{ nameCategory }}<RightOutlined />
+    {{ nameCategory }}
   </div>
   <a-list size="large" style="height: 75vh; overflow: auto">
     <a-list-item class="p-0" v-for="item in data" :key="item.id">

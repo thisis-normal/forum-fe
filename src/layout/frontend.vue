@@ -18,7 +18,7 @@
             <TheMenu />
           </a-list>
         </div>
-        <div class="col-sm-6 col-12">
+        <div class="col-sm-6 col-12 pe-5">
           <!-- <AddPost /> -->
 
           <router-view> </router-view>

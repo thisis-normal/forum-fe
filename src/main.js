@@ -14,6 +14,9 @@ import 'bootstrap/dist/css/bootstrap-grid.min.css'
 import 'bootstrap/dist/css/bootstrap-utilities.min.css';
 // import axios from 'axios';
 import axios from 'axios';
+import * as Icons from '@ant-design/icons-vue';
+
+
 window.axios = axios;
 
 axios.defaults.baseURL = import.meta.env.VITE_URL_API;
@@ -36,6 +39,13 @@ axios.defaults.headers.delete['Accept'] = 'application/json';
 
 const app = createApp(App)
 app.component('QuillEditor', QuillEditor)
+// Đăng ký tất cả các icon với Vue
+Object.keys(Icons).forEach((key) => {
+
+    app.component(key, Icons[key]);
+
+});
+
 app.use(useRoute);
 app.use(useRouter)
 app.use(router);
