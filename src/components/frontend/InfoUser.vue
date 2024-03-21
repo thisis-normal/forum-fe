@@ -9,7 +9,7 @@
       height: 100%;
       background-color: rgba(0, 0, 0, 0.3);
     "
-    @click="closeAddPost()"
+    @click="closeInfoUser()"
   ></div>
   <div
     style="
@@ -33,9 +33,10 @@
       style="max-width: 600px; width: 100%"
     >
       <div class="title d-flex justify-content-center">
-        <h1 class="text-center mt-3">Tạo bài viết</h1>
+        <h1 class="text-center mt-3">Thông tin tài khoản</h1>
+
         <a-button
-          @click="closeAddPost()"
+          @click="closeInfoUser()"
           shape="circle"
           style="
             position: absolute;
@@ -46,48 +47,36 @@
           ><CloseOutlined
         /></a-button>
       </div>
-      <a-form-item>
-        <label for="">Tiêu đề bài viết</label>
+      <a-form-item class="text-center">
+        <a-avatar :size="150">
+          <template #icon>
+            <img :src="user.avatar" alt="" />
+          </template>
+        </a-avatar>
         <br />
-        <div class="d-flex">
-          <a-select
-            v-model:value="value"
-            label-in-value
-            style="width: 120px"
-            size="large"
-            @change="handleChange"
-            placeholder="Thể loại"
-          >
-            <a-select-option
-              v-for="option in prefix"
-              :key="option.id"
-              :value="option.id"
-              :style="{ background: option.color }"
-            >
-              <span>{{ option.name }}</span>
-            </a-select-option>
-          </a-select>
-          <a-input placeholder="Tiêu đề bài viết" size="large" />
-        </div>
+        @{{ user.username }}
+        <br />
+        <a-button>Đổi ảnh đại điện</a-button>
       </a-form-item>
-      <a-form-item>
-        <label for="">Danh mục bài viết</label>
-        <br />
-        <a-select
+      <a-form-item class="my-2">
+        <label for="">Họ và tên</label>
+
+        <a-input
+          placeholder="Họ và Tên"
+          v-model:value="formState.fullname"
           size="large"
-          placeholder="Danh mục bài viết"
-          :options="options"
-          :filter-option="filterOption"
-          @focus="handleFocus"
-          @blur="handleBlur"
-          @change="handleChange"
-        ></a-select>
+        />
       </a-form-item>
       <a-form-item>
-        <label for="">Nội dung</label>
-        <br />
-        <TextEditor style="height: 150px" />
+        <label for="">Email</label>
+
+        <a-input
+          placeholder="Email"
+          v-model:value="formState.email"
+          size="large"
+        />
       </a-form-item>
+      <a-form-item> </a-form-item>
       <a-form-item>
         <a-button
           style="
@@ -97,7 +86,7 @@
             background-color: #7392ff;
             font-size: larger;
           "
-          >Đăng bài</a-button
+          >Cập nhật tài khoản</a-button
         >
       </a-form-item>
     </a-form>
@@ -111,14 +100,24 @@ import { CloseOutlined } from "@ant-design/icons-vue";
 import { defineEmits } from "vue";
 import TextEditor from "./TextEditor.vue";
 // import { TextEditor } from "./TextEditor.vue";
-const emit = defineEmits(["closeAddPost"]);
+const formState = reactive({
+  avatar: "",
+  fullname: "",
+  email: "",
+  password: "",
+  rePassword: "",
+});
+const emit = defineEmits(["closeInfoUser"]);
 import axios from "axios";
-const prefix = ref([]);
+const user = ref([]);
 const getPrefix = () => {
   axios
-    .get("prefix")
+    .get("me")
     .then(function (response) {
-      prefix.value = response.data;
+      user.value = response.data;
+      formState.avatar = user.value.avatar;
+      formState.fullname = user.value.full_name;
+      formState.email = user.value.email;
     })
     .catch(function (error) {
       // Xử lý lỗi
@@ -126,8 +125,8 @@ const getPrefix = () => {
     });
 };
 getPrefix();
-const closeAddPost = () => {
-  emit("closeAddPost");
+const closeInfoUser = () => {
+  emit("closeInfoUser");
 };
 const wrapperCol = {
   span: 28,

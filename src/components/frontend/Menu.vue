@@ -8,7 +8,7 @@
   >
     <a-menu-item
       v-for="item in items"
-      :key="item.id.toString()"
+      :key="item.forum_group_id.toString()"
       :item="item"
       style="height: 50px"
     >
@@ -17,10 +17,12 @@
         style="font-size: 16px; height: 50px"
       >
         <DynamicIcon
+          v-if="item.icon_name"
           :name="item.icon_name"
           style="font-size: 24px; margin-right: 12px"
         />
-        {{ item.name }}
+        <div v-else></div>
+        {{ item.forum_group }}
       </div>
     </a-menu-item>
   </a-menu>
@@ -47,21 +49,16 @@ const route = useRoute();
 const items = ref([]);
 const store = useMenuFront();
 const { selectedKeys, openKeys } = store;
-
-const getCategory = () => {
-  axios
-    .get("forum-group")
-    .then(function (response) {
-      items.value = response.data;
-      console.log(route.params.id, items.value.length, items.value[0].id);
-      if (!route.params.id && items.value.length > 0) {
-        router.push(`/${items.value[0].id}`);
-      }
-    })
-    .catch(function (error) {
-      // Xử lý lỗi
-      console.log(error);
-    });
+const getCategory = async () => {
+  try {
+    const response = await axios.get("home/forum-list");
+    items.value = response.data;
+    // if (!route.params.forum_group_id && items.value.length > 0) {
+    //   await router.push(`/${items.value[0].forum_group_id}`);
+    // }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 onMounted(() => {
@@ -69,14 +66,15 @@ onMounted(() => {
 });
 const handleClick = (menuInfo) => {
   console.log(menuInfo);
-  if (menuInfo && menuInfo.item.item.id) {
-    const { id } = menuInfo.item.item;
-    const menuItem = items.value.find((item) => item.id === id);
-    console.log(menuItem.id);
-    if (menuItem && menuItem.id) {
+  if (menuInfo && menuInfo.item && menuInfo.item.item) {
+    const { forum_group_id } = menuInfo.item.item;
+    const menuItem = items.value.find(
+      (item) => item.forum_group_id === forum_group_id
+    );
+    if (menuItem && menuItem.forum_group_id) {
       router.push({
         name: "content",
-        params: { id: menuItem.id },
+        params: { id: menuItem.forum_group_id },
       });
     }
   }

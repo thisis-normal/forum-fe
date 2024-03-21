@@ -139,7 +139,7 @@ const onFinish = () => {
   axios
     .post("login", {
       username: formState.username,
-      email: "nguyenthanhchung.06042002@gmail.com",
+
       password: formState.password,
     })
     .then(function (response) {

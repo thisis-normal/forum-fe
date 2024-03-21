@@ -20,7 +20,9 @@
       "
       class="row"
     >
-      <div class="col-6 d-flex flex-column justify-content-center align-items-center">
+      <div
+        class="col-6 d-flex flex-column justify-content-center align-items-center"
+      >
         <h2>Đăng nhập với Admin</h2>
         <a-form
           :model="formState"
@@ -50,7 +52,9 @@
           <a-form-item
             class="m-0 mb-2"
             name="password"
-            :rules="[{ required: true, message: 'vui lòng nhập mật khẩu của bạn!' }]"
+            :rules="[
+              { required: true, message: 'vui lòng nhập mật khẩu của bạn!' },
+            ]"
           >
             <label for="">Mật khẩu</label>
             <a-input-password v-model:value="formState.password" size="large">
@@ -75,7 +79,9 @@
         </a-form>
       </div>
       <div class="col-6" style="display: flex; align-items: center">
-        <div style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"></div>
+        <div
+          style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"
+        ></div>
       </div>
     </div>
   </div>
@@ -83,37 +89,58 @@
 <script setup>
 import { reactive, computed, ref } from "vue";
 import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
+import { handleRequestError } from "../../../store/errorHandler.js";
+import Swal from "sweetalert2";
+import router from "@/router";
 const formState = reactive({
   username: "",
   password: "",
   remember: true,
 });
-const urlApi = import.meta.env.VITE_URL_API;
-const urlTest = import.meta.env.VITE_URL_TEST;
+
 const users = ref([]);
 const onFinish = () => {
   axios
-    .get("http://127.0.0.1:5173/user.json")
+    .post("login", {
+      username: formState.username,
+
+      password: formState.password,
+    })
     .then(function (response) {
-      users.value = response.data;
-      const userArray = users.value;
-      const foundUser = userArray.find(
-        (user) =>
-          user.username === formState.username && user.password === formState.password
-      );
-      if (!foundUser) {
-        alert(`Username or Password is incorrect.`);
+      const status = response.status;
+      console.log(response.data);
+      if (status === 200) {
+        router.push("/");
+        localStorage.setItem("token", response.data.token);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: response.data.message,
+        });
       } else {
-        sessionStorage.setItem("loggedIn", JSON.stringify(true));
-        window.location.href = "/";
+        Swal.fire({
+          title: "Đăng nhập thất bại!",
+          text: response.data.message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     })
     .catch(function (error) {
-      // handle error
-      console.log(error);
+      handleRequestError(error);
     });
 };
-
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };

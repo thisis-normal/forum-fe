@@ -45,7 +45,7 @@ const admin = [{
         component: () => import("../views/admin/category/edit.vue"),
     },
     {
-        path: "forumAdd",
+        path: "categorys/:id/forumAdd",
         name: "admin-forum-add",
         component: () => import("../views/admin/forums/add.vue"),
     },

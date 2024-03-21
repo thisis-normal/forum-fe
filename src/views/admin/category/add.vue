@@ -60,6 +60,7 @@ const onFinish = (values) => {
     .post("forum-group", {
       name: formState.forumGroups.name,
       description: formState.forumGroups.description,
+      icon_name: formState.forumGroups.icon,
     })
     .then(function (response) {
       Swal.fire({

@@ -18,8 +18,12 @@
             <template v-if="column.key === 'id'">
               {{ index + 1 }}
             </template>
-            <template v-else-if="column.key === 'icon_name'"
-              ><DynamicIcon :name="record.icon_name" />
+            <template v-else-if="column.key === 'icon_name'">
+              <template v-if="record.icon_name">
+                <DynamicIcon :name="record.icon_name" />
+              </template>
+              <template v-else> </template>
+              <!-- <DynamicIcon :name="record.icon_name" /> -->
             </template>
             <template v-if="column.key === 'action'">
               <router-link

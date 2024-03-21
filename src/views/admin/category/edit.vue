@@ -78,13 +78,12 @@ const onFinish = (values) => {
       // icon:
     })
     .then(function (response) {
+      router.push("/admin/categorys");
       Swal.fire({
         title: "Cập nhật thành công!",
         //   text: response.data.message + "!",
         icon: "success",
         confirmButtonText: "OK",
-      }).then((result) => {
-        router.push("/admin/categorys");
       });
     })
     .catch(function (error) {

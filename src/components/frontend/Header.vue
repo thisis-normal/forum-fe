@@ -56,17 +56,21 @@
             ><PlusOutlined
           /></a-button>
         </div>
-        <a-dropdown :trigger="['click']" style="" class="col-5 hover">
+        <a-dropdown :trigger="['click']" style="" class="col-7 hover">
           <a class="ant-dropdown-link" @click.prevent>
             <a-avatar>
-              <template #icon><UserOutlined /></template>
+              <template #icon>
+                <img :src="urlPublic + user.avatar_path" alt="" />
+              </template>
             </a-avatar>
-            NTC
+            {{ user.username }}
             <DownOutlined />
           </a>
           <template #overlay>
             <a-menu>
-              <a-menu-item key="0"> Thông tin tài khoản </a-menu-item>
+              <a-menu-item key="0" @click="showInfoUser()">
+                Thông tin tài khoản
+              </a-menu-item>
 
               <a-menu-divider />
               <a-menu-item key="2" @click="logout">Đăng xuất</a-menu-item>
@@ -105,14 +109,20 @@ import { defineEmits } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 const token = localStorage.getItem("token");
-const emit = defineEmits(["showAddPost"]);
-const router = useRouter();
+const emit = defineEmits(["showAddPost", "showInfoUser"]);
 
+const router = useRouter();
+const user = ref([]);
+const urlPublic = import.meta.env.VITE_URL_BACKEND;
 const showAddPost = () => {
   emit("showAddPost");
 };
+const showInfoUser = () => {
+  emit("showInfoUser");
+  console.log(1);
+};
 const value = ref("");
-console.log(token);
+
 const logout = () => {
   axios
     .post("logout", null)
@@ -127,6 +137,17 @@ const logout = () => {
     });
   router.push("/login");
 };
+const me = () => {
+  axios
+    .get("me", null)
+    .then(function (response) {
+      user.value = response.data;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+me();
 const onSearch = (searchValue) => {
   console.log("use value", searchValue);
   console.log("or use this.value", value.value);
