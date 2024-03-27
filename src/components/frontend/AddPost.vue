@@ -76,12 +76,19 @@
         <a-select
           size="large"
           placeholder="Danh mục bài viết"
-          :options="options"
-          :filter-option="filterOption"
           @focus="handleFocus"
           @blur="handleBlur"
           @change="handleChange"
-        ></a-select>
+        >
+          <a-select-option
+            v-for="option in forum"
+            :key="option.id"
+            :value="option.id"
+            :style="{ background: option.color }"
+          >
+            <span>{{ option.name }}</span>
+          </a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item>
         <label for="">Nội dung</label>
@@ -113,7 +120,14 @@ import TextEditor from "./TextEditor.vue";
 // import { TextEditor } from "./TextEditor.vue";
 const emit = defineEmits(["closeAddPost"]);
 import axios from "axios";
+const idCategory = sessionStorage.getItem("idCategory");
 const prefix = ref([]);
+// console.log(TextEditor.quillContent.value);
+const formState = reactive({
+  name: "",
+  description: "",
+  content: "",
+});
 const getPrefix = () => {
   axios
     .get("prefix")
@@ -126,6 +140,19 @@ const getPrefix = () => {
     });
 };
 getPrefix();
+const forum = ref([]);
+const getForum = () => {
+  axios
+    .get(`forum-group/${idCategory}`)
+    .then(function (response) {
+      forum.value = response.data.forums;
+    })
+    .catch(function (error) {
+      // Xử lý lỗi
+      console.log(error);
+    });
+};
+getForum();
 const closeAddPost = () => {
   emit("closeAddPost");
 };

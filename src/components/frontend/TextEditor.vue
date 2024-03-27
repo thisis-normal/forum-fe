@@ -25,6 +25,6 @@ import { QuillEditor } from "@vueup/vue-quill";
 const quillContent = ref(""); // Sử dụng ref để tạo reactive variable cho v-model
 
 const handleInput = () => {
-  console.log(quillContent.value); // Giá trị của nội dung khi có sự thay đổi
+  console.log(quillContent.value);
 };
 </script>

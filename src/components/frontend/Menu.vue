@@ -2,7 +2,7 @@
   <a-menu
     v-model:openKeys="openKeys"
     v-model:selectedKeys="selectedKeys"
-    style="width: 256px; background-color: rgba(0, 0, 0, 0); border: none"
+    style="width: 100%; background-color: rgba(0, 0, 0, 0); border: none"
     mode="vertical"
     @click="handleClick"
   >
@@ -28,20 +28,10 @@
   </a-menu>
 </template>
 <script setup>
-import { h, ref, onMounted } from "vue";
+import { h, ref, onMounted, onBeforeMount } from "vue";
 import DynamicIcon from "../Icon.vue";
 import axios from "axios";
-import {
-  MailOutlined,
-  CalendarOutlined,
-  TrophyOutlined,
-  HomeOutlined,
-  NumberOutlined,
-  AppstoreOutlined,
-  LaptopOutlined,
-  ShoppingOutlined,
-  GiftOutlined,
-} from "@ant-design/icons-vue";
+
 import { useRouter, useRoute } from "vue-router";
 import { useMenuFront } from "../../store/useMenuFront.js";
 const router = useRouter();
@@ -61,7 +51,7 @@ const getCategory = async () => {
   }
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   getCategory();
 });
 const handleClick = (menuInfo) => {

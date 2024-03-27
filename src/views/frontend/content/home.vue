@@ -23,7 +23,14 @@
             "
           >
             <CommentOutlined class="me-3" />
-            {{ item.name }}
+            <router-link
+              :to="{
+                name: 'forum',
+                params: { slug: item.slug + '.' + item.id },
+              }"
+            >
+              {{ item.name }}
+            </router-link>
           </div>
           <div
             class="d-flex flex-column justify-content-center align-items-center"
