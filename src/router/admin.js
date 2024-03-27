@@ -4,7 +4,7 @@ const admin = [{
 
     component: () => import("../layout/admin.vue"),
     children: [{
-        path: "dashboard",
+        path: "",
         name: "admin-dashboard",
         component: () => import("../views/admin/dashboard/index.vue"),
 
@@ -32,6 +32,7 @@ const admin = [{
         name: "admin-categorys",
         component: () => import("../views/admin/category/index.vue"),
 
+
     },
     {
         path: "categoryAdd",
@@ -39,9 +40,24 @@ const admin = [{
         component: () => import("../views/admin/category/add.vue"),
     },
     {
-        path: "categoryEdit",
+        path: "categorys/:id",
         name: "admin-category-edit",
         component: () => import("../views/admin/category/edit.vue"),
+    },
+    {
+        path: "categorys/:id/forumAdd",
+        name: "admin-forum-add",
+        component: () => import("../views/admin/forums/add.vue"),
+    },
+    {
+        path: "forums/:id",
+        name: "admin-forum-edit",
+        component: () => import("../views/admin/forums/edit.vue"),
+    },
+    {
+        path: "categorys/:id/forum",
+        name: "admin-category-forum",
+        component: () => import("../views/admin/forums/index.vue"),
     },
     {
         path: "pinnedPost",

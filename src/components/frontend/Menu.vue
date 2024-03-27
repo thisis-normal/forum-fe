@@ -4,12 +4,32 @@
     v-model:selectedKeys="selectedKeys"
     style="width: 256px; background-color: rgba(0, 0, 0, 0); border: none"
     mode="vertical"
-    :items="items"
     @click="handleClick"
-  />
+  >
+    <a-menu-item
+      v-for="item in items"
+      :key="item.forum_group_id.toString()"
+      :item="item"
+      style="height: 50px"
+    >
+      <div
+        class="d-flex align-items-center"
+        style="font-size: 16px; height: 50px"
+      >
+        <DynamicIcon
+          v-if="item.icon_name"
+          :name="item.icon_name"
+          style="font-size: 24px; margin-right: 12px"
+        />
+        <div v-else></div>
+        {{ item.forum_group }}
+      </div>
+    </a-menu-item>
+  </a-menu>
 </template>
 <script setup>
 import { h, ref, onMounted } from "vue";
+import DynamicIcon from "../Icon.vue";
 import axios from "axios";
 import {
   MailOutlined,
@@ -22,35 +42,39 @@ import {
   ShoppingOutlined,
   GiftOutlined,
 } from "@ant-design/icons-vue";
-import { useRouter } from "vue-router";
-
+import { useRouter, useRoute } from "vue-router";
+import { useMenuFront } from "../../store/useMenuFront.js";
 const router = useRouter();
-const selectedKeys = ref([]);
-const openKeys = ref([]);
+const route = useRoute();
 const items = ref([]);
-const getCategory = () => {
-  axios
-    .get("http://127.0.0.1:5173/category.json")
-    .then(function (response) {
-      items.value = response.data;
-    })
-    .catch(function (error) {
-      // Xử lý lỗi
-      console.log(error);
-    });
+const store = useMenuFront();
+const { selectedKeys, openKeys } = store;
+const getCategory = async () => {
+  try {
+    const response = await axios.get("home/forum-list");
+    items.value = response.data;
+    // if (!route.params.forum_group_id && items.value.length > 0) {
+    //   await router.push(`/${items.value[0].forum_group_id}`);
+    // }
+  } catch (error) {
+    console.error(error);
+  }
 };
+
 onMounted(() => {
   getCategory();
 });
 const handleClick = (menuInfo) => {
-  if (menuInfo && menuInfo.item.id) {
-    const { id } = menuInfo.item;
-    const menuItem = items.value.find((item) => item.id === id);
-    console.log(menuItem.categoryId);
-    if (menuItem && menuItem.categoryId) {
+  console.log(menuInfo);
+  if (menuInfo && menuInfo.item && menuInfo.item.item) {
+    const { forum_group_id } = menuInfo.item.item;
+    const menuItem = items.value.find(
+      (item) => item.forum_group_id === forum_group_id
+    );
+    if (menuItem && menuItem.forum_group_id) {
       router.push({
         name: "content",
-        params: { id: menuItem.categoryId },
+        params: { id: menuItem.forum_group_id },
       });
     }
   }

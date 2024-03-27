@@ -9,14 +9,9 @@
         class="post row mt-2"
       >
         <div class="avt col-2 justify-content-center align-items-center">
-          <div
-            style="
-              border-radius: 30px;
-              width: 40px;
-              height: 40px;
-              background-color: aqua;
-            "
-          ></div>
+          <a-avatar size="large">
+            <template #icon><UserOutlined /></template>
+          </a-avatar>
         </div>
         <div class="content col-10 row">
           <div class="row">
@@ -42,7 +37,9 @@
 
 <script setup>
 import { ref } from "vue";
-
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
+import { UserOutlined } from "@ant-design/icons-vue";
 // Danh sách các bài viết mới nhất
 const latestPosts = ref([
   {

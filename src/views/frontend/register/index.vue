@@ -12,7 +12,7 @@
   >
     <div
       style="
-        width: 60%;
+        width: 50%;
         height: 80%;
         background-color: #ffffff;
         border-radius: 10px;
@@ -21,10 +21,11 @@
       class="row"
     >
       <div
-        class="col-6 d-flex flex-column justify-content-center align-items-center"
+        class="col-12 d-flex flex-column justify-content-center align-items-center"
       >
-        <h1>Đăng nhập</h1>
+        <h2 class="mt-3">Đăng ký</h2>
         <a-form
+          style="width: 80%"
           :model="formState"
           name="normal_login"
           class="login-form"
@@ -36,67 +37,79 @@
             name="username"
             :rules="[
               {
-                required: true,
-                message: 'Vui lòng nhập tên tài khoản của bạn!',
+                validator: validateUsername,
               },
             ]"
           >
             <label for="">Tài khoản</label>
-            <a-input
-              v-model:value="formState.username"
-              placeholder="Tài khoản"
-              size="large"
-            >
+            <a-input v-model:value="formState.username" placeholder="Tài khoản">
             </a-input>
           </a-form-item>
           <a-form-item
             class="m-0 mb-2"
-            name="username"
+            name="fullname"
             :rules="[
               {
                 required: true,
                 message: 'Vui lòng nhập họ và tên của bạn!',
               },
+              {
+                max: 100,
+                message: 'Vui lòng nhập họ và tên không quá 100 ký tự!',
+              },
+              {
+                validator: validateFullname,
+              },
             ]"
           >
             <label for="">Họ và tên </label>
-            <a-input
-              v-model:value="formState.fullname"
-              placeholder="Họ và tên"
-              size="large"
-            >
+            <a-input v-model:value="formState.fullname" placeholder="Họ và tên">
+            </a-input>
+          </a-form-item>
+          <a-form-item
+            class="m-0 mb-2"
+            name="email"
+            :rules="[
+              {
+                type: 'email',
+                required: true,
+                message: 'Vui lòng nhập email của bạn!',
+              },
+            ]"
+          >
+            <label for="">Email </label>
+            <a-input v-model:value="formState.email" placeholder="Email">
             </a-input>
           </a-form-item>
           <a-form-item
             class="m-0 mb-2"
             name="password"
-            :rules="[
-              { required: true, message: 'vui lòng nhập mật khẩu của bạn!' },
-            ]"
+            :rules="[{ validator: validatePassword }]"
           >
             <label for="">Mật khẩu</label>
             <a-input-password
               v-model:value="formState.password"
               placeholder="Mật khẩu"
-              size="large"
             >
             </a-input-password>
           </a-form-item>
           <a-form-item
             class="m-0 mb-2"
-            name="password"
+            name="confirmPassword"
             :rules="[
               {
                 required: true,
                 message: 'vui lòng nhập lại mật khẩu của bạn!',
               },
+              {
+                validator: validateConfirmPassword,
+              },
             ]"
           >
             <label for="">Xác nhận mật khẩu</label>
             <a-input-password
-              v-model:value="formState.password"
+              v-model:value="formState.confirmPassword"
               placeholder="Xác nhận mật khẩu"
-              size="large"
             >
             </a-input-password>
           </a-form-item>
@@ -107,7 +120,6 @@
               html-type="submit"
               class="login-form-button my-3"
               style="width: 100%"
-              size="large"
             >
               Đăng ký
             </a-button>
@@ -121,44 +133,76 @@
           </a-form-item>
         </a-form>
       </div>
-      <div class="col-6" style="display: flex; align-items: center">
-        <div
-          style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"
-        ></div>
-      </div>
     </div>
   </div>
 </template>
 <script setup>
 import { reactive, computed, ref } from "vue";
-import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
+
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
+import router from "@/router";
+import { handleRequestError } from "../../../store/errorHandler.js";
+
 const formState = reactive({
   username: "",
+  fullname: "",
+  email: "",
   password: "",
-  remember: true,
+  confirmPassword: "",
 });
+
 const users = ref([]);
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 30,
+  },
+};
 const onFinish = () => {
   axios
-    .get("http://127.0.0.1:5173/user.json")
+    .post("register", {
+      username: formState.username,
+      full_name: formState.fullname,
+      email: formState.email,
+      password: formState.password,
+      confirmPassword: formState.confirmPassword,
+    })
     .then(function (response) {
-      users.value = response.data;
-      const userArray = users.value;
-      const foundUser = userArray.find(
-        (user) =>
-          user.username === formState.username &&
-          user.password === formState.password
-      );
-      if (!foundUser) {
-        alert(`Username or Password is incorrect.`);
+      console.log(response.data, response.message, response.status);
+      if (response.status === 201) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: response.data.message + "!",
+        });
+        router.push("/login");
       } else {
-        sessionStorage.setItem("loggedIn", JSON.stringify(true));
-        window.location.href = "/";
+        console.log(response.data.message);
+        Swal.fire({
+          title: "Đăng ký thất bại!",
+          text: response.data.message + "!",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     })
     .catch(function (error) {
-      // handle error
-      console.log(error);
+      // console.log(response.data.message);
+
+      handleRequestError(error);
     });
 };
 
@@ -166,6 +210,65 @@ const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 const disabled = computed(() => {
-  return !(formState.username && formState.password);
+  return !(
+    formState.username &&
+    formState.password &&
+    formState.username.length >= 8 &&
+    formState.username.length <= 50 &&
+    formState.email &&
+    formState.confirmPassword
+  );
 });
+const validateUsername = (rule, value, callback) => {
+  if (value.length < 8 || value.length > 50) {
+    callback(new Error("Tài khoản phải có từ 8 đến 50 ký tự!"));
+  } else if (/\s/.test(value)) {
+    callback(new Error("Tài khoản không được chứa khoảng trắng!"));
+  } else if (/[\u0080-\uFFFF]/.test(value)) {
+    callback(new Error("Tài khoản không được chứa tiếng Việt!"));
+  } else {
+    callback();
+  }
+};
+const validatePassword = (rule, value, callback) => {
+  if (value.length < 8) {
+    callback(new Error("Mật khẩu phải có ít nhất 8 ký tự!"));
+  } else if (!/^[a-zA-Z0-9!@#$%^&*()_+{}|:"<>?~`\-=[\]\\;',./]+$/.test(value)) {
+    callback(
+      new Error("Mật khẩu chỉ chứa các ký tự chữ cái, số và ký tự đặc biệt!")
+    );
+  } else if (
+    !/[a-z]/.test(value) ||
+    !/[A-Z]/.test(value) ||
+    !/\d/.test(value)
+  ) {
+    callback(
+      new Error(
+        "Mật khẩu phải chứa ít nhất một ký tự viết thường, một ký tự viết hoa và một số!"
+      )
+    );
+  } else {
+    callback();
+  }
+};
+const validateConfirmPassword = (rule, value, callback) => {
+  if (value !== formState.password) {
+    callback(
+      "Mật khẩu xác nhận không khớp. Vui lòng nhập lại mật khẩu chính xác!"
+    );
+  } else {
+    callback();
+  }
+};
+const validateFullname = (rule, value, callback) => {
+  if (
+    !/^[a-zA-Z0-9\sàáạãảăắằẵặẳâấầẫậẩèéẹẽẻêềếễểệìíịĩỉòóọõỏôốồỗộổơớờợỡởùúụũủưứừựữửỳýỵỹỷđÀÁẠÃẢĂẮẰẴẶẲÂẤẦẪẬẨÈÉẸẼẺÊỀẾỄỂỆÌÍỊĨỈÒÓỌÕỎÔỐỒỖỘỔƠỚỜỢỠỞÙÚỤŨỦƯỨỪỰỮỬỲÝỴỸỶĐ]*$/.test(
+      value
+    )
+  ) {
+    callback(new Error("Họ và tên không được chứa ký tự đặc biệt!"));
+  } else {
+    callback();
+  }
+};
 </script>

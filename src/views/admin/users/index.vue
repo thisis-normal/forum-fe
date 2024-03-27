@@ -9,12 +9,17 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <a-table :dataSource="users" :columns="columns" :scroll="{ x: 576 }">
+        <a-table :dataSource="users" :columns="columns" :scroll="{ x: 800 }">
           <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'avatar'">
+              <a-avatar>
+                <template #icon>
+                  <img src="http://127.0.0.1:5173/public/panh.jpg" alt=""
+                /></template>
+              </a-avatar>
+            </template>
             <template v-if="column.key === 'action'">
-              <router-link
-                :to="{ name: 'admin-users-edit', params: { id: record.id } }"
-              >
+              <router-link :to="{ name: 'admin-users-edit', params: { id: record.id } }">
                 <BtnEdit />
               </router-link>
 
@@ -51,67 +56,78 @@ export default {
         title: "ID",
         dataIndex: "id",
         key: "id",
+        width: "5%",
       },
       {
         title: "Họ",
         dataIndex: "first_name",
         key: "first_name",
       },
+      // {
+      //   title: "Mật khẩu",
+      //   dataIndex: "password",
+      //   key: "password",
+      //   // Đặt hide để ẩn cột mật khẩu khỏi bảng
+      //   hide: true,
+      // },
       {
-        title: "Tên",
-        dataIndex: "last_name",
-        key: "last_name",
+        title: "Email",
+        dataIndex: "email",
+        key: "email",
       },
       {
-        title: "Birthday",
-        dataIndex: "birth_date",
-        key: "birth_date",
+        title: "Họ và tên",
+        dataIndex: "fullname",
+        key: "fullname",
       },
       {
-        title: "Giới tính",
-        dataIndex: "gender",
-        key: "gender",
-        // Đặt hide để ẩn cột mật khẩu khỏi bảng
-        hide: true,
-      }
-      // ,
-      // {
-      //   title: "Email",
-      //   dataIndex: "email",
-      //   key: "email",
-      // }
-      // // ,
-      // {
-      //   title: "Vai trò",
-      //   dataIndex: "role",
-      //   key: "role",
-      // },
-      // {
-      //   title: "Thao tác",
-      //   dataIndex: "action",
-      //   key: "action",
-      //   fixed: "right",
-      // },
+        title: "Ảnh",
+        dataIndex: "avatar",
+        key: "avatar",
+        width: "7%",
+      },
+      {
+        title: "Mã sinh viên",
+        dataIndex: "studentid",
+        key: "studentid",
+      },
+      {
+        title: "Cấm",
+        dataIndex: "banned",
+        key: "banned",
+        width: "7%",
+      },
+      {
+        title: "Thời gian",
+        dataIndex: "bannedUntil",
+        key: "bannedUntil",
+      },
+      {
+        title: "Lý do",
+        dataIndex: "bannedReason",
+        key: "bannedReason",
+      },
+      {
+        title: "Thao tác",
+        dataIndex: "action",
+        key: "action",
+        fixed: "right",
+      },
     ];
     const getUsers = () => {
-      axios
-          .put("http://127.0.0.1:2002/api/student-put/5 ",
-              {
-                "first_name": "áda",
-                "last_name": "bro"
-              }, {
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              }
-          )
-          .then(function (response) {
-            users.value = response.data;
-          })
-          .catch(function (error) {
-            // handle error
-            console.log(error);
-          });
+      fetch("http://127.0.0.1:5173/user.json")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          users.value = data;
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
     };
 
     getUsers();

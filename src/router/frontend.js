@@ -8,6 +8,11 @@ const frontend = [
                 name: "content",
                 component: () => import("../views/frontend/content/index.vue")
             },
+            {
+                path: "",
+                name: "home",
+                component: () => import("../views/frontend/content/home.vue")
+            }
         ]
     },
 

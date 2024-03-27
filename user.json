@@ -1,28 +1,35 @@
 [
-    {
-      "id": 1,
-      "username": "john_doe",
-      "password": "hashed_password_1",
-      "email": "john@example.com",
-      "fullname": "John Doe",
-      "role": "admin"
-    },
-    {
-      "id": 2,
-      "username": "jane_smith",
-      "password": "hashed_password_2",
-      "email": "jane@example.com",
-      "fullname": "Jane Smith",
-      "role": "user"
-    },
-    {
-      "id": 3,
-      "username": "alex_jones",
-      "password": "hashed_password_3",
-      "email": "alex@example.com",
-      "fullname": "Alex Jones",
-      "role": "user"
-    }
-    
-  ]
-  
+  {
+    "id": 1,
+    "username": "Nguyễn Thành Chung chung",
+    "email": "user1@example.com",
+    "fullname": "User One",
+    "avatar": "avatar1.jpg",
+    "studentid": "123456",
+    "banned": false,
+    "bannedUntil": null,
+    "bannedReason": ""
+  },
+  {
+    "id": 2,
+    "username": "user2",
+    "email": "user2@example.com",
+    "fullname": "User Two",
+    "avatar": "avatar2.jpg",
+    "studentid": "789012",
+    "banned": true,
+    "bannedUntil": "2024-01-31",
+    "bannedReason": "Spamming"
+  },
+  {
+    "id": 3,
+    "username": "user3",
+    "email": "user3@example.com",
+    "fullname": "User Three",
+    "avatar": "avatar3.jpg",
+    "studentid": "345678",
+    "banned": false,
+    "bannedUntil": null,
+    "bannedReason": ""
+  }
+]

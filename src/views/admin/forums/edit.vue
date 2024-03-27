@@ -16,9 +16,6 @@
       <a-form-item label="Icon" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.icon" />
       </a-form-item>
-      <a-form-item label="Icon đã lấy:" id="icon" :rules="[{ required: true }]">
-        <DynamicIcon :name="formState.forumGroups.icon" />
-      </a-form-item>
       <a-form-item label="Lấy tên icon">
         <a href="https://www.antdv.com/components/icon" target="_blank"
           >Tại đây !</a
@@ -37,7 +34,6 @@ import { useRoute } from "vue-router";
 import { useMenu } from "../../../store/useMenu.js";
 import router from "@/router";
 import Swal from "sweetalert2";
-import DynamicIcon from "../../../components/Icon.vue";
 useMenu().onSelectedKeys("admin-categorys");
 const layout = {
   labelCol: {
@@ -60,16 +56,6 @@ const formState = reactive({
 });
 const forumGroups = ref([]);
 const onFinish = (values) => {
-  if (!isValidIcon(formState.forumGroups.icon)) {
-    Swal.fire({
-      title: "Icon không hợp lệ!",
-      text: "Vui lòng kiểm tra lại icon.",
-      icon: "error",
-      confirmButtonText: "OK",
-    });
-    return;
-  }
-
   axios
     .put(`forum-group/${route.params.id}`, {
       name: formState.forumGroups.name,
@@ -78,12 +64,13 @@ const onFinish = (values) => {
       // icon:
     })
     .then(function (response) {
-      router.push("/admin/categorys");
       Swal.fire({
         title: "Cập nhật thành công!",
         //   text: response.data.message + "!",
         icon: "success",
         confirmButtonText: "OK",
+      }).then((result) => {
+        router.push("/admin/categorys");
       });
     })
     .catch(function (error) {
@@ -111,10 +98,6 @@ const getCategory = (values) => {
       // handle error
       console.log(error);
     });
-};
-
-const isValidIcon = (iconName) => {
-  return iconName && iconName.length > 0;
 };
 getCategory();
 </script>
