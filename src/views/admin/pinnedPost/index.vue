@@ -44,6 +44,7 @@ export default {
   setup() {
     useMenu().onSelectedKeys("admin-pinnedPost");
     const users = ref([]);
+
     const columns = [
       {
         title: "ID",
@@ -98,6 +99,7 @@ export default {
 
     getUsers();
     return {
+      getUsers,
       users,
       columns,
     };

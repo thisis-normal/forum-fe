@@ -7,18 +7,10 @@
       :validate-messages="validateMessages"
       @finish="onFinish"
     >
-      <a-form-item
-        :name="['user', 'name']"
-        label="Name"
-        :rules="[{ required: true }]"
-      >
+      <a-form-item :name="['user', 'name']" label="Name" :rules="[{ required: true }]">
         <a-input v-model:value="formState.user.name" />
       </a-form-item>
-      <a-form-item
-        :name="['user', 'email']"
-        label="Email"
-        :rules="[{ type: 'email' }]"
-      >
+      <a-form-item :name="['user', 'email']" label="Email" :rules="[{ type: 'email' }]">
         <a-input v-model:value="formState.user.email" />
       </a-form-item>
       <a-form-item
@@ -47,6 +39,8 @@ import { ref, reactive } from "vue";
 // import {}
 const route = useRoute();
 const router = useRouter();
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
 const layout = {
   labelCol: {
     span: 6,

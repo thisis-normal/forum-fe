@@ -21,9 +21,9 @@
       class="row"
     >
       <div
-        class="col-6 d-flex flex-column justify-content-center align-items-center"
+        class="col-sm-6 d-flex flex-column justify-content-center align-items-center"
       >
-        <h1>Đăng nhập</h1>
+        <h2>Đăng nhập</h2>
         <a-form
           :model="formState"
           name="normal_login"
@@ -109,7 +109,10 @@
           </a-form-item>
         </a-form>
       </div>
-      <div class="col-6" style="display: flex; align-items: center">
+      <div
+        class="col-sm-6 d-none d-sm-flex"
+        style="display: flex; align-items: center"
+      >
         <div
           style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"
         ></div>
@@ -120,33 +123,57 @@
 <script setup>
 import { reactive, computed, ref } from "vue";
 import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
+import { handleRequestError } from "../../../store/errorHandler.js";
+import Swal from "sweetalert2";
+import router from "@/router";
 const formState = reactive({
   username: "",
   password: "",
   remember: true,
 });
+
+// const router = useRouter();
 const users = ref([]);
 const onFinish = () => {
   axios
-    .get("http://127.0.0.1:5173/user.json")
+    .post("login", {
+      username: formState.username,
+
+      password: formState.password,
+    })
     .then(function (response) {
-      users.value = response.data;
-      const userArray = users.value;
-      const foundUser = userArray.find(
-        (user) =>
-          user.username === formState.username &&
-          user.password === formState.password
-      );
-      if (!foundUser) {
-        alert(`Username or Password is incorrect.`);
+      const status = response.status;
+      console.log(response.data);
+      if (status === 200) {
+        router.push("/");
+        localStorage.setItem("token", response.data.token);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: response.data.message,
+        });
       } else {
-        sessionStorage.setItem("loggedIn", JSON.stringify(true));
-        window.location.href = "/";
+        Swal.fire({
+          title: "Đăng nhập thất bại!",
+          text: response.data.message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     })
     .catch(function (error) {
-      // handle error
-      console.log(error);
+      handleRequestError(error);
     });
 };
 

@@ -23,7 +23,6 @@
             "
           >
             <CommentOutlined class="me-3" />
-
             <router-link
               :to="{
                 name: 'forum',
@@ -76,27 +75,38 @@ import {
   RightOutlined,
 } from "@ant-design/icons-vue";
 import axios from "axios";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";
 const route = useRoute();
 const router = useRouter();
 
 const nameCategory = ref([]);
-useMenuFront().onSelectedKeys(route.params.id);
-
-watch(route, () => {
-  useMenuFront().onSelectedKeys(route.params.id);
-});
 
 const data = ref([]);
 // Lấy dữ liệu theo danh mục
+const firstItemId = ref(null);
+
+// Hàm lấy item đầu tiên từ API
+const getFirstItem = async () => {
+  try {
+    const response = await axios.get("home/forum-list");
+    const items = response.data;
+    if (items.length > 0) {
+      const firstItem = items[0];
+      firstItemId.value = firstItem.forum_group_id; // Lưu ID của item đầu tiên
+      useMenuFront().onSelectedKeys(firstItemId.value.toString());
+      getNameCategory(firstItemId.value);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 const getNameCategory = async (id) => {
   await axios
     .get(`forum-group/${id}`)
     .then((response) => {
       nameCategory.value = response.data.name;
       data.value = response.data.forums;
-      console.log(data);
     })
     .catch((error) => {
       console.log(error);
@@ -114,14 +124,7 @@ const getImg = () => {
     });
 };
 
-const categoryId = route.params.id;
-watch(
-  () => route.params.id,
-  (newId, oldId) => {
-    getNameCategory(newId);
-  }
-);
-getNameCategory(route.params.id);
+onMounted(getFirstItem);
 
 getImg();
 </script>

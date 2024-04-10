@@ -13,16 +13,8 @@
       <a-form-item label="Mô tả" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.description" />
       </a-form-item>
-      <a-form-item label="Icon" :rules="[{ required: true }]">
-        <a-input v-model:value="formState.forumGroups.icon" />
-      </a-form-item>
-      <a-form-item label="Icon đã lấy:" id="icon" :rules="[{ required: true }]">
-        <DynamicIcon :name="formState.forumGroups.icon" />
-      </a-form-item>
-      <a-form-item label="Lấy tên icon">
-        <a href="https://www.antdv.com/components/icon" target="_blank"
-          >Tại đây !</a
-        >
+      <a-form-item label="Url hiển thị" :rules="[{ required: true }]">
+        <a-input v-model:value="formState.forumGroups.slug" />
       </a-form-item>
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
         <a-button type="primary" html-type="submit">Thêm mới</a-button>
@@ -31,10 +23,11 @@
   </a-card>
 </template>
 <script setup>
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import router from "@/router";
 import Swal from "sweetalert2";
-import DynamicIcon from "../../../components/Icon.vue";
+import { useRoute } from "vue-router";
+
 import { useMenu } from "../../../store/useMenu.js";
 useMenu().onSelectedKeys("admin-categorys");
 const layout = {
@@ -52,15 +45,19 @@ const formState = reactive({
   forumGroups: {
     name: "",
     description: "",
-    icon: "",
+    slug: "",
   },
 });
+console.log(formState.forumGroups.slug);
+const route = useRoute();
+
 const onFinish = (values) => {
   axios
-    .post("forum-group", {
+    .post("forum", {
+      forum_group_id: route.params.id,
       name: formState.forumGroups.name,
       description: formState.forumGroups.description,
-      icon_name: formState.forumGroups.icon,
+      slug: formState.forumGroups.slug,
     })
     .then(function (response) {
       Swal.fire({
@@ -70,7 +67,7 @@ const onFinish = (values) => {
         confirmButtonText: "OK",
       });
 
-      router.push("/admin/categorys");
+      router.push(`/admin/categorys/${route.params.id}/forum`);
     })
     .catch(function (error) {
       // handle error
@@ -83,4 +80,32 @@ const onFinish = (values) => {
       });
     });
 };
+const generateSlug = (str) => {
+  str = str.replace(/à|á|ạ|ả|ã|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ/g, "a");
+  str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ế|ề|ể|ễ|ệ/g, "e");
+  str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+  str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ố|ồ|ộ|ổ|ỗ|ơ|ớ|ờ|ợ|ở|ỡ/g, "o");
+  str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ứ|ừ|ự|ử|ữ/g, "u");
+  str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+  str = str.replace(/đ/g, "d");
+
+  str = str.replace(/ /g, "-"); // Thay thế khoảng trắng bằng dấu gạch ngang
+  str = str.replace(/[^a-zA-Z0-9\-]/g, ""); // Cho phép giữ lại dấu "-"
+
+  str = str.replace(/-+/g, "-"); // Thêm dấu cách sau mỗi dấu "-"
+
+  str = str.replace(/^-+|-+$/g, "");
+
+  str = str.toLowerCase(); // Chuyển đổi sang dạng in thường
+
+  return str;
+};
+
+// Sử dụng watch để theo dõi thay đổi của 'name' và cập nhật 'slug'
+watch(
+  () => formState.forumGroups.name,
+  (newValue) => {
+    formState.forumGroups.slug = generateSlug(newValue);
+  }
+);
 </script>

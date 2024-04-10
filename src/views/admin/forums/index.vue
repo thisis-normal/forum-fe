@@ -1,8 +1,10 @@
 <template>
-  <a-card title="Danh mục" style="width: 100%">
+  <a-card :title="`Nhóm ${forum.name}`" style="width: 100%">
     <div class="row">
       <div class="col-12 d-flex justify-content-end align-items-center my-3">
-        <router-link :to="{ name: 'admin-category-add' }">
+        <router-link
+          :to="{ name: 'admin-forum-add', params: { id: route.params.id } }"
+        >
           <BtnCreate />
         </router-link>
       </div>
@@ -18,32 +20,14 @@
             <template v-if="column.key === 'id'">
               {{ index + 1 }}
             </template>
-            <template v-else-if="column.key === 'icon_name'">
-              <template v-if="record.icon_name">
-                <DynamicIcon :name="record.icon_name" />
-              </template>
-              <template v-else> </template>
-              <!-- <DynamicIcon :name="record.icon_name" /> -->
-            </template>
             <template v-if="column.key === 'action'">
               <router-link
-                :to="{ name: 'admin-category-edit', params: { id: record.id } }"
+                :to="{ name: 'admin-forum-edit', params: { id: record.id } }"
               >
                 <BtnEdit />
               </router-link>
 
               <BtnDel @click="deleteCategory(record.id, record.name)" />
-
-              <router-link
-                :to="{
-                  name: 'admin-category-forum',
-                  params: { id: record.id },
-                }"
-              >
-                <a-button style="background-color: #009c10"
-                  ><UnorderedListOutlined style="color: #fff" />
-                </a-button>
-              </router-link>
             </template>
           </template>
         </a-table>
@@ -57,14 +41,15 @@ import {
   EditOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons-vue";
-import DynamicIcon from "../../../components/Icon.vue";
+
 import BtnCreate from "../../../components/BtnCreate.vue";
 import BtnEdit from "../../../components/BtnEdit.vue";
 import BtnDel from "../../../components/BtnDel.vue";
-import Swal from "sweetalert2";
+
 import { defineComponent, ref } from "vue";
 import { useMenu } from "../../../store/useMenu.js";
-import router from "@/router";
+import { useRoute } from "vue-router";
+import Swal from "sweetalert2";
 export default {
   components: {
     PlusOutlined,
@@ -73,12 +58,13 @@ export default {
     BtnEdit,
     BtnDel,
     UnorderedListOutlined,
-    DynamicIcon,
   },
   setup() {
     useMenu().onSelectedKeys("admin-categorys");
     const forumGroups = ref([]);
+    const forum = ref([]);
 
+    const route = useRoute();
     const columns = [
       {
         title: "ID",
@@ -86,7 +72,7 @@ export default {
         key: "id",
       },
       {
-        title: "Tên danh mục",
+        title: "Tên diễn đàn",
         dataIndex: "name",
         key: "name",
       },
@@ -97,11 +83,6 @@ export default {
         // Đặt hide để ẩn cột mật khẩu khỏi bảng
         hide: true,
       },
-      {
-        title: "Icon",
-        dataIndex: "icon_name",
-        key: "icon_name",
-      },
 
       {
         title: "Thao tác",
@@ -110,12 +91,12 @@ export default {
         fixed: "right",
       },
     ];
-    const getforumGroups = () => {
+    const getforums = () => {
       axios
-        .get("forum-group")
+        .get(`forum-group/${route.params.id}`)
         .then(function (response) {
-          forumGroups.value = response.data;
-          console.log(forumGroups);
+          forum.value = response.data;
+          forumGroups.value = response.data.forums;
         })
         .catch(function (error) {
           // handle error
@@ -135,7 +116,7 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`forum-group/${id}`)
+            .delete(`forum/${id}`)
             .then(function (response) {
               Swal.fire({
                 title: `Xóa thành công danh mục ${name}!`,
@@ -155,11 +136,16 @@ export default {
         }
       });
     };
-    getforumGroups();
+
+    getforums();
+
     return {
+      getforums,
       forumGroups,
       columns,
       deleteCategory,
+      forum,
+      route,
     };
   },
 };

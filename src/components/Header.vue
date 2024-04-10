@@ -45,7 +45,8 @@ import {
 } from "@ant-design/icons-vue";
 import { ref } from "vue";
 import TheMenu from "../components/Menu.vue";
-
+const urlApi = import.meta.env.VITE_URL_API;
+const urlTest = import.meta.env.VITE_URL_TEST;
 const open = ref(false);
 const openTk = ref(false);
 

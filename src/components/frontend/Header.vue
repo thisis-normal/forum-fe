@@ -25,7 +25,7 @@
       </div>
       <div
         class="col-sm-3 d-none d-sm-flex align-items-center text-black justify-content-end"
-        v-if="!isLogin"
+        v-if="!token"
       >
         <router-link to="/login" style="text-decoration: none; color: black">
           <span
@@ -37,15 +37,46 @@
             >Đăng nhập</span
           >
         </router-link>
-        <span>Đăng ký</span>
+        <router-link to="/register" style="text-decoration: none; color: black">
+          <span>Đăng ký</span>
+        </router-link>
       </div>
       <div
-        class="col-sm-3 d-none d-sm-flex align-items-center text-black"
+        class="col-sm-3 d-none d-sm-flex align-items-center text-black row"
         v-else
       >
-        <a-button type="primary" shape="circle" @click="showAddPost()"
-          ><PlusOutlined
-        /></a-button>
+        <div class="col-5 d-flex justify-content-end align-items-center">
+          <CommentOutlined style="font-size: 20px" />
+          <BellOutlined style="font-size: 20px" class="mx-2" />
+          <a-button
+            class=""
+            type="primary"
+            shape="circle"
+            @click="showAddPost()"
+            ><PlusOutlined
+          /></a-button>
+        </div>
+        <a-dropdown :trigger="['click']" style="" class="col-7 hover">
+          <a class="ant-dropdown-link" @click.prevent>
+            <a-avatar>
+              <template #icon>
+                <img :src="urlPublic + user.avatar_path" alt="" />
+              </template>
+            </a-avatar>
+            {{ user.username }}
+            <DownOutlined />
+          </a>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item key="0" @click="showInfoUser()">
+                Thông tin tài khoản
+              </a-menu-item>
+
+              <a-menu-divider />
+              <a-menu-item key="2" @click="logout">Đăng xuất</a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
       </div>
       <div
         class="col-1 d-flex d-sm-none justify-content-center align-items-center"
@@ -69,18 +100,54 @@ import {
   UserOutlined,
   LoadingOutlined,
   PlusOutlined,
+  DownOutlined,
+  CommentOutlined,
+  BellOutlined,
 } from "@ant-design/icons-vue";
 import { ref } from "vue";
 import { defineEmits } from "vue";
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
+const token = localStorage.getItem("token");
+const emit = defineEmits(["showAddPost", "showInfoUser"]);
 
-const isLogin = sessionStorage.getItem("loggedIn");
-const emit = defineEmits(["showAddPost"]);
-
+const router = useRouter();
+const user = ref([]);
+const urlPublic = import.meta.env.VITE_URL_BACKEND;
 const showAddPost = () => {
   emit("showAddPost");
 };
+const showInfoUser = () => {
+  emit("showInfoUser");
+  console.log(1);
+};
 const value = ref("");
 
+const logout = () => {
+  axios
+    .post("logout", null)
+    .then(function (response) {
+      console.log(response);
+      if (response.status === 200) {
+        localStorage.removeItem("token");
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  router.push("/login");
+};
+const me = () => {
+  axios
+    .get("me", null)
+    .then(function (response) {
+      user.value = response.data;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+me();
 const onSearch = (searchValue) => {
   console.log("use value", searchValue);
   console.log("or use this.value", value.value);
