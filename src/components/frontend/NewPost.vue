@@ -2,9 +2,9 @@
   <div class="latest-posts">
     <div class="row border-bottom">Bài viết mới nhất</div>
     <div class="row mt-3">
-      <!-- Hiển thị danh sách các bài viết mới nhất -->
+      <!-- Hiển thị 3 bài viết mới nhất -->
       <div
-        v-for="(post, index) in latestPosts"
+        v-for="(post, index) in latestPosts.slice(0, 3)"
         :key="index"
         class="post row mt-2"
       >
@@ -15,18 +15,18 @@
         </div>
         <div class="content col-10 row">
           <div class="row">
-            <div class="user col-2">{{ post.user }}</div>
+            <div class="user col-7">{{ post.user_full_name }}</div>
             <div class="user col-1">-</div>
-            <div class="time col-7">{{ post.time }}</div>
+            <div class="time col-2">{{ post.post_created_at }}</div>
           </div>
           <div class="row">
             <div class="col-12">
-              {{ post.title }}
+              {{ post.thread_name }}
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              {{ post.category }}
+              {{ post.prefixes_name }}
             </div>
           </div>
         </div>
@@ -36,29 +36,19 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-const urlApi = import.meta.env.VITE_URL_API;
-const urlTest = import.meta.env.VITE_URL_TEST;
+import { onMounted, ref } from "vue";
+
 import { UserOutlined } from "@ant-design/icons-vue";
+import axios from "axios";
 // Danh sách các bài viết mới nhất
-const latestPosts = ref([
-  {
-    user: "NTC",
-    time: "06/04/2024",
-    title: "Bài viết 1",
-    category: "Máy tính",
-  },
-  {
-    user: "NTC",
-    time: "06/04/2024",
-    title: "Bài viết 2",
-    category: "Máy tính",
-  },
-  {
-    user: "NTC",
-    time: "06/04/2024",
-    title: "Bài viết 3",
-    category: "Máy tính",
-  },
-]);
+const latestPosts = ref([]);
+const getPost = () => {
+  axios.get("home/latest-threads").then((response) => {
+    latestPosts.value = response.data;
+    console.log(latestPosts.value);
+  });
+};
+onMounted(() => {
+  getPost();
+});
 </script>

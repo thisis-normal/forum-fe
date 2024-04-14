@@ -70,7 +70,9 @@
               >
             </div>
             <div>
-              <a class="login-form-forgot" href="">Quên mật khẩu</a>
+              <a class="login-form-forgot" href="/forgotpassword"
+                >Quên mật khẩu</a
+              >
             </div>
           </div>
 

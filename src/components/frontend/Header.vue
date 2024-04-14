@@ -63,7 +63,7 @@
                 <img :src="urlPublic + user.avatar_path" alt="" />
               </template>
             </a-avatar>
-            {{ user.username }}
+            {{ user.username == null ? user.student_id : user.username }}
             <DownOutlined />
           </a>
           <template #overlay>
@@ -104,7 +104,7 @@ import {
   CommentOutlined,
   BellOutlined,
 } from "@ant-design/icons-vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { defineEmits } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
@@ -147,7 +147,10 @@ const me = () => {
       console.log(error);
     });
 };
-me();
+onMounted(() => {
+  me();
+});
+// me();
 const onSearch = (searchValue) => {
   console.log("use value", searchValue);
   console.log("or use this.value", value.value);

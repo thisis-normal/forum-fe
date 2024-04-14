@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import axios from "axios";
 const data = ref([]);
 const getStatistics = () => {
@@ -42,7 +42,9 @@ const getStatistics = () => {
     data.value = response.data;
   });
 };
-getStatistics();
+onMounted(() => {
+  getStatistics();
+});
 
 // Danh sách các bài viết mới nhất
 </script>

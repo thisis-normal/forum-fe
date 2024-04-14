@@ -17,6 +17,16 @@ const login = [
     }
     ,
     {
+        path: "/forgotpassword",
+        component: () => import("../views/frontend/forgot/index.vue"),
+
+    },
+    {
+        path: "/reset-password",
+        component: () => import("../views/frontend/reset/index.vue"),
+
+    },
+    {
         path: "/admin/login",
         component: () => import("../views/admin/login/index.vue"),
 

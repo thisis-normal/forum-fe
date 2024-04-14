@@ -23,7 +23,7 @@
       <div
         class="col-6 d-flex flex-column justify-content-center align-items-center"
       >
-        <h1>Đăng nhập với ULSA</h1>
+        <h1>Quên mật khẩu</h1>
         <a-form
           :model="formState"
           name="normal_login"
@@ -33,43 +33,25 @@
         >
           <a-form-item
             class="m-0 mb-2"
-            name="username"
+            name="email"
             :rules="[
               {
                 required: true,
-                message: 'Vui lòng nhập tên tài khoản của bạn!',
+                message: 'Vui lòng nhập email đăng ký!',
               },
             ]"
           >
-            <label for="">Mã sinh viên</label>
-            <a-input v-model:value="formState.username" size="large">
+            <label for="">Email</label>
+            <a-input
+              v-model:value="formState.email"
+              size="large"
+              placeholder="Nhập email đăng ký"
+            >
               <template #prefix>
-                <UserOutlined class="site-form-item-icon" />
+                <MailOutlined class="site-form-item-icon" />
               </template>
             </a-input>
           </a-form-item>
-
-          <a-form-item
-            class="m-0 mb-2"
-            name="password"
-            :rules="[
-              { required: true, message: 'vui lòng nhập mật khẩu của bạn!' },
-            ]"
-          >
-            <label for="">Mật khẩu</label>
-            <a-input-password v-model:value="formState.password" size="large">
-              <template #prefix>
-                <LockOutlined class="site-form-item-icon" />
-              </template>
-            </a-input-password>
-          </a-form-item>
-          <div class="d-flex" style="justify-content: space-between">
-            <div>
-              <a-checkbox v-model:checked="formState.remember"
-                >Ghi nhớ tôi</a-checkbox
-              >
-            </div>
-          </div>
 
           <a-form-item>
             <a-button
@@ -80,14 +62,12 @@
               style="width: 100%"
               size="large"
             >
-              Đăng nhập
+              Quên mật khẩu
             </a-button>
 
             <br />
             <div class="">
-              <div style="color: rgba(0, 0, 0, 0.5)">
-                Hoặc đăng nhập với tài khoản khác
-              </div>
+              <div style="color: rgba(0, 0, 0, 0.5)">Hoặc đăng nhập</div>
             </div>
             <router-link to="/login">
               <a-button
@@ -96,7 +76,7 @@
                 style="width: 100%"
                 size="large"
               >
-                Đăng nhập thường
+                Đăng nhập
               </a-button>
             </router-link>
           </a-form-item>
@@ -112,51 +92,30 @@
 </template>
 <script setup>
 import { reactive, computed, ref } from "vue";
+import Swal from "sweetalert2";
 import { handleRequestError } from "../../../store/errorHandler.js";
 import router from "@/router";
-import Swal from "sweetalert2";
 
 const formState = reactive({
-  username: "",
-  password: "",
-  remember: true,
+  email: "",
 });
-
-const users = ref([]);
 const onFinish = () => {
   axios
-    .post("student-login", {
-      student_id: formState.username,
-      password: formState.password,
+    .post("forgot-password", {
+      email: formState.email,
     })
     .then(function (response) {
       if (response.status === 200) {
-        router.push("/");
-        localStorage.setItem("token", response.data.token);
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: response.data.message,
-        });
-      } else {
         Swal.fire({
-          title: "Đăng nhập thất bại!",
-          text: response.data.message,
-          icon: "error",
+          title: response.data.message + "!",
+          icon: "success",
           confirmButtonText: "OK",
+        }).then((result) => {
+          router.push("/login");
         });
       }
     })
+
     .catch(function (error) {
       handleRequestError(error);
     });
@@ -166,6 +125,6 @@ const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 const disabled = computed(() => {
-  return !(formState.username && formState.password);
+  return !formState.email;
 });
 </script>

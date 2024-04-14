@@ -76,7 +76,7 @@ import {
   RightOutlined,
 } from "@ant-design/icons-vue";
 import axios from "axios";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";
 const route = useRoute();
 const router = useRouter();
@@ -121,7 +121,9 @@ watch(
     getNameCategory(newId);
   }
 );
-getNameCategory(route.params.id);
+onMounted(() => {
+  getNameCategory(route.params.id);
 
-getImg();
+  getImg();
+});
 </script>

@@ -40,7 +40,13 @@
             class="d-flex flex-column justify-content-center align-items-center"
           >
             <span> Tin nhắn </span>
-            <!-- Hiển thị thông tin tin nhắn -->
+            9
+          </div>
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
+            <span> Tin nhắn </span>
+            9
           </div>
         </div>
       </div>

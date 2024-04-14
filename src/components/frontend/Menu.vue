@@ -43,15 +43,12 @@ const getCategory = async () => {
   try {
     const response = await axios.get("home/forum-list");
     items.value = response.data;
-    // if (!route.params.forum_group_id && items.value.length > 0) {
-    //   await router.push(`/${items.value[0].forum_group_id}`);
-    // }
   } catch (error) {
     console.error(error);
   }
 };
 
-onBeforeMount(() => {
+onMounted(() => {
   getCategory();
 });
 const handleClick = (menuInfo) => {
