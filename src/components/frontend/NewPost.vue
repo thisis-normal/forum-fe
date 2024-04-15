@@ -14,19 +14,20 @@
           </a-avatar>
         </div>
         <div class="content col-10 row">
-          <div class="row">
-            <div class="user col-7">{{ post.user_full_name }}</div>
-            <div class="user col-1">-</div>
-            <div class="time col-2">{{ post.post_created_at }}</div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              {{ post.thread_name }}
+          <div style="display: flex; align-items: center">
+            <div class="user">{{ post.user_full_name }}</div>
+            <div class="user mx-1">-</div>
+            <div class="time" style="font-size: 9px">
+              {{ post.post_created_at }}
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              {{ post.prefixes_name }}
+              <span style="color: darkblue">
+                {{ post.prefixes_name }}
+              </span>
+
+              {{ post.thread_name }}
             </div>
           </div>
         </div>
