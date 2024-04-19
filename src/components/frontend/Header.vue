@@ -60,7 +60,7 @@
           <a class="ant-dropdown-link" @click.prevent>
             <a-avatar>
               <template #icon>
-                <img :src="urlPublic + user.avatar_path" alt="" />
+                <img :src="user.avatar_path" alt="" />
               </template>
             </a-avatar>
             {{ user.username == null ? user.student_id : user.username }}
@@ -139,7 +139,7 @@ const logout = () => {
 };
 const me = () => {
   axios
-    .get("me", null)
+    .get("user/profile", null)
     .then(function (response) {
       user.value = response.data;
     })

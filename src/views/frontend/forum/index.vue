@@ -7,46 +7,59 @@
   </div>
   <a-list size="large" style="height: 75vh; overflow: auto">
     <a-list-item class="p-0" v-for="item in data" :key="item.id">
-      <div class="row" style="width: 100%">
+      <div class="" style="width: 100%; margin: 12px 0">
         <div
-          class="col-12 d-flex align-items-center"
-          style="justify-content: space-between"
+          class="d-flex align-items-center"
+          style="width: 100%; justify-content: space-between"
         >
-          <div
-            style="
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-              width: 60%;
-              padding-right: 24px;
-              font-size: 16px;
-              display: flex;
-            "
-          >
-            <div
-              class="border px-2"
-              style="border-radius: 5px"
-              :style="{ background: item.prefix_color }"
-            >
-              {{ item.prefix_name }}
+          <div style="display: flex; width: 70%">
+            <div>
+              <a-avatar size="large">
+                <template #icon>
+                  <img :src="item.user_avatar" alt="" />
+                </template>
+              </a-avatar>
             </div>
-            <router-link
-              :to="{ name: 'thread', params: { slug: item.slug } }"
-              >{{ item.title }}</router-link
-            >
-          </div>
 
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
-            <span> Tin nhắn </span>
-            9
+            <div>
+              <div
+                style="
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  width: 70%;
+                  padding-right: 24px;
+                  font-size: 16px;
+                  display: flex;
+                "
+              >
+                <div
+                  class="border px-2"
+                  style="border-radius: 5px; margin-right: 12px; height: 30px"
+                  :style="{ background: item.prefix_color }"
+                >
+                  {{ item.prefix_name }}
+                </div>
+                <router-link
+                  :to="{
+                    name: 'thread',
+                    params: { slug: item.slug + '.' + item.id },
+                  }"
+                  >{{ item.title }}</router-link
+                >
+              </div>
+              {{ item.user_full_name }}
+            </div>
           </div>
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
-            <span> Tin nhắn </span>
-            9
+          <div style="width: 30%; display: flex; text-align: center">
+            <div class="me-3" style="">
+              <div>Lượt xem</div>
+              {{ item.views }}
+            </div>
+            <div class="" style="">
+              <div>Trả lời</div>
+              {{ item.replies }}
+            </div>
           </div>
         </div>
       </div>

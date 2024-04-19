@@ -1,16 +1,16 @@
 <template>
   <a-card title="Tài khoản" style="width: 100%">
     <div class="row">
-      <div class="col-12 d-flex justify-content-end align-items-center my-3">
+      <!-- <div class="col-12 d-flex justify-content-end align-items-center my-3">
         <router-link :to="{ name: 'admin-users-add' }">
           <BtnCreate />
         </router-link>
-      </div>
+      </div> -->
     </div>
     <div class="row">
       <div class="col-12">
         <a-table :dataSource="users" :columns="columns" :scroll="{ x: 576 }">
-          <template #bodyCell="{ column }">
+          <!-- <template #bodyCell="{ column }">
             <template v-if="column.key === 'action'">
               <router-link :to="{ name: 'admin-users-edit' }">
                 <BtnEdit />
@@ -18,7 +18,7 @@
 
               <BtnDel />
             </template>
-          </template>
+          </template> -->
         </a-table>
       </div>
     </div>

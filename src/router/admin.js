@@ -64,6 +64,20 @@ const admin = [{
         name: "admin-pinnedPost",
         component: () => import("../views/admin/pinnedPost/index.vue"),
 
+    },
+    {
+        path: "prefix",
+        name: "admin-prefix",
+        component: () => import("../views/admin/prefix/index.vue"),
+    }, {
+        path: "prefix/add",
+        name: "admin-prefix-add",
+        component: () => import("../views/admin/prefix/add.vue"),
+    },
+    {
+        path: "prefix/edit:id",
+        name: "admin-prefix-edit",
+        component: () => import("../views/admin/prefix/edit.vue"),
     }
     ],
 }];

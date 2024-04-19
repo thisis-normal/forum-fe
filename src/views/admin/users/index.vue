@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12 d-flex justify-content-end align-items-center my-3">
         <router-link :to="{ name: 'admin-users-add' }">
-          <BtnCreate/>
+          <BtnCreate />
         </router-link>
       </div>
     </div>
@@ -19,11 +19,13 @@
               </a-avatar>
             </template>
             <template v-if="column.key === 'action'">
-              <router-link :to="{ name: 'admin-users-edit', params: { id: record.id } }">
+              <router-link
+                :to="{ name: 'admin-users-edit', params: { id: record.id } }"
+              >
                 <BtnEdit />
               </router-link>
 
-              <BtnDel/>
+              <BtnDel />
             </template>
           </template>
         </a-table>
@@ -32,13 +34,13 @@
   </a-card>
 </template>
 <script>
-import {PlusOutlined, EditOutlined} from "@ant-design/icons-vue";
+import { PlusOutlined, EditOutlined } from "@ant-design/icons-vue";
 import BtnCreate from "../../../components/BtnCreate.vue";
 import BtnEdit from "../../../components/BtnEdit.vue";
 import BtnDel from "../../../components/BtnDel.vue";
 
-import {defineComponent, ref} from "vue";
-import {useMenu} from "../../../store/useMenu.js";
+import { defineComponent, ref } from "vue";
+import { useMenu } from "../../../store/useMenu.js";
 
 export default {
   components: {
@@ -115,19 +117,7 @@ export default {
       },
     ];
     const getUsers = () => {
-      fetch("http://127.0.0.1:5173/user.json")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          users.value = data;
-        })
-        .catch((error) => {
-          console.error("There was a problem with the fetch operation:", error);
-        });
+      axios.get("");
     };
 
     getUsers();

@@ -3,10 +3,44 @@
     class="directional pb-2"
     style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)"
   >
-    {{ nameForum }}
+    {{ nameForum.title }}
   </div>
-  <a-list size="large" style="height: 75vh; overflow: auto">
-    <a-list-item class="p-0" v-for="item in data" :key="item.id">
+
+  <a-list size="large" style="height: 75vh; overflow: auto; padding-top: 12px">
+    <span
+      style="border-radius: 5px; padding: 5px"
+      :style="{ background: nameForum.prefix_color }"
+      >{{ nameForum.prefix_name }}</span
+    >
+    {{ nameForum.title }}
+    <div
+      style="
+        width: 100%;
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 12px;
+        margin-top: 12px;
+      "
+    >
+      <!-- <div><img :src="urlPublic + nameForum." alt="" /></div> -->
+
+      <div class="d-flex">
+        <div class="me-2">
+          <a-avatar>
+            <template #icon>
+              <img :src="nameForum.user_avatar" alt="" />
+            </template>
+          </a-avatar>
+        </div>
+        <div>
+          {{ nameForum.user_full_name }}
+        </div>
+      </div>
+      <div>
+        {{ nameForum.content }}
+      </div>
+    </div>
+    <a-list-item class="p-0" v-for="item in post" :key="item.id">
       <div class="row" style="width: 100%">
         <div
           class="col-12 d-flex align-items-center"
@@ -23,14 +57,7 @@
               display: flex;
             "
           >
-            <div
-              class="border px-2"
-              style="border-radius: 5px"
-              :style="{ background: item.prefix_color }"
-            >
-              {{ item.prefix_name }}
-            </div>
-            {{ item.title }}
+            {{ item.user_full_name }}
           </div>
 
           <div
@@ -44,42 +71,50 @@
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import {
-  CommentOutlined,
-  UserOutlined,
-  RightOutlined,
-} from "@ant-design/icons-vue";
+
 import axios from "axios";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";
 const route = useRoute();
 const router = useRouter();
 const params = route.params.slug;
 const parts = params.split(".");
 const result = parts[1];
-console.log(result);
+
 const nameForum = ref([]);
 useMenuFront().onSelectedKeys(sessionStorage.getItem("idCategory"));
-
 watch(route, () => {
   useMenuFront().onSelectedKeys(sessionStorage.getItem("idCategory"));
 });
 
 const data = ref([]);
+const post = ref([]);
+
 // Lấy dữ liệu theo danh mục
 const getNameForum = async (id) => {
   await axios
-    .get(`forum/${id}`)
+    .get(`thread/${id}`)
     .then((response) => {
-      nameForum.value = response.data.name;
-      data.value = response.data.threads;
+      nameForum.value = response.data;
+      data.value = response.data;
       console.log(data);
     })
     .catch((error) => {
       console.log(error);
     });
 };
+const getPost = async (id) => {
+  await axios
+    .get(`thread/${id}/posts`)
+    .then((response) => {
+      post.value = response.data.data;
 
+      console.log(post);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 const getImg = () => {
   axios
     .get("view-image")
@@ -98,7 +133,9 @@ watch(
     getNameForum(newId);
   }
 );
-getNameForum(result);
-
-getImg();
+onMounted(() => {
+  getNameForum(result);
+  getPost(result);
+  getImg();
+});
 </script>
