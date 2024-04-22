@@ -38,12 +38,7 @@
         <a-button
           @click="closeInfoUser()"
           shape="circle"
-          style="
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            background-color: #d8dadf;
-          "
+          style="position: absolute; top: 24px; right: 24px; background-color: #d8dadf"
           ><CloseOutlined
         /></a-button>
       </div>
@@ -67,17 +62,13 @@
           size="large"
         />
       </a-form-item>
-      <a-form-item>
+      <a-form-item v-if="user.student_id === null">
         <label for="">Email</label>
 
-        <a-input
-          placeholder="Email"
-          v-model:value="formState.email"
-          size="large"
-        />
+        <a-input placeholder="Email" v-model:value="formState.email" size="large" />
       </a-form-item>
-      <a-form-item>
-        <a style="color: #7392ff">Đổi mật khẩu</a>
+      <a-form-item v-if="user.student_id === null">
+        <a style="color: #7392ff" @click="hidenPassword">Đổi mật khẩu</a>
       </a-form-item>
       <a-form-item>
         <a-button
@@ -94,6 +85,7 @@
     </a-form>
   </div>
   <div
+    v-if="isDisabled"
     style="
       width: 60%;
       height: 90%;
@@ -110,6 +102,7 @@
     "
   >
     <a-form
+      :model="formPass"
       :wrapper-col="wrapperCol"
       layout="horizontal"
       style="max-width: 600px; width: 100%"
@@ -119,14 +112,9 @@
         <h1 class="text-center mt-3">Đổi mật khẩu</h1>
 
         <a-button
-          @click="closeInfoUser()"
+          @click="hidenPassword"
           shape="circle"
-          style="
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            background-color: #d8dadf;
-          "
+          style="position: absolute; top: 24px; right: 24px; background-color: #d8dadf"
           ><CloseOutlined
         /></a-button>
       </div>
@@ -141,7 +129,7 @@
         <br />
         <!-- <a-button>Đổi ảnh đại điện</a-button> -->
       </a-form-item>
-      <a-form-item class="my-2">
+      <a-form-item class="my-2" name="oldPassword">
         <label for="">Nhập mật khẩu cũ</label>
 
         <a-input-password v-model:value="formPass.oldPassword" size="large">
@@ -150,7 +138,11 @@
           </template>
         </a-input-password>
       </a-form-item>
-      <a-form-item class="my-2">
+      <a-form-item
+        class="my-2"
+        name="newPassword"
+        :rules="[{ validator: validatePassword }]"
+      >
         <label for="">Nhập mật khẩu mới</label>
 
         <a-input-password v-model:value="formPass.newPassword" size="large">
@@ -159,7 +151,18 @@
           </template>
         </a-input-password>
       </a-form-item>
-      <a-form-item>
+      <a-form-item
+        name="rePassword"
+        :rules="[
+          {
+            required: true,
+            message: 'vui lòng nhập lại mật khẩu của bạn!',
+          },
+          {
+            validator: validateConfirmPassword,
+          },
+        ]"
+      >
         <label for="">Xác nhận mật khẩu mới</label>
 
         <a-input-password v-model:value="formPass.rePassword" size="large">
@@ -170,6 +173,9 @@
       </a-form-item>
       <a-form-item>
         <a-button
+          class="login-form-button my-2"
+          html-type="submit"
+          :disabled="disabled"
           style="
             width: 100%;
             height: 40px;
@@ -185,11 +191,14 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 const componentDisabled = ref(true);
 import { CloseOutlined } from "@ant-design/icons-vue";
 import { defineEmits } from "vue";
 import TextEditor from "./TextEditor.vue";
+import axios from "axios";
+import { handleRequestError } from "../../store/errorHandler.js";
+import Swal from "sweetalert2";
 // import { TextEditor } from "./TextEditor.vue";
 const formState = reactive({
   avatar: "",
@@ -203,8 +212,11 @@ const formPass = reactive({
   newPassword: "",
   rePassword: "",
 });
+const disabled = computed(() => {
+  return !(formPass.oldPassword && formPass.newPassword && formPass.rePassword);
+});
+const isDisabled = ref(false);
 const emit = defineEmits(["closeInfoUser"]);
-import axios from "axios";
 const user = ref([]);
 const getPrefix = () => {
   axios
@@ -221,7 +233,24 @@ const getPrefix = () => {
     });
 };
 const onFinish = () => {
-  axios.put("user/password");
+  axios
+    .put("user/password", {
+      password: formPass.oldPassword,
+      new_password: formPass.newPassword,
+    })
+    .then(function (response) {
+      console.log(response.data);
+
+      Swal.fire({
+        icon: "success",
+        title: response.data.message,
+
+        confirmButtonText: "OK",
+      });
+    })
+    .catch(function (error) {
+      handleRequestError(error);
+    });
 };
 getPrefix();
 const closeInfoUser = () => {
@@ -240,8 +269,33 @@ const handleBlur = () => {
 const handleFocus = () => {
   console.log("focus");
 };
+const hidenPassword = () => {
+  isDisabled.value = !isDisabled.value;
+};
 const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+};
+const validatePassword = (rule, value, callback) => {
+  if (value.length < 8) {
+    callback(new Error("Mật khẩu phải có ít nhất 8 ký tự!"));
+  } else if (!/^[a-zA-Z0-9!@#$%^&*()_+{}|:"<>?~`\-=[\]\\;',./]+$/.test(value)) {
+    callback(new Error("Mật khẩu chỉ chứa các ký tự chữ cái, số và ký tự đặc biệt!"));
+  } else if (!/[a-z]/.test(value) || !/[A-Z]/.test(value) || !/\d/.test(value)) {
+    callback(
+      new Error(
+        "Mật khẩu phải chứa ít nhất một ký tự viết thường, một ký tự viết hoa và một số!"
+      )
+    );
+  } else {
+    callback();
+  }
+};
+const validateConfirmPassword = (rule, value, callback) => {
+  if (value !== formPass.newPassword) {
+    callback("Mật khẩu xác nhận không khớp. Vui lòng nhập lại mật khẩu chính xác!");
+  } else {
+    callback();
+  }
 };
 const value = ref(undefined);
 </script>

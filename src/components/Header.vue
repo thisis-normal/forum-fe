@@ -18,7 +18,7 @@
       <div
         class="col-sm-3 d-none d-sm-flex justify-content-sm-end align-items-center text-white"
       >
-        admin
+        <!-- {{ user.admin.username }} -->
       </div>
       <div
         class="col-1 d-flex d-sm-none justify-content-center align-items-center"
@@ -43,17 +43,28 @@ import {
   UserOutlined,
   LoadingOutlined,
 } from "@ant-design/icons-vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import TheMenu from "../components/Menu.vue";
-const urlApi = import.meta.env.VITE_URL_API;
-const urlTest = import.meta.env.VITE_URL_TEST;
+
 const open = ref(false);
 const openTk = ref(false);
-
+const user = ref([]);
 const showDrawer = () => {
   open.value = true;
 };
-
+const me = () => {
+  axios
+    .get("admin/me", null)
+    .then(function (response) {
+      user.value = response.data;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+onMounted(() => {
+  me();
+});
 const showDrawerTk = () => {
   openTk.value = true;
 };

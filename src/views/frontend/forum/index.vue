@@ -12,7 +12,7 @@
           class="d-flex align-items-center"
           style="width: 100%; justify-content: space-between"
         >
-          <div style="display: flex; width: 70%">
+          <div style="display: flex; width: 80%">
             <div>
               <a-avatar size="large">
                 <template #icon>
@@ -27,7 +27,7 @@
                   overflow: hidden;
                   text-overflow: ellipsis;
                   white-space: nowrap;
-                  width: 70%;
+                  width: 80%;
                   padding-right: 24px;
                   font-size: 16px;
                   display: flex;
@@ -51,7 +51,7 @@
               {{ item.user_full_name }}
             </div>
           </div>
-          <div style="width: 30%; display: flex; text-align: center">
+          <div style="width: 20%; display: flex; text-align: center">
             <div class="me-3" style="">
               <div>Lượt xem</div>
               {{ item.views }}

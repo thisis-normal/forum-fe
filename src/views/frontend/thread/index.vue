@@ -41,28 +41,29 @@
       </div>
     </div>
     <a-list-item class="p-0" v-for="item in post" :key="item.id">
-      <div class="row" style="width: 100%">
+      <div class="" style="width: 100%">
         <div
-          class="col-12 d-flex align-items-center"
-          style="justify-content: space-between"
+          style="
+            width: 100%;
+            padding-right: 24px;
+            font-size: 16px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+          "
         >
-          <div
-            style="
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-              width: 60%;
-              padding-right: 24px;
-              font-size: 16px;
-              display: flex;
-            "
-          >
+          <div>
+            <a-avatar size="">
+              <template #icon>
+                <img :src="item.user_avatar" alt="" />
+              </template>
+            </a-avatar>
             {{ item.user_full_name }}
           </div>
-
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          ></div>
+          <div>
+            {{ item.content }}
+          </div>
         </div>
       </div>
     </a-list-item>

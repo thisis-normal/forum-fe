@@ -34,7 +34,7 @@
         </div>
         <div class="col-sm-3 d-none d-sm-flex flex-column">
           <a-list style="width: 100%; height: 65%">
-            <NewPost />
+            <NewPost style="width: 100%" />
           </a-list>
           <a-list class="">
             <Statistics />

@@ -125,17 +125,14 @@ const value = ref("");
 
 const logout = () => {
   axios
-    .post("logout", null)
+    .post("logout")
     .then(function (response) {
-      console.log(response);
-      if (response.status === 200) {
-        localStorage.removeItem("token");
-      }
+      router.push("/login");
+      localStorage.removeItem("token");
     })
     .catch(function (error) {
       console.log(error);
     });
-  router.push("/login");
 };
 const me = () => {
   axios
