@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <a-drawer v-model:visible="open" title="Danh mục" placement="left">
+  <a-drawer v-model:visible="open" title="chủ đề" placement="left">
     <TheMenu />
   </a-drawer>
   <a-drawer v-model:visible="openTk" title="Tài khoản" placement="right">

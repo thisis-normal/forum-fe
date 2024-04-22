@@ -91,7 +91,7 @@ watch(route, () => {
 });
 
 const data = ref([]);
-// Lấy dữ liệu theo danh mục
+// Lấy dữ liệu theo chủ đề
 const getNameForum = async (id) => {
   await axios
     .get(`forum/${id}`)

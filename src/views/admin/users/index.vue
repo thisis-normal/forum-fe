@@ -1,5 +1,5 @@
 <template>
-  <a-card title="Tài khoản" style="width: 100%">
+  <a-card title="Quản lý tài khoản" style="width: 100%">
     <div class="row">
       <div class="col-12 d-flex justify-content-end align-items-center my-3">
         <router-link :to="{ name: 'admin-users-add' }">

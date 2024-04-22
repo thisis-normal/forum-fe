@@ -1,5 +1,5 @@
 <template>
-  <a-card :title="`Nhóm ${forum.name}`" style="width: 100%">
+  <a-card :title="`Quản lý chủ đề con`" style="width: 100%">
     <div class="row">
       <div class="col-12 d-flex justify-content-end align-items-center my-3">
         <router-link
@@ -106,7 +106,7 @@ export default {
 
     const deleteCategory = (id, name) => {
       Swal.fire({
-        title: `Bạn có muốn xóa danh mục ${name}`,
+        title: `Bạn có muốn xóa chủ đề con ${name}`,
 
         icon: "warning",
         showCancelButton: true,
@@ -119,7 +119,7 @@ export default {
             .delete(`forum/${id}`)
             .then(function (response) {
               Swal.fire({
-                title: `Xóa thành công danh mục ${name}!`,
+                title: `Xóa thành công chủ đề con ${name}!`,
                 // text: "Your file has been deleted.",
                 icon: "success",
               }).then((result) => {
@@ -128,7 +128,7 @@ export default {
             })
             .catch(function (error) {
               Swal.fire({
-                title: `Xóa không thành công danh mục ${name}!`,
+                title: `Xóa không thành công chủ đề con ${name}!`,
                 // text: "Your file has been deleted.",
                 icon: "error",
               });

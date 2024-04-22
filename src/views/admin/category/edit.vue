@@ -1,5 +1,5 @@
 <template>
-  <a-card title="Cập nhật danh mục" style="width: 100%">
+  <a-card title="Cập nhật chủ đề" style="width: 100%">
     <a-form
       :model="formState"
       v-bind="layout"
@@ -7,7 +7,7 @@
       :validate-messages="validateMessages"
       @finish="onFinish"
     >
-      <a-form-item label="Tên danh mục" :rules="[{ required: true }]">
+      <a-form-item label="Tên chủ đề" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.name" />
       </a-form-item>
       <a-form-item label="Mô tả" :rules="[{ required: true }]">
@@ -20,9 +20,7 @@
         <DynamicIcon :name="formState.forumGroups.icon" />
       </a-form-item>
       <a-form-item label="Lấy tên icon">
-        <a href="https://www.antdv.com/components/icon" target="_blank"
-          >Tại đây !</a
-        >
+        <a href="https://www.antdv.com/components/icon" target="_blank">Tại đây !</a>
       </a-form-item>
 
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">

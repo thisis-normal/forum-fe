@@ -1,5 +1,5 @@
 <template>
-  <a-card title="Tiền tố" style="width: 100%">
+  <a-card title="tiêu đề" style="width: 100%">
     <div class="row">
       <div class="col-12 d-flex justify-content-end align-items-center my-3">
         <router-link :to="{ name: 'admin-prefix-add' }">
@@ -80,7 +80,7 @@ export default {
         key: "id",
       },
       {
-        title: "Tên tiền tố",
+        title: "Tên tiêu đề",
         dataIndex: "name",
         key: "name",
       },
@@ -117,7 +117,7 @@ export default {
 
     const deleteCategory = (id, name) => {
       Swal.fire({
-        title: `Bạn có muốn xóa tiền tố ${name}`,
+        title: `Bạn có muốn xóa tiêu đề ${name}`,
 
         icon: "warning",
         showCancelButton: true,
@@ -130,7 +130,7 @@ export default {
             .delete(`prefix/${id}`)
             .then(function (response) {
               Swal.fire({
-                title: `Xóa thành công tiền tố ${name}!`,
+                title: `Xóa thành công tiêu đề ${name}!`,
                 // text: "Your file has been deleted.",
                 icon: "success",
               }).then((result) => {
@@ -139,7 +139,7 @@ export default {
             })
             .catch(function (error) {
               Swal.fire({
-                title: `Xóa không thành công tiền tố ${name}!`,
+                title: `Xóa không thành công tiêu đề ${name}!`,
                 // text: "Your file has been deleted.",
                 icon: "error",
               });

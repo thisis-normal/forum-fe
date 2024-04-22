@@ -1,5 +1,5 @@
 <template>
-  <a-card title="Thêm tiền tố" style="width: 100%">
+  <a-card title="Thêm tiêu đề" style="width: 100%">
     <a-form
       :model="formState"
       v-bind="layout"
@@ -7,7 +7,7 @@
       :validate-messages="validateMessages"
       @finish="onFinish"
     >
-      <a-form-item label="Tên tiền tố" :rules="[{ required: true }]">
+      <a-form-item label="Tên tiêu đề" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.name" />
       </a-form-item>
       <a-form-item label="Mô tả" :rules="[{ required: true }]">
@@ -16,7 +16,7 @@
       <a-form-item label="Màu" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.color" type="color" />
       </a-form-item>
-      <a-form-item label="Tiền tố hiển thị" :rules="[{ required: true }]">
+      <a-form-item label="tiêu đề hiển thị" :rules="[{ required: true }]">
         <div
           :style="{
             background: formState.forumGroups.color,

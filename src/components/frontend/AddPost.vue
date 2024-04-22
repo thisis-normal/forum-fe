@@ -71,11 +71,11 @@
         </div>
       </a-form-item>
       <a-form-item>
-        <label for="">Danh mục bài viết</label>
+        <label for="">chủ đề bài viết</label>
         <br />
         <a-select
           size="large"
-          placeholder="Danh mục bài viết"
+          placeholder="chủ đề bài viết"
           @focus="handleFocus"
           @blur="handleBlur"
           @change="handleChange"
