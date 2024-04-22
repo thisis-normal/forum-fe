@@ -134,6 +134,10 @@ const logout = () => {
       console.log(error);
     });
 };
+// Assuming you have a token variable
+
+// Set the Authorization header with the Bearer token
+axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 const me = () => {
   axios
     .get("user/profile", null)

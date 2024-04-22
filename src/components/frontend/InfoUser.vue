@@ -28,9 +28,11 @@
     "
   >
     <a-form
+      :model="formState"
       :wrapper-col="wrapperCol"
       layout="horizontal"
       style="max-width: 600px; width: 100%"
+      @finish="onFinishInfo"
     >
       <div class="title d-flex justify-content-center">
         <h1 class="text-center mt-3">Thông tin tài khoản</h1>
@@ -38,7 +40,12 @@
         <a-button
           @click="closeInfoUser()"
           shape="circle"
-          style="position: absolute; top: 24px; right: 24px; background-color: #d8dadf"
+          style="
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background-color: #d8dadf;
+          "
           ><CloseOutlined
         /></a-button>
       </div>
@@ -65,13 +72,18 @@
       <a-form-item v-if="user.student_id === null">
         <label for="">Email</label>
 
-        <a-input placeholder="Email" v-model:value="formState.email" size="large" />
+        <a-input
+          placeholder="Email"
+          v-model:value="formState.email"
+          size="large"
+        />
       </a-form-item>
       <a-form-item v-if="user.student_id === null">
         <a style="color: #7392ff" @click="hidenPassword">Đổi mật khẩu</a>
       </a-form-item>
       <a-form-item>
         <a-button
+          html-type="submit"
           style="
             width: 100%;
             height: 40px;
@@ -114,7 +126,12 @@
         <a-button
           @click="hidenPassword"
           shape="circle"
-          style="position: absolute; top: 24px; right: 24px; background-color: #d8dadf"
+          style="
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background-color: #d8dadf;
+          "
           ><CloseOutlined
         /></a-button>
       </div>
@@ -199,13 +216,13 @@ import TextEditor from "./TextEditor.vue";
 import axios from "axios";
 import { handleRequestError } from "../../store/errorHandler.js";
 import Swal from "sweetalert2";
+import router from "@/router";
+
 // import { TextEditor } from "./TextEditor.vue";
 const formState = reactive({
   avatar: "",
   fullname: "",
   email: "",
-  password: "",
-  rePassword: "",
 });
 const formPass = reactive({
   oldPassword: "",
@@ -232,6 +249,34 @@ const getPrefix = () => {
       console.log(error);
     });
 };
+const onFinishInfo = () => {
+  axios
+    .put("user/name", {
+      full_name: formState.fullname,
+    })
+    .then(function (response) {
+      axios
+        .put("user/email", {
+          email: formState.email,
+        })
+        .then(function (response) {
+          console.log(response.data);
+
+          Swal.fire({
+            icon: "success",
+            title: "Cập nhật thông tin thành công",
+
+            confirmButtonText: "OK",
+          });
+        })
+        .catch(function (error) {
+          handleRequestError(error);
+        });
+    })
+    .catch(function (error) {
+      handleRequestError(error);
+    });
+};
 const onFinish = () => {
   axios
     .put("user/password", {
@@ -246,6 +291,8 @@ const onFinish = () => {
         title: response.data.message,
 
         confirmButtonText: "OK",
+      }).then((result) => {
+        hidenPassword();
       });
     })
     .catch(function (error) {
@@ -279,8 +326,14 @@ const validatePassword = (rule, value, callback) => {
   if (value.length < 8) {
     callback(new Error("Mật khẩu phải có ít nhất 8 ký tự!"));
   } else if (!/^[a-zA-Z0-9!@#$%^&*()_+{}|:"<>?~`\-=[\]\\;',./]+$/.test(value)) {
-    callback(new Error("Mật khẩu chỉ chứa các ký tự chữ cái, số và ký tự đặc biệt!"));
-  } else if (!/[a-z]/.test(value) || !/[A-Z]/.test(value) || !/\d/.test(value)) {
+    callback(
+      new Error("Mật khẩu chỉ chứa các ký tự chữ cái, số và ký tự đặc biệt!")
+    );
+  } else if (
+    !/[a-z]/.test(value) ||
+    !/[A-Z]/.test(value) ||
+    !/\d/.test(value)
+  ) {
     callback(
       new Error(
         "Mật khẩu phải chứa ít nhất một ký tự viết thường, một ký tự viết hoa và một số!"
@@ -292,7 +345,9 @@ const validatePassword = (rule, value, callback) => {
 };
 const validateConfirmPassword = (rule, value, callback) => {
   if (value !== formPass.newPassword) {
-    callback("Mật khẩu xác nhận không khớp. Vui lòng nhập lại mật khẩu chính xác!");
+    callback(
+      "Mật khẩu xác nhận không khớp. Vui lòng nhập lại mật khẩu chính xác!"
+    );
   } else {
     callback();
   }

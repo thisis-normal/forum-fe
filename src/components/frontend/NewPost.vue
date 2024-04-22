@@ -23,11 +23,12 @@
           </div>
           <div class="row">
             <div class="">
-              <span style="color: darkblue">
+              <span style="color: darkblue; margin-right: 12px">
                 {{ post.prefixes_name }}
               </span>
-
-              {{ post.thread_name }}
+              <router-link to="">
+                {{ post.thread_name }}
+              </router-link>
             </div>
           </div>
         </div>
