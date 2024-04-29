@@ -1,5 +1,15 @@
 <template>
   <a-card title="Cập nhật chủ đề con" style="width: 100%">
+    <div class="btnBack" style="position: absolute; top: 12px; right: 24px">
+      <router-link
+        :to="{
+          name: 'admin-category-forum',
+          params: { id: formId },
+        }"
+      >
+        <RollbackOutlined style="font-size: 24px" />
+      </router-link>
+    </div>
     <a-form
       :model="formState"
       v-bind="layout"
@@ -43,6 +53,7 @@ const layout = {
     span: 16,
   },
 };
+const formId = localStorage.getItem("forum");
 const route = useRoute();
 const validateMessages = {
   required: "${label} is required!",

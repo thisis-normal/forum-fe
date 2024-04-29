@@ -13,6 +13,7 @@
           :dataSource="forumGroups"
           :columns="columns"
           :scroll="{ x: 576 }"
+          :pagination="{ pageSize: 5 }"
         >
           <template #bodyCell="{ column, record, index }">
             <template v-if="column.key === 'id'">
@@ -84,6 +85,8 @@ export default {
         title: "ID",
         dataIndex: "id",
         key: "id",
+        width: 100,
+        align: "center",
       },
       {
         title: "Tên chủ đề",
@@ -101,6 +104,8 @@ export default {
         title: "Icon",
         dataIndex: "icon_name",
         key: "icon_name",
+        width: 100,
+        align: "center",
       },
 
       {
@@ -108,6 +113,8 @@ export default {
         dataIndex: "action",
         key: "action",
         fixed: "right",
+        width: 200,
+        align: "center",
       },
     ];
     const getforumGroups = () => {

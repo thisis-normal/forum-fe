@@ -13,10 +13,10 @@
       <a-form-item label="Mô tả" :rules="[{ required: true }]">
         <a-input v-model:value="formState.forumGroups.description" />
       </a-form-item>
-      <a-form-item label="Màu" :rules="[{ required: true }]">
+      <a-form-item label="Màu">
         <a-input v-model:value="formState.forumGroups.color" type="color" />
       </a-form-item>
-      <a-form-item label="tiêu đề hiển thị" :rules="[{ required: true }]">
+      <a-form-item label="tiêu đề hiển thị">
         <div
           :style="{
             background: formState.forumGroups.color,
@@ -29,6 +29,8 @@
             line-height: 30px;
             font-weight: bold;
             font-size: 16px;
+            overflow: hidden;
+            padding: 0 4px 0 4px;
           "
         >
           {{ formState.forumGroups.name }}
@@ -38,6 +40,11 @@
         <a-button type="primary" html-type="submit">Thêm mới</a-button>
       </a-form-item>
     </a-form>
+    <div class="btnBack" style="position: absolute; top: 12px; right: 24px">
+      <router-link :to="{ name: 'admin-prefix' }">
+        <RollbackOutlined style="font-size: 24px" />
+      </router-link>
+    </div>
   </a-card>
 </template>
 <script setup>
@@ -47,7 +54,8 @@ import Swal from "sweetalert2";
 import { useRoute } from "vue-router";
 
 import { useMenu } from "../../../store/useMenu.js";
-useMenu().onSelectedKeys("admin-categorys");
+useMenu().onSelectedKeys("admin-prefix");
+
 const layout = {
   labelCol: {
     span: 6,
@@ -63,7 +71,7 @@ const formState = reactive({
   forumGroups: {
     name: "",
     description: "",
-    color: "#000000",
+    color: "#b8b8b8",
   },
 });
 

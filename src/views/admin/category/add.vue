@@ -28,6 +28,11 @@
         <a-button type="primary" html-type="submit">Thêm mới</a-button>
       </a-form-item>
     </a-form>
+    <div class="btnBack" style="position: absolute; top: 12px; right: 24px">
+      <router-link :to="{ name: 'admin-categorys' }">
+        <RollbackOutlined style="font-size: 24px" />
+      </router-link>
+    </div>
   </a-card>
 </template>
 <script setup>

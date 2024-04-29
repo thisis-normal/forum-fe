@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="directional pb-2"
-    style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)"
-  >
+  <div class="directional pb-2" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)">
     {{ nameForum }}
   </div>
   <a-list size="large" style="height: 75vh; overflow: auto">
@@ -69,13 +66,7 @@
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import {
-  CommentOutlined,
-  UserOutlined,
-  RightOutlined,
-} from "@ant-design/icons-vue";
-import axios from "axios";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";
 const route = useRoute();
 const router = useRouter();
@@ -105,16 +96,16 @@ const getNameForum = async (id) => {
     });
 };
 
-const getImg = () => {
-  axios
-    .get("view-image")
-    .then((response) => {
-      // Xử lý dữ liệu từ API nếu cần
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+// const getImg = () => {
+//   axios
+//     .get("view-image")
+//     .then((response) => {
+//       // Xử lý dữ liệu từ API nếu cần
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// };
 
 const ForumId = result;
 watch(
@@ -123,7 +114,9 @@ watch(
     getNameForum(newId);
   }
 );
-getNameForum(result);
+onMounted(() => {
+  getNameForum(result);
+});
 
-getImg();
+// getImg();
 </script>

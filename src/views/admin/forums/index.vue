@@ -1,10 +1,13 @@
 <template>
   <a-card :title="`Quản lý chủ đề con`" style="width: 100%">
+    <div class="btnBack" style="position: absolute; top: 12px; right: 24px">
+      <router-link :to="{ name: 'admin-categorys' }">
+        <RollbackOutlined style="font-size: 24px" />
+      </router-link>
+    </div>
     <div class="row">
       <div class="col-12 d-flex justify-content-end align-items-center my-3">
-        <router-link
-          :to="{ name: 'admin-forum-add', params: { id: route.params.id } }"
-        >
+        <router-link :to="{ name: 'admin-forum-add', params: { id: route.params.id } }">
           <BtnCreate />
         </router-link>
       </div>
@@ -15,15 +18,14 @@
           :dataSource="forumGroups"
           :columns="columns"
           :scroll="{ x: 576 }"
+          :pagination="{ pageSize: 5 }"
         >
           <template #bodyCell="{ column, record, index }">
             <template v-if="column.key === 'id'">
               {{ index + 1 }}
             </template>
             <template v-if="column.key === 'action'">
-              <router-link
-                :to="{ name: 'admin-forum-edit', params: { id: record.id } }"
-              >
+              <router-link :to="{ name: 'admin-forum-edit', params: { id: record.id } }">
                 <BtnEdit />
               </router-link>
 
@@ -36,11 +38,7 @@
   </a-card>
 </template>
 <script>
-import {
-  PlusOutlined,
-  EditOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons-vue";
+import { PlusOutlined, EditOutlined, UnorderedListOutlined } from "@ant-design/icons-vue";
 
 import BtnCreate from "../../../components/BtnCreate.vue";
 import BtnEdit from "../../../components/BtnEdit.vue";
@@ -70,6 +68,8 @@ export default {
         title: "ID",
         dataIndex: "id",
         key: "id",
+        align: "center",
+        width: 100,
       },
       {
         title: "Tên diễn đàn",
@@ -89,6 +89,8 @@ export default {
         dataIndex: "action",
         key: "action",
         fixed: "right",
+        width: 150,
+        align: "center",
       },
     ];
     const getforums = () => {
@@ -97,6 +99,7 @@ export default {
         .then(function (response) {
           forum.value = response.data;
           forumGroups.value = response.data.forums;
+          localStorage.setItem("forum", route.params.id);
         })
         .catch(function (error) {
           // handle error

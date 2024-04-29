@@ -5,7 +5,8 @@
       height: 96vh;
       border-radius: 30px;
       margin: 0;
-      padding: 12px;
+
+      margin: 12px !important;
       overflow: hidden;
     "
   >

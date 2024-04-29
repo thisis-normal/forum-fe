@@ -38,6 +38,11 @@
         <a-button type="primary" html-type="submit">Cập nhật</a-button>
       </a-form-item>
     </a-form>
+    <div class="btnBack" style="position: absolute; top: 12px; right: 24px">
+      <router-link :to="{ name: 'admin-prefix' }">
+        <RollbackOutlined style="font-size: 24px" />
+      </router-link>
+    </div>
   </a-card>
 </template>
 <script setup>
@@ -47,7 +52,8 @@ import Swal from "sweetalert2";
 import { useRoute } from "vue-router";
 
 import { useMenu } from "../../../store/useMenu.js";
-useMenu().onSelectedKeys("admin-categorys");
+useMenu().onSelectedKeys("admin-prefix");
+
 const layout = {
   labelCol: {
     span: 6,

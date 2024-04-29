@@ -70,12 +70,7 @@
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import {
-  CommentOutlined,
-  UserOutlined,
-  RightOutlined,
-} from "@ant-design/icons-vue";
-import axios from "axios";
+
 import { ref, watch, onMounted } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";
 const route = useRoute();
@@ -103,16 +98,16 @@ const getNameCategory = async (id) => {
     });
 };
 
-const getImg = () => {
-  axios
-    .get("view-image")
-    .then((response) => {
-      // Xử lý dữ liệu từ API nếu cần
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+// const getImg = () => {
+//   axios
+//     .get("view-image")
+//     .then((response) => {
+//       // Xử lý dữ liệu từ API nếu cần
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// };
 
 const categoryId = route.params.id;
 watch(
@@ -124,6 +119,6 @@ watch(
 onMounted(() => {
   getNameCategory(route.params.id);
 
-  getImg();
+  // getImg();
 });
 </script>

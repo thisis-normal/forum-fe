@@ -88,9 +88,6 @@
 </template>
 <script setup>
 import { reactive, computed, ref } from "vue";
-import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
-import { useRouter } from "vue-router";
-import { handleRequestError } from "../../../store/errorHandler.js";
 import Swal from "sweetalert2";
 import router from "@/router";
 const formState = reactive({
@@ -100,47 +97,51 @@ const formState = reactive({
 });
 
 const users = ref([]);
-const onFinish = () => {
-  axios
-    .post("login", {
+const callApi = async () => {
+  try {
+    const response = await axios.post("admin/login", {
       username: formState.username,
-
       password: formState.password,
-    })
-    .then(function (response) {
-      const status = response.status;
-      console.log(response.data);
-      if (status === 200) {
-        router.push("/");
-        localStorage.setItem("token", response.data.token);
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: response.data.message,
-        });
-      } else {
-        Swal.fire({
-          title: "Đăng nhập thất bại!",
-          text: response.data.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      }
-    })
-    .catch(function (error) {
-      handleRequestError(error);
     });
+
+    const status = response.status;
+    console.log(response.data);
+
+    if (status === 200) {
+      router.push("/admin");
+      localStorage.setItem("token", response.data.token);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: response.data.message,
+      });
+    } else {
+      Swal.fire({
+        title: "Đăng nhập thất bại!",
+        text: response.data.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  } catch (error) {
+    handleRequestError(error);
+  }
 };
+
+const onFinish = async () => {
+  await callApi();
+};
+
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };

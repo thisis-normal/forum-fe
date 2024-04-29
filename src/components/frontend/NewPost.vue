@@ -36,21 +36,20 @@
     </div>
   </div>
 </template>
-
 <script setup>
-import { onMounted, ref } from "vue";
-
-import { UserOutlined } from "@ant-design/icons-vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
-// Danh sách các bài viết mới nhất
+
 const latestPosts = ref([]);
-const getPost = () => {
-  axios.get("home/latest-threads").then((response) => {
+
+const getPost = async () => {
+  try {
+    const response = await axios.get("home/latest-threads");
     latestPosts.value = response.data;
-    console.log(latestPosts.value);
-  });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  }
 };
-onMounted(() => {
-  getPost();
-});
+
+onMounted(getPost);
 </script>

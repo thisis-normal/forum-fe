@@ -1,5 +1,10 @@
 <template>
   <a-card title="Cập nhật chủ đề" style="width: 100%">
+    <div class="btnBack" style="position: absolute; top: 12px; right: 24px">
+      <router-link :to="{ name: 'admin-categorys' }">
+        <RollbackOutlined style="font-size: 24px" />
+      </router-link>
+    </div>
     <a-form
       :model="formState"
       v-bind="layout"
@@ -17,10 +22,15 @@
         <a-input v-model:value="formState.forumGroups.icon" />
       </a-form-item>
       <a-form-item label="Icon đã lấy:" id="icon" :rules="[{ required: true }]">
-        <DynamicIcon :name="formState.forumGroups.icon" />
+        <DynamicIcon
+          :name="formState.forumGroups.icon"
+          v-if="formState.forumGroups.icon !== null"
+        />
       </a-form-item>
       <a-form-item label="Lấy tên icon">
-        <a href="https://www.antdv.com/components/icon" target="_blank">Tại đây !</a>
+        <a href="https://www.antdv.com/components/icon" target="_blank"
+          >Tại đây !</a
+        >
       </a-form-item>
 
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">

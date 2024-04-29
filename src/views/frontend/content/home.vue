@@ -67,8 +67,7 @@
 <script setup>
 import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
-import { CommentOutlined, UserOutlined } from "@ant-design/icons-vue";
+
 import { useMenuFront } from "../../../store/useMenuFront.js";
 
 const route = useRoute();
@@ -103,6 +102,7 @@ const getNameCategory = async (id) => {
 };
 
 onMounted(() => {
+  getNameCategory();
   getFirstItem();
 });
 </script>

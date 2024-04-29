@@ -28,10 +28,8 @@
   </a-menu>
 </template>
 <script setup>
-import { h, ref, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import DynamicIcon from "../Icon.vue";
-import axios from "axios";
-
 import { useRouter, useRoute } from "vue-router";
 import { useMenuFront } from "../../store/useMenuFront.js";
 const router = useRouter();

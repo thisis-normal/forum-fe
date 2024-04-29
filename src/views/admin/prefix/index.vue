@@ -1,5 +1,5 @@
 <template>
-  <a-card title="tiêu đề" style="width: 100%">
+  <a-card title="Quản lý tiêu đề" style="width: 100%">
     <div class="row">
       <div class="col-12 d-flex justify-content-end align-items-center my-3">
         <router-link :to="{ name: 'admin-prefix-add' }">
@@ -9,7 +9,12 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <a-table :dataSource="forum" :columns="columns" :scroll="{ x: 576 }">
+        <a-table
+          :dataSource="forum"
+          :columns="columns"
+          :scroll="{ x: 576 }"
+          :pagination="{ pageSize: 5 }"
+        >
           <template #bodyCell="{ column, record, index }">
             <template v-if="column.key === 'id'">
               {{ index + 1 }}
@@ -78,6 +83,7 @@ export default {
         title: "ID",
         dataIndex: "id",
         key: "id",
+        width: 100,
       },
       {
         title: "Tên tiêu đề",
@@ -95,12 +101,14 @@ export default {
         title: "Màu",
         dataIndex: "color",
         key: "color",
+        width: 200,
       },
       {
         title: "Thao tác",
         dataIndex: "action",
         key: "action",
         fixed: "right",
+        width: 150,
       },
     ];
     const getforums = () => {

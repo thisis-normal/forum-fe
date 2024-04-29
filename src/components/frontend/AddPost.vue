@@ -28,9 +28,13 @@
     "
   >
     <a-form
+      :model="formState"
+      name="addPost"
+      class="addPost"
       :wrapper-col="wrapperCol"
       layout="horizontal"
       style="max-width: 600px; width: 100%"
+      @finish="onFinish"
     >
       <div class="title d-flex justify-content-center">
         <h1 class="text-center mt-3">Tạo bài viết</h1>
@@ -46,7 +50,7 @@
           ><CloseOutlined
         /></a-button>
       </div>
-      <a-form-item>
+      <a-form-item v-model:value="formState.title">
         <label for="">Tiêu đề bài viết</label>
         <br />
         <div class="d-flex">
@@ -90,13 +94,14 @@
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item>
+      <a-form-item v-model:value="formState.content">
         <label for="">Nội dung</label>
         <br />
         <TextEditor style="height: 150px" />
       </a-form-item>
       <a-form-item>
         <a-button
+          html-type="submit"
           style="
             width: 100%;
             height: 40px;
@@ -117,17 +122,50 @@ const componentDisabled = ref(true);
 import { CloseOutlined } from "@ant-design/icons-vue";
 import { defineEmits } from "vue";
 import TextEditor from "./TextEditor.vue";
-// import { TextEditor } from "./TextEditor.vue";
+
+import Swal from "sweetalert2";
 const emit = defineEmits(["closeAddPost"]);
-import axios from "axios";
 const idCategory = sessionStorage.getItem("idCategory");
 const prefix = ref([]);
 // console.log(TextEditor.quillContent.value);
 const formState = reactive({
-  name: "",
-  description: "",
+  forum_id: "",
+  prefix_id: "",
+  title: "",
   content: "",
+  slug: "",
+  image: "",
 });
+const onFinish = async () => {
+  await axios
+    .post("thread", {
+      forum_id: 1,
+      prefix_id: 1,
+      slug: " formState.title",
+      title: " formState.title",
+      content: "formState.content",
+    })
+    .then(function (response) {
+      Swal.fire({
+        title: "Thêm mới thành công!",
+        //   text: response.data.message + "!",
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          emit("closeAddPost");
+        }
+      });
+    })
+    .catch((error) => {
+      Swal.fire({
+        title: error.response.data.message + "!",
+        //   text: response.data.message + "!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    });
+};
 const getPrefix = () => {
   axios
     .get("prefix")
