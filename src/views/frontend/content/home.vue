@@ -9,7 +9,7 @@
     <a-list-item v-for="item in data" :key="item.id" class="p-0">
       <div class="row" style="width: 100%">
         <div
-          class="col-8 d-flex align-items-center"
+          class="col-12 d-flex align-items-center"
           :style="{ 'justify-content': 'space-between' }"
         >
           <div
@@ -35,15 +35,17 @@
           <div
             class="d-flex flex-column justify-content-center align-items-center"
           >
-            <span> Chủ đề </span>
+            <span> Bài viết </span>
+            <span> {{ item.total_threads }} </span>
           </div>
           <div
             class="d-flex flex-column justify-content-center align-items-center"
           >
-            <span> Tin nhắn </span>
+            <span> Bình luận </span>
+            <span> {{ item.total_posts }}</span>
           </div>
         </div>
-        <div class="col-4 d-flex align-items-center">
+        <!-- <div class="col-4 d-flex align-items-center">
           <a-avatar size="large" class="me-3">
             <template #icon><UserOutlined /></template>
           </a-avatar>
@@ -58,7 +60,7 @@
             <div class="date">{{ item.date }}</div>
             <div class="art">Nguyễn thành chung</div>
           </div>
-        </div>
+        </div> -->
       </div>
     </a-list-item>
   </a-list>

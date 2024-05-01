@@ -18,17 +18,11 @@
     <div class="container-fluid mt-3">
       <div class="row">
         <div class="col-sm-3 d-none d-sm-flex">
-          <a-list
-            style="
-              width: 100%;
-
-              overflow: auto;
-            "
-          >
+          <a-list style="width: 100%; overflow: auto">
             <TheMenu />
           </a-list>
         </div>
-        <div class="col-sm-6 col-12 pe-5">
+        <div class="col-sm-6 col-12">
           <!-- <AddPost /> -->
 
           <router-view> </router-view>

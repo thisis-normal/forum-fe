@@ -40,12 +40,7 @@
         <a-button
           @click="closeInfoUser()"
           shape="circle"
-          style="
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            background-color: #d8dadf;
-          "
+          style="position: absolute; top: 24px; right: 24px; background-color: #d8dadf"
           ><CloseOutlined
         /></a-button>
       </div>
@@ -58,7 +53,7 @@
         <br />
         @{{ user.username }}
         <br />
-        <a-button>Đổi ảnh đại điện</a-button>
+        <a-button @click="hidenAvt">Đổi ảnh đại điện</a-button>
       </a-form-item>
       <a-form-item class="my-2">
         <label for="">Họ và tên</label>
@@ -72,11 +67,7 @@
       <a-form-item v-if="user.student_id === null">
         <label for="">Email</label>
 
-        <a-input
-          placeholder="Email"
-          v-model:value="formState.email"
-          size="large"
-        />
+        <a-input placeholder="Email" v-model:value="formState.email" size="large" />
       </a-form-item>
       <a-form-item v-if="user.student_id === null">
         <a style="color: #7392ff" @click="hidenPassword">Đổi mật khẩu</a>
@@ -126,12 +117,7 @@
         <a-button
           @click="hidenPassword"
           shape="circle"
-          style="
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            background-color: #d8dadf;
-          "
+          style="position: absolute; top: 24px; right: 24px; background-color: #d8dadf"
           ><CloseOutlined
         /></a-button>
       </div>
@@ -205,6 +191,73 @@
       </a-form-item>
     </a-form>
   </div>
+  <div
+    v-if="isDisabledAvt"
+    style="
+      width: 60%;
+      height: 90%;
+      background-color: #fff;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    "
+  >
+    <a-form
+      :model="formAvt"
+      :wrapper-col="wrapperCol"
+      layout="horizontal"
+      style="max-width: 600px; width: 100%"
+      @finish="onFinishAvt"
+    >
+      <div class="title d-flex justify-content-center">
+        <h1 class="text-center mt-3">Đổi ảnh đại diện</h1>
+
+        <a-button
+          @click="hidenAvt"
+          shape="circle"
+          style="position: absolute; top: 24px; right: 24px; background-color: #d8dadf"
+          ><CloseOutlined
+        /></a-button>
+      </div>
+      <a-form-item class="text-center">
+        <a-avatar :size="250">
+          <template #icon>
+            <img :src="user.avatar_path" alt="" />
+          </template>
+        </a-avatar>
+        <br />
+        @{{ user.username }}
+        <br />
+        <!-- <a-button>Đổi ảnh đại điện</a-button> -->
+      </a-form-item>
+      <a-upload list-type="picture" :max-count="1">
+        <a-button>
+          <upload-outlined></upload-outlined>
+          Upload
+        </a-button>
+      </a-upload>
+      <a-form-item>
+        <a-button
+          class="login-form-button my-2"
+          html-type="submit"
+          style="
+            width: 100%;
+            height: 40px;
+            color: #fff;
+            background-color: #7392ff;
+            font-size: larger;
+          "
+          >Cập nhật ảnh đại diện</a-button
+        >
+      </a-form-item>
+    </a-form>
+  </div>
 </template>
 
 <script setup>
@@ -229,10 +282,15 @@ const formPass = reactive({
   newPassword: "",
   rePassword: "",
 });
+const formAvt = reactive({
+  avatar: "",
+});
 const disabled = computed(() => {
   return !(formPass.oldPassword && formPass.newPassword && formPass.rePassword);
 });
 const isDisabled = ref(false);
+const isDisabledAvt = ref(false);
+
 const emit = defineEmits(["closeInfoUser"]);
 const user = ref([]);
 const getPrefix = () => {
@@ -243,6 +301,7 @@ const getPrefix = () => {
       formState.avatar = user.value.avatar;
       formState.fullname = user.value.full_name;
       formState.email = user.value.email;
+      formAvt.avatar = user.value.avatar;
     })
     .catch(function (error) {
       // Xử lý lỗi
@@ -319,6 +378,9 @@ const handleFocus = () => {
 const hidenPassword = () => {
   isDisabled.value = !isDisabled.value;
 };
+const hidenAvt = () => {
+  isDisabledAvt.value = !isDisabledAvt.value;
+};
 const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
@@ -326,14 +388,8 @@ const validatePassword = (rule, value, callback) => {
   if (value.length < 8) {
     callback(new Error("Mật khẩu phải có ít nhất 8 ký tự!"));
   } else if (!/^[a-zA-Z0-9!@#$%^&*()_+{}|:"<>?~`\-=[\]\\;',./]+$/.test(value)) {
-    callback(
-      new Error("Mật khẩu chỉ chứa các ký tự chữ cái, số và ký tự đặc biệt!")
-    );
-  } else if (
-    !/[a-z]/.test(value) ||
-    !/[A-Z]/.test(value) ||
-    !/\d/.test(value)
-  ) {
+    callback(new Error("Mật khẩu chỉ chứa các ký tự chữ cái, số và ký tự đặc biệt!"));
+  } else if (!/[a-z]/.test(value) || !/[A-Z]/.test(value) || !/\d/.test(value)) {
     callback(
       new Error(
         "Mật khẩu phải chứa ít nhất một ký tự viết thường, một ký tự viết hoa và một số!"
@@ -345,9 +401,7 @@ const validatePassword = (rule, value, callback) => {
 };
 const validateConfirmPassword = (rule, value, callback) => {
   if (value !== formPass.newPassword) {
-    callback(
-      "Mật khẩu xác nhận không khớp. Vui lòng nhập lại mật khẩu chính xác!"
-    );
+    callback("Mật khẩu xác nhận không khớp. Vui lòng nhập lại mật khẩu chính xác!");
   } else {
     callback();
   }

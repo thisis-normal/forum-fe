@@ -6,7 +6,10 @@
     {{ nameForum.title }}
   </div>
 
-  <a-list size="large" style="height: 75vh; overflow: auto; padding-top: 12px">
+  <a-list
+    size="large"
+    style="height: 75vh; overflow: auto; padding-top: 12px; padding-right: 4px"
+  >
     <span
       style="border-radius: 5px; padding: 5px"
       :style="{ background: nameForum.prefix_color }"
@@ -20,8 +23,9 @@
         width: 100%;
         background-color: #ffffff;
         border-radius: 10px;
-        padding: 12px;
+        padding: 12px 12px 36px 12px;
         margin-top: 12px;
+        position: relative;
       "
     >
       <!-- <div><img :src="urlPublic + nameForum." alt="" /></div> -->
@@ -41,6 +45,9 @@
       <div>
         {{ DOMPurify.sanitize(nameForum.content) }}
       </div>
+      <div class="reply" style="position: absolute; bottom: 12px; right: 12px">
+        <a href=""><SendOutlined /> Reply </a>
+      </div>
     </div>
     <a-list-item class="p-0" v-for="item in post" :key="item.id">
       <div class="" style="width: 100%">
@@ -51,20 +58,33 @@
             font-size: 16px;
             background-color: #ffffff;
             border-radius: 10px;
-            padding: 12px;
+            padding: 12px 12px 36px 12px;
             margin-top: 12px;
+            position: relative;
           "
         >
-          <div>
+          <div class="d-flex align-items-center">
             <a-avatar size="">
               <template #icon>
                 <img :src="item.user_avatar" alt="" />
               </template>
             </a-avatar>
-            {{ item.user_full_name }}
+            <div class="mx-2">
+              {{ item.user_full_name }}
+
+              <div style="font-size: 12px">
+                {{ item.created_at }}
+              </div>
+            </div>
           </div>
           <div>
             {{ item.content }}
+          </div>
+          <div
+            class="reply"
+            style="position: absolute; bottom: 12px; right: 12px"
+          >
+            <a href=""><SendOutlined /> Reply </a>
           </div>
         </div>
       </div>

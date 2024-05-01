@@ -128,7 +128,7 @@ const logout = () => {
     .post("logout")
     .then(function (response) {
       router.push("/login");
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
     })
     .catch(function (error) {
       console.log(error);
@@ -148,9 +148,9 @@ const me = () => {
       console.log(error);
     });
 };
-onMounted(() => {
-  me();
-});
+
+me();
+
 // me();
 const onSearch = (searchValue) => {
   console.log("use value", searchValue);

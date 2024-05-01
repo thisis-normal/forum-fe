@@ -130,6 +130,7 @@ const componentDisabled = ref(true);
 import { CloseOutlined } from "@ant-design/icons-vue";
 import { defineEmits } from "vue";
 import TextEditor from "./TextEditor.vue";
+import { generateSlug } from "../../store/slug.js";
 
 import Swal from "sweetalert2";
 const emit = defineEmits(["closeAddPost"]);
@@ -148,6 +149,9 @@ const formState = reactive({
 const quillContent = ref(""); // Sử dụng ref để tạo reactive variable cho v-model
 
 const handleInput = () => {
+  console.log(quillContent.value);
+  console.log(myTextEditor.value.convertDeltaToHtml(quillContent.value));
+
   formState.content = myTextEditor.value.convertDeltaToHtml(quillContent.value);
 };
 const onFinish = async () => {
@@ -221,8 +225,8 @@ const handleChangePrefix = (value) => {
   formState.prefix_id = value.value;
 };
 const handleChangeTitle = (value) => {
-  console.log(value.target.value);
-
+  console.log(generateSlug(value.target.value));
+  formState.slug = generateSlug(value.target.value);
   formState.title = value.target.value;
 };
 const handleBlur = () => {

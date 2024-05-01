@@ -17,16 +17,24 @@
           <div style="">
             <div class="user">{{ post.user_full_name }}</div>
 
-            <div class="time" style="font-size: 9px">
+            <div class="time" style="font-size: 9px; margin-bottom: 8px">
               {{ post.post_created_at }}
             </div>
           </div>
           <div class="row">
             <div class="">
-              <span style="color: darkblue; margin-right: 12px">
+              <span
+                :style="{ background: post.prefixes_color }"
+                style="margin-right: 4px; padding: 4px; border-radius: 5px"
+              >
                 {{ post.prefixes_name }}
               </span>
-              <router-link to="">
+              <router-link
+                :to="{
+                  name: 'thread',
+                  params: { slug: post.thread_slug + '.' + post.thread_id },
+                }"
+              >
                 {{ post.thread_name }}
               </router-link>
             </div>

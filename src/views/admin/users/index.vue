@@ -117,7 +117,15 @@ export default {
       },
     ];
     const getUsers = () => {
-      axios.get("");
+      axios
+        .get("admin/user")
+        .then(function (response) {
+          users.value = response.data;
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
     };
 
     getUsers();
