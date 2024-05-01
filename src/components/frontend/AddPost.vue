@@ -50,16 +50,15 @@
           ><CloseOutlined
         /></a-button>
       </div>
-      <a-form-item v-model:value="formState.title">
+      <a-form-item>
         <label for="">Tiêu đề bài viết</label>
         <br />
         <div class="d-flex">
           <a-select
-            v-model:value="value"
             label-in-value
             style="width: 120px"
             size="large"
-            @change="handleChange"
+            @change="handleChangePrefix"
             placeholder="Thể loại"
           >
             <a-select-option
@@ -71,7 +70,11 @@
               <span>{{ option.name }}</span>
             </a-select-option>
           </a-select>
-          <a-input placeholder="Tiêu đề bài viết" size="large" />
+          <a-input
+            placeholder="Tiêu đề bài viết"
+            size="large"
+            @input="handleChangeTitle"
+          />
         </div>
       </a-form-item>
       <a-form-item>
@@ -94,10 +97,15 @@
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item v-model:value="formState.content">
+      <a-form-item>
         <label for="">Nội dung</label>
         <br />
-        <TextEditor style="height: 150px" />
+        <TextEditor
+          style="height: 150px"
+          v-model:content="quillContent"
+          @input="handleInput"
+          ref="myTextEditor"
+        />
       </a-form-item>
       <a-form-item>
         <a-button
@@ -127,6 +135,7 @@ import Swal from "sweetalert2";
 const emit = defineEmits(["closeAddPost"]);
 const idCategory = sessionStorage.getItem("idCategory");
 const prefix = ref([]);
+const myTextEditor = ref(null);
 // console.log(TextEditor.quillContent.value);
 const formState = reactive({
   forum_id: "",
@@ -136,14 +145,19 @@ const formState = reactive({
   slug: "",
   image: "",
 });
+const quillContent = ref(""); // Sử dụng ref để tạo reactive variable cho v-model
+
+const handleInput = () => {
+  formState.content = myTextEditor.value.convertDeltaToHtml(quillContent.value);
+};
 const onFinish = async () => {
   await axios
     .post("thread", {
-      forum_id: 1,
-      prefix_id: 1,
+      forum_id: formState.forum_id,
+      prefix_id: formState.prefix_id,
       slug: " formState.title",
-      title: " formState.title",
-      content: "formState.content",
+      title: formState.title,
+      content: formState.content,
     })
     .then(function (response) {
       Swal.fire({
@@ -178,6 +192,7 @@ const getPrefix = () => {
     });
 };
 getPrefix();
+
 const forum = ref([]);
 const getForum = () => {
   axios
@@ -199,13 +214,23 @@ const wrapperCol = {
 };
 
 const handleChange = (value) => {
-  console.log(`selected ${value}`);
+  formState.forum_id = value;
+};
+const handleChangePrefix = (value) => {
+  console.log(value.value);
+  formState.prefix_id = value.value;
+};
+const handleChangeTitle = (value) => {
+  console.log(value.target.value);
+
+  formState.title = value.target.value;
 };
 const handleBlur = () => {
   console.log("blur");
 };
 const handleFocus = () => {
   console.log("focus");
+  console.log(formState.content);
 };
 const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;

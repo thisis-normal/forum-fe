@@ -1,5 +1,9 @@
 <template>
   <QuillEditor
+    class="editor"
+    ref="myTextEditor"
+    v-model:content="quillContent"
+    @update:content="handleInput"
     :toolbar="[
       { header: [1, 2, 3, 4, 5, 6, false] },
       { align: [] },
@@ -11,20 +15,35 @@
       'video',
       'formula',
     ]"
-    v-model:content="quillContent"
-    @input="handleInput"
   />
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { QuillEditor } from "@vueup/vue-quill";
+import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
-// Không cần tạo đối tượng Quill tại đây, QuillEditor sẽ tự quản lý
-
-const quillContent = ref(""); // Sử dụng ref để tạo reactive variable cho v-model
-
-const handleInput = () => {
-  console.log(quillContent.value);
+const quillContent = ref(""); // Trường hợp mặc định là chuỗi, sửa lại tùy vào cấu trúc Delta của bạn
+const rawHtml = ref(""); // Sử dụng ref để khai báo rawHtml như một reactive variable
+const rawDelta = ref({});
+const myTextEditor = ref(null);
+const convertDeltaToHtml = (delta) => {
+  const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
+  rawHtml.value = converter.convert(); // Gán giá trị được chuyển đổi
+  return rawHtml.value;
 };
+const convertHtmlToDelta = (html) => {
+  if (myTextEditor.value) {
+    const quillEditor = myTextEditor.value.getQuill();
+    const delta = quillEditor.clipboard.convert(html);
+    quillContent.value = delta; // Cập nhật Delta mới vào quillContent
+  }
+};
+const handleInput = (newContent) => {
+  convertDeltaToHtml(newContent);
+  convertHtmlToDelta(rawHtml);
+};
+defineExpose({
+  convertDeltaToHtml,
+});
 </script>

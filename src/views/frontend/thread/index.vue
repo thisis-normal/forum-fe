@@ -12,7 +12,9 @@
       :style="{ background: nameForum.prefix_color }"
       >{{ nameForum.prefix_name }}</span
     >
-    {{ nameForum.title }}
+
+    {{ DOMPurify.sanitize(nameForum.title) }}
+
     <div
       style="
         width: 100%;
@@ -37,7 +39,7 @@
         </div>
       </div>
       <div>
-        {{ nameForum.content }}
+        {{ DOMPurify.sanitize(nameForum.content) }}
       </div>
     </div>
     <a-list-item class="p-0" v-for="item in post" :key="item.id">
@@ -72,7 +74,7 @@
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-
+import DOMPurify from "dompurify";
 import axios from "axios";
 import { ref, watch, onMounted } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";

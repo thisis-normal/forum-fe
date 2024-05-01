@@ -108,7 +108,7 @@ import { onMounted, ref } from "vue";
 import { defineEmits } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
-const token = localStorage.getItem("token");
+const token = sessionStorage.getItem("token");
 const emit = defineEmits(["showAddPost", "showInfoUser"]);
 
 const router = useRouter();
@@ -137,10 +137,10 @@ const logout = () => {
 // Assuming you have a token variable
 
 // Set the Authorization header with the Bearer token
-axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+// axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 const me = () => {
   axios
-    .get("user/profile", null)
+    .get("user/profile")
     .then(function (response) {
       user.value = response.data;
     })

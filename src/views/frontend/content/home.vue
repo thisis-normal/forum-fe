@@ -102,7 +102,7 @@ const getNameCategory = async (id) => {
 };
 
 onMounted(() => {
-  getNameCategory();
+  // getNameCategory();
   getFirstItem();
 });
 </script>

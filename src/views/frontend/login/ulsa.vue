@@ -132,7 +132,7 @@ const onFinish = () => {
     .then(function (response) {
       if (response.status === 200) {
         router.push("/");
-        localStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("token", response.data.token);
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
