@@ -94,7 +94,7 @@
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import DOMPurify from "dompurify";
+import * as DOMPurify from 'dompurify';
 import axios from "axios";
 import { ref, watch, onMounted } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";

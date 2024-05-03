@@ -7,28 +7,48 @@
       :validate-messages="validateMessages"
       @finish="onFinish"
     >
-      <a-form-item :name="['user', 'name']" label="Name" :rules="[{ required: true }]">
+      <a-form-item
+        :name="['user', 'name']"
+        label="Tài khoản"
+        :rules="[{ required: true }]"
+      >
         <a-input v-model:value="formState.user.name" />
       </a-form-item>
-      <a-form-item :name="['user', 'email']" label="Email" :rules="[{ type: 'email' }]">
+
+      <a-form-item
+        :name="['user', 'name']"
+        label="Mật khẩu"
+        :rules="[{ required: true }]"
+      >
+        <a-input v-model:value="formState.user.name" />
+      </a-form-item>
+      <a-form-item
+        :name="['user', 'email']"
+        label="Email"
+        :rules="[{ required: true }]"
+      >
         <a-input v-model:value="formState.user.email" />
       </a-form-item>
       <a-form-item
-        :name="['user', 'age']"
-        label="Age"
-        :rules="[{ type: 'number', min: 0, max: 99 }]"
+        :name="['user', 'name']"
+        label="Họ và tên"
+        :rules="[{ required: true }]"
       >
-        <a-input-number v-model:value="formState.user.age" />
+        <a-input v-model:value="formState.user.name" />
       </a-form-item>
-      <a-form-item :name="['user', 'website']" label="Website">
-        <a-input v-model:value="formState.user.website" />
+
+      <a-form-item :name="['user', 'name']" label="Quyền người dùng">
+        <a-input v-model:value="formState.user.name" />
       </a-form-item>
-      <a-form-item :name="['user', 'introduction']" label="Introduction">
-        <a-textarea v-model:value="formState.user.introduction" />
-      </a-form-item>
+
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
-        <a-button type="primary" html-type="submit">Submit</a-button>
+        <a-button type="primary" html-type="submit">Tạo tài khoản</a-button>
       </a-form-item>
+      <div class="btnBack" style="position: absolute; top: 12px; right: 24px">
+        <router-link :to="{ name: 'admin-users' }">
+          <RollbackOutlined style="font-size: 24px" />
+        </router-link>
+      </div>
     </a-form>
   </a-card>
 </template>
@@ -56,7 +76,7 @@ const validateMessages = {
 const formState = reactive({
   user: {
     name: "",
-    age: undefined,
+    age: "",
     email: "",
     website: "",
     introduction: "",

@@ -11,17 +11,13 @@
       <div class="col-12">
         <a-table :dataSource="users" :columns="columns" :scroll="{ x: 800 }">
           <template #bodyCell="{ column, record }">
-            <template v-if="column.key === 'avatar'">
+            <template v-if="column.key === 'avatar_path'">
               <a-avatar>
-                <template #icon>
-                  <img src="http://127.0.0.1:5173/public/panh.jpg" alt=""
-                /></template>
+                <template #icon> <img :src="record.avatar_path" alt="" /></template>
               </a-avatar>
             </template>
             <template v-if="column.key === 'action'">
-              <router-link
-                :to="{ name: 'admin-users-edit', params: { id: record.id } }"
-              >
+              <router-link :to="{ name: 'admin-users-edit', params: { id: record.id } }">
                 <BtnEdit />
               </router-link>
 
@@ -33,106 +29,91 @@
     </div>
   </a-card>
 </template>
-<script>
+<script setup>
 import { PlusOutlined, EditOutlined } from "@ant-design/icons-vue";
 import BtnCreate from "../../../components/BtnCreate.vue";
 import BtnEdit from "../../../components/BtnEdit.vue";
 import BtnDel from "../../../components/BtnDel.vue";
-
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
 import { useMenu } from "../../../store/useMenu.js";
+import axios from "axios"; // Đảm bảo đang import axios
 
-export default {
-  components: {
-    PlusOutlined,
-    EditOutlined,
-    BtnCreate,
-    BtnEdit,
-    BtnDel,
-  },
-  setup() {
-    useMenu().onSelectedKeys("admin-users");
-    const users = ref([]);
-    const columns = [
-      {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        width: "5%",
-      },
-      {
-        title: "Họ",
-        dataIndex: "first_name",
-        key: "first_name",
-      },
-      // {
-      //   title: "Mật khẩu",
-      //   dataIndex: "password",
-      //   key: "password",
-      //   // Đặt hide để ẩn cột mật khẩu khỏi bảng
-      //   hide: true,
-      // },
-      {
-        title: "Email",
-        dataIndex: "email",
-        key: "email",
-      },
-      {
-        title: "Họ và tên",
-        dataIndex: "fullname",
-        key: "fullname",
-      },
-      {
-        title: "Ảnh",
-        dataIndex: "avatar",
-        key: "avatar",
-        width: "7%",
-      },
-      {
-        title: "Mã sinh viên",
-        dataIndex: "studentid",
-        key: "studentid",
-      },
-      {
-        title: "Cấm",
-        dataIndex: "banned",
-        key: "banned",
-        width: "7%",
-      },
-      {
-        title: "Thời gian",
-        dataIndex: "bannedUntil",
-        key: "bannedUntil",
-      },
-      {
-        title: "Lý do",
-        dataIndex: "bannedReason",
-        key: "bannedReason",
-      },
-      {
-        title: "Thao tác",
-        dataIndex: "action",
-        key: "action",
-        fixed: "right",
-      },
-    ];
-    const getUsers = () => {
-      axios
-        .get("admin/user")
-        .then(function (response) {
-          users.value = response.data;
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error);
-        });
-    };
+// Cầu hình menu đã chọn
+useMenu().onSelectedKeys("admin-users");
 
-    getUsers();
-    return {
-      users,
-      columns,
-    };
+// Khai báo ref cho users
+const users = ref([]);
+
+// Cột bảng
+const columns = [
+  {
+    title: "ID",
+    dataIndex: "id",
+    key: "id",
+    width: "5%",
   },
+  {
+    title: "Tài khoản",
+    dataIndex: "username",
+    key: "username",
+  },
+  // Cột mật khẩu đã bị bỏ chú thích, có thể bỏ qua hoặc giữ lại tùy ý
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
+  },
+  {
+    title: "Họ và tên",
+    dataIndex: "full_name",
+    key: "full_name",
+  },
+  {
+    title: "Ảnh",
+    dataIndex: "avatar_path",
+    key: "avatar_path",
+    width: "7%",
+  },
+  {
+    title: "Mã sinh viên",
+    dataIndex: "student_id",
+    key: "student_id",
+  },
+  {
+    title: "Cấm",
+    dataIndex: "banned",
+    key: "banned",
+    width: "7%",
+  },
+  {
+    title: "Thời gian",
+    dataIndex: "banned_until",
+    key: "banned_until",
+  },
+  {
+    title: "Lý do",
+    dataIndex: "banned_reason",
+    key: "banned_reason",
+  },
+  {
+    title: "Thao tác",
+    dataIndex: "action",
+    key: "action",
+    fixed: "right",
+  },
+];
+
+// Hàm lấy thông tin người dùng
+const getUsers = async () => {
+  try {
+    const response = await axios.get("admin/users");
+    users.value = response.data.data.users;
+    console.log(users.value);
+  } catch (error) {
+    console.error(error);
+  }
 };
+
+// Kích hoạt lấy dữ liệu người dùng
+getUsers();
 </script>
