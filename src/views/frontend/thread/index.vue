@@ -9,6 +9,7 @@
   <a-list
     size="large"
     style="height: 75vh; overflow: auto; padding-top: 12px; padding-right: 4px"
+    :pagination="pagination"
   >
     <span
       style="border-radius: 5px; padding: 5px"
@@ -16,7 +17,7 @@
       >{{ nameForum.prefix_name }}</span
     >
 
-    {{ DOMPurify.sanitize(nameForum.title) }}
+    {{ nameForum.title }}
 
     <div
       style="
@@ -43,10 +44,10 @@
         </div>
       </div>
       <div>
-        {{ DOMPurify.sanitize(nameForum.content) }}
+        {{ nameForum.content }}
       </div>
       <div class="reply" style="position: absolute; bottom: 12px; right: 12px">
-        <a href=""><SendOutlined /> Reply </a>
+        <a href="#TextEditor"><SendOutlined /> Trả lời </a>
       </div>
     </div>
     <a-list-item class="p-0" v-for="item in post" :key="item.id">
@@ -84,32 +85,60 @@
             class="reply"
             style="position: absolute; bottom: 12px; right: 12px"
           >
-            <a href=""><SendOutlined /> Reply </a>
+            <a href="#TextEditor"><SendOutlined /> Trả lời </a>
           </div>
         </div>
       </div>
     </a-list-item>
+    <div style="margin: 12px 0">
+      <TextEditor
+        id="TextEditor"
+        style="height: 150px; background-color: #ffffff"
+        v-model:content="quillContent"
+        @input="handleInput"
+        ref="myTextEditor"
+      />
+      <a-button style="margin: 12px 0" size="large" type="primary"
+        >Đăng câu trả lời <SendOutlined
+      /></a-button>
+    </div>
   </a-list>
 </template>
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import * as DOMPurify from 'dompurify';
+import TextEditor from "../../../components/frontend/TextEditor.vue";
+
 import axios from "axios";
 import { ref, watch, onMounted } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";
 const route = useRoute();
+
 const router = useRouter();
 const params = route.params.slug;
 const parts = params.split(".");
 const result = parts[1];
+const myTextEditor = ref(null);
+
+const quillContent = ref(""); // Sử dụng ref để tạo reactive variable cho v-model
 
 const nameForum = ref([]);
 useMenuFront().onSelectedKeys(sessionStorage.getItem("idCategory"));
 watch(route, () => {
   useMenuFront().onSelectedKeys(sessionStorage.getItem("idCategory"));
 });
+const handleInput = () => {
+  console.log(quillContent.value);
+  console.log(myTextEditor.value.convertDeltaToHtml(quillContent.value));
 
+  formState.content = myTextEditor.value.convertDeltaToHtml(quillContent.value);
+};
+const pagination = {
+  onChange: (page) => {
+    console.log(page);
+  },
+  pageSize: 1,
+};
 const data = ref([]);
 const post = ref([]);
 
