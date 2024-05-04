@@ -45,6 +45,7 @@ import {
 } from "@ant-design/icons-vue";
 import { ref, onMounted } from "vue";
 import TheMenu from "../components/Menu.vue";
+import router from "@/router";
 
 const open = ref(false);
 const openTk = ref(false);
@@ -52,19 +53,19 @@ const user = ref([]);
 const showDrawer = () => {
   open.value = true;
 };
-const me = () => {
-  axios
-    .get("admin/me", null)
-    .then(function (response) {
-      user.value = response.data;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
-onMounted(() => {
-  me();
-});
+// const me = () => {
+//   axios
+//     .get("admin/me", null)
+//     .then(function (response) {
+//       user.value = response.data;
+//     })
+//     .catch(function (error) {
+//       router.push(`/admin/login`);
+//     });
+// };
+// onMounted(() => {
+//   me();
+// });
 const showDrawerTk = () => {
   openTk.value = true;
 };

@@ -4,7 +4,7 @@ import { createApp } from 'vue';
 import router from './router';
 import { createPinia } from 'pinia';
 import { QuillEditor } from '@vueup/vue-quill'
-import { Menu, List, Drawer, Dropdown, Avatar, Button, message, Card, Table, InputNumber, Input, Form, Select, Checkbox, Upload } from 'ant-design-vue';
+import { Menu, List, Drawer, DatePicker, Dropdown, Avatar, Button, message, Card, Table, InputNumber, Input, Form, Select, Checkbox, Upload } from 'ant-design-vue';
 import App from './App.vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -51,6 +51,8 @@ app.use(useRouter)
 app.use(router);
 app.use(createPinia())
 app.use(Button);
+app.use(DatePicker);
+
 app.use(Avatar);
 app.use(Select);
 app.use(Card);
