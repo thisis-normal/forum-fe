@@ -9,7 +9,6 @@
   <a-list
     size="large"
     style="height: 75vh; overflow: auto; padding-top: 12px; padding-right: 4px"
-    :pagination="pagination"
   >
     <span
       style="border-radius: 5px; padding: 5px"
@@ -77,15 +76,23 @@
             </div>
           </div>
           <div v-html="item.content"></div>
+
           <div
             class="reply"
             style="position: absolute; bottom: 12px; right: 12px"
           >
-            <a href="#TextEditor"><SendOutlined /> Trả lời </a>
+            <a href="#TextEditor" @click="setReplyTo(item.post_id)"
+              ><SendOutlined /> Trả lời
+            </a>
           </div>
         </div>
       </div>
     </a-list-item>
+    <a-pagination
+      style="margin: 12px; text-align: center"
+      v-model:current="current1"
+      :total="13"
+    />
     <a-form
       :model="formState"
       name="normal_post"
@@ -122,35 +129,35 @@ import { ref, watch, onMounted, reactive } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";
 
 const route = useRoute();
-
+const current1 = ref(1);
 const router = useRouter();
 const params = route.params.slug;
 const parts = params.split(".");
 const result = parts[1];
 const myTextEditor = ref(null);
+const Pagination = ref([]);
 
 const quillContent = ref(""); // Sử dụng ref để tạo reactive variable cho v-model
 const formState = reactive({
   thread_id: result,
   content: "",
+  replied_to: "",
 });
 const nameForum = ref([]);
 useMenuFront().onSelectedKeys(sessionStorage.getItem("idCategory"));
 watch(route, () => {
   useMenuFront().onSelectedKeys(sessionStorage.getItem("idCategory"));
 });
+const setReplyTo = (itemId) => {
+  this.formStage.replied_to = itemId;
+};
 const handleInput = () => {
   console.log(quillContent.value);
   console.log(myTextEditor.value.convertDeltaToHtml(quillContent.value));
 
   formState.content = myTextEditor.value.convertDeltaToHtml(quillContent.value);
 };
-const pagination = {
-  onChange: (page) => {
-    console.log(page);
-  },
-  pageSize: 1,
-};
+
 const data = ref([]);
 const post = ref([]);
 
@@ -191,7 +198,9 @@ const getPost = async (id) => {
     .get(`thread/${id}/posts`)
     .then((response) => {
       post.value = response.data.data;
-      console.log(post);
+      Pagination.value = response.data;
+
+      console.log(Pagination.value);
     })
     .catch((error) => {
       console.log(error);
