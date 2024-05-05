@@ -7,17 +7,32 @@
       :validate-messages="validateMessages"
       @finish="onFinish"
     >
-      <a-form-item label="Tên chủ đề" :rules="[{ required: true }]">
+      <a-form-item
+        label="Tên chủ đề"
+        :name="['forumGroups', 'name']"
+        :rules="[{ required: true }]"
+      >
         <a-input v-model:value="formState.forumGroups.name" />
       </a-form-item>
-      <a-form-item label="Mô tả" :rules="[{ required: true }]">
+      <a-form-item
+        label="Mô tả"
+        :name="['forumGroups', 'description']"
+        :rules="[{ required: true }]"
+      >
         <a-input v-model:value="formState.forumGroups.description" />
       </a-form-item>
-      <a-form-item label="Icon" :rules="[{ required: true }]">
+      <a-form-item
+        label="Icon"
+        :name="['forumGroups', 'icon']"
+        :rules="[{ required: true }]"
+      >
         <a-input v-model:value="formState.forumGroups.icon" />
       </a-form-item>
       <a-form-item label="Icon đã lấy:" id="icon" :rules="[{ required: true }]">
-        <DynamicIcon :name="formState.forumGroups.icon" />
+        <DynamicIcon
+          :name="formState.forumGroups.icon"
+          @error="handleIconError"
+        />
       </a-form-item>
       <a-form-item label="Lấy tên icon">
         <a href="https://www.antdv.com/components/icon" target="_blank"
@@ -51,7 +66,7 @@ const layout = {
   },
 };
 const validateMessages = {
-  required: "${label} is required!",
+  required: "${label} không được để trống",
 };
 const formState = reactive({
   forumGroups: {
@@ -87,5 +102,9 @@ const onFinish = (values) => {
         confirmButtonText: "OK",
       });
     });
+};
+const handleIconError = (error) => {
+  console.error("Error in DynamicIcon:", error);
+  this.formState.forumGroups.icon = null; // Set icon to null on error
 };
 </script>

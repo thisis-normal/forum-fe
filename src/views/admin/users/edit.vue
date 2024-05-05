@@ -89,6 +89,8 @@ const handleChangeBan = (value) => {
     checkBan.value = true;
   } else {
     checkBan.value = false;
+    formState.banned_until = null;
+    formState.banned_reason = null;
   }
 };
 const validatePassword = (rule, value, callback) => {
@@ -124,14 +126,17 @@ const getUser = async () => {
       formState.role = response.data.data.user.roles[0].name;
       formState.banned = response.data.data.user.banned;
       formState.banned_reason = response.data.data.user.banned_reason;
-      formState.banned_until = dayjs(
-        response.data.data.user.banned_until.split(" ")[0],
-        "YYYY-MM-DD"
-      );
+      formState.banned_until = response.data.data.user.banned_until;
       if (formState.banned === 1) {
         checkBan.value = true;
+        formState.banned_until = dayjs(
+          response.data.data.user.banned_until.split(" ")[0],
+          "YYYY-MM-DD"
+        );
       } else {
         checkBan.value = false;
+        formState.banned_until = null;
+        formState.banned_reason = null;
       }
     })
     .catch(function (error) {
@@ -145,35 +150,114 @@ const getUser = async () => {
       // });
     });
 };
+const getdate = (date) => {
+  const fullDateString = date.toString();
+  const parts = fullDateString.split(" "); // Tách chuỗi dựa vào khoảng trắng
+
+  const month = parts[1]; // May
+  const dayOfMonth = parts[2]; // 23
+  const year = parts[3]; // 2024
+
+  return year + "-" + month + "-" + dayOfMonth;
+};
 getUser();
 const onFinish = async (values) => {
-  await axios
-    .post("admin/users", {
-      username: formState.username,
-      email: formState.email,
-      password: formState.password,
-      full_name: formState.full_name,
-      role: formState.role,
-    })
-    .then(function (response) {
-      Swal.fire({
-        title: "Thêm mới thành công!",
+  if (formState.banned === 1) {
+    let date;
+    if (formState.banned_until === null) {
+      // Lấy ngày mai nếu formState.banned_until bằng null
+      date = dayjs().add(1, "day").format("YYYY-MM-DD");
+    } else {
+      // Nếu formState.banned_until có giá trị, định dạng theo yêu cầu
+      date = dayjs(formState.banned_until.$d).format("YYYY-MM-DD");
+    }
+    await axios
+      .patch(`admin/users/${route.params.id}`, {
+        email: formState.email,
+        full_name: formState.full_name,
+        role: formState.role,
+        banned: formState.banned,
+        banned_reason: formState.banned_reason,
+        banned_until: date,
+      })
+      .then(function (response) {
+        Swal.fire({
+          title: "Cập nhật thành công!",
 
-        icon: "success",
-        confirmButtonText: "OK",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+
+        router.push(`/admin/users`);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        Swal.fire({
+          title: error.response.data.message + "!",
+
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       });
+  } else {
+    await axios
+      .patch(`admin/user/${route.params.id}`, {
+        email: formState.email,
+        full_name: formState.full_name,
+        role: formState.role,
+        banned: formState.banned,
+        banned_reason: formState.banned_reason,
+        banned_until: formState.banned_until,
+      })
+      .then(function (response) {
+        Swal.fire({
+          title: "Cập nhật thành công!",
 
-      router.push(`/admin/users`);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-      Swal.fire({
-        title: error.response.data.message + "!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
 
-        icon: "error",
-        confirmButtonText: "OK",
+        router.push(`/admin/users`);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        Swal.fire({
+          title: error.response.data.message + "!",
+
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       });
-    });
+  }
+  // await axios
+  //   .post("admin/users", {
+  //     username: formState.username,
+  //     email: formState.email,
+  //     password: formState.password,
+  //     full_name: formState.full_name,
+  //     role: formState.role,
+  //   })
+  //   .then(function (response) {
+  //     Swal.fire({
+  //       title: "Thêm mới thành công!",
+
+  //       icon: "success",
+  //       confirmButtonText: "OK",
+  //     });
+
+  //     router.push(`/admin/users`);
+  //   })
+  //   .catch(function (error) {
+  //     // handle error
+  //     console.log(error);
+  //     Swal.fire({
+  //       title: error.response.data.message + "!",
+
+  //       icon: "error",
+  //       confirmButtonText: "OK",
+  //     });
+  //   });
 };
 </script>

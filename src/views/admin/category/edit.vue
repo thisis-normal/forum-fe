@@ -24,7 +24,7 @@
       <a-form-item label="Icon đã lấy:" id="icon" :rules="[{ required: true }]">
         <DynamicIcon
           :name="formState.forumGroups.icon"
-          v-if="formState.forumGroups.icon !== null"
+          @error="handleIconError"
         />
       </a-form-item>
       <a-form-item label="Lấy tên icon">
@@ -66,6 +66,10 @@ const formState = reactive({
     icon: "",
   },
 });
+const handleIconError = (error) => {
+  console.error("Error in DynamicIcon:", error);
+  this.formState.forumGroups.icon = null;
+};
 const forumGroups = ref([]);
 const onFinish = (values) => {
   if (!isValidIcon(formState.forumGroups.icon)) {

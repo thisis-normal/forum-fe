@@ -25,7 +25,7 @@
                 <BtnEdit />
               </router-link>
 
-              <BtnDel />
+              <BtnDel @click="deleteUser(record.id, record.username)" />
             </template>
           </template>
         </a-table>
@@ -41,6 +41,7 @@ import BtnDel from "../../../components/BtnDel.vue";
 import { ref } from "vue";
 import { useMenu } from "../../../store/useMenu.js";
 import axios from "axios"; // Đảm bảo đang import axios
+import Swal from "sweetalert2";
 
 // Cầu hình menu đã chọn
 useMenu().onSelectedKeys("admin-users");
@@ -123,7 +124,39 @@ const getUsers = async () => {
     users.value = response.data.data.users;
   } catch (error) {}
 };
+const deleteUser = (id, name) => {
+  console.log(id, name);
+  Swal.fire({
+    title: `Bạn có muốn xóa người dùng ${name}`,
 
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Có",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios
+        .delete(`admin/users/${id}`)
+        .then(function (response) {
+          Swal.fire({
+            title: `Xóa thành công người dùng ${name}!`,
+            // text: "Your file has been deleted.",
+            icon: "success",
+          }).then((result) => {
+            window.location.reload();
+          });
+        })
+        .catch(function (error) {
+          Swal.fire({
+            title: `Xóa không thành công người dùng ${name}!`,
+            // text: "Your file has been deleted.",
+            icon: "error",
+          });
+        });
+    }
+  });
+};
 // Kích hoạt lấy dữ liệu người dùng
 getUsers();
 </script>
