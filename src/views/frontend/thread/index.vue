@@ -91,7 +91,8 @@
     <a-pagination
       style="margin: 12px; text-align: center"
       v-model:current="current1"
-      :total="13"
+      @change="onChange"
+      :total="total"
     />
     <a-form
       :model="formState"
@@ -136,7 +137,7 @@ const parts = params.split(".");
 const result = parts[1];
 const myTextEditor = ref(null);
 const Pagination = ref([]);
-
+const total = ref(0);
 const quillContent = ref(""); // Sử dụng ref để tạo reactive variable cho v-model
 const formState = reactive({
   thread_id: result,
@@ -192,15 +193,15 @@ const onFinish = async () => {
       });
     });
 };
-
-const getPost = async (id) => {
+const onChange = (page) => {
+  getPost(result, page);
+};
+const getPost = async (id, page) => {
   await axios
-    .get(`thread/${id}/posts`)
+    .get(`thread/${id}/posts?page=${page}`)
     .then((response) => {
       post.value = response.data.data;
-      Pagination.value = response.data;
-
-      console.log(Pagination.value);
+      total.value = response.data.meta.last_page * 10;
     })
     .catch((error) => {
       console.log(error);
@@ -226,7 +227,7 @@ watch(
 );
 onMounted(() => {
   getNameForum(result);
-  getPost(result);
+  getPost(result, 1);
   // getImg();
 });
 </script>

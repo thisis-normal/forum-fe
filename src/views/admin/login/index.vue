@@ -110,8 +110,8 @@ const callApi = async () => {
     console.log(response.data);
 
     if (status === 200) {
-      router.push("/admin");
       sessionStorage.setItem("token", response.data.token);
+      router.push("/admin");
       const Toast = Swal.mixin({
         toast: true,
         position: "top-end",

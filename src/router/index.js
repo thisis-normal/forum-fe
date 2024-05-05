@@ -7,4 +7,12 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 });
+router.beforeEach((to, from, next) => {
+  if (to.path.startsWith('/admin') && !sessionStorage.getItem('hasVisitedAdmin')) {
+    sessionStorage.setItem('hasVisitedAdmin', 'true');
+    next('admin/login');
+  } else {
+    next();
+  }
+});
 export default router;
