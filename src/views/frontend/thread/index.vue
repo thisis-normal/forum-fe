@@ -43,9 +43,7 @@
           {{ nameForum.user_full_name }}
         </div>
       </div>
-      <div>
-        {{ nameForum.content }}
-      </div>
+      <div v-html="nameForum.content"></div>
       <div class="reply" style="position: absolute; bottom: 12px; right: 12px">
         <a href="#TextEditor"><SendOutlined /> Trả lời </a>
       </div>
@@ -78,9 +76,7 @@
               </div>
             </div>
           </div>
-          <div>
-            {{ item.content }}
-          </div>
+          <div v-html="item.content"></div>
           <div
             class="reply"
             style="position: absolute; bottom: 12px; right: 12px"
@@ -90,28 +86,41 @@
         </div>
       </div>
     </a-list-item>
-    <div style="margin: 12px 0">
-      <TextEditor
-        id="TextEditor"
-        style="height: 150px; background-color: #ffffff"
-        v-model:content="quillContent"
-        @input="handleInput"
-        ref="myTextEditor"
-      />
-      <a-button style="margin: 12px 0" size="large" type="primary"
-        >Đăng câu trả lời <SendOutlined
-      /></a-button>
-    </div>
+    <a-form
+      :model="formState"
+      name="normal_post"
+      class="post-form"
+      @finish="onFinish"
+    >
+      <div style="margin: 12px 0">
+        <TextEditor
+          id="TextEditor"
+          style="height: 150px; background-color: #ffffff"
+          v-model:content="quillContent"
+          @input="handleInput"
+          ref="myTextEditor"
+        />
+        <a-button
+          style="margin: 12px 0"
+          size="large"
+          type="primary"
+          html-type="submit"
+          >Đăng câu trả lời <SendOutlined
+        /></a-button>
+      </div>
+    </a-form>
   </a-list>
 </template>
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import TextEditor from "../../../components/frontend/TextEditor.vue";
+import Swal from "sweetalert2";
 
 import axios from "axios";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, reactive } from "vue";
 import { useMenuFront } from "../../../store/useMenuFront.js";
+
 const route = useRoute();
 
 const router = useRouter();
@@ -121,7 +130,10 @@ const result = parts[1];
 const myTextEditor = ref(null);
 
 const quillContent = ref(""); // Sử dụng ref để tạo reactive variable cho v-model
-
+const formState = reactive({
+  thread_id: result,
+  content: "",
+});
 const nameForum = ref([]);
 useMenuFront().onSelectedKeys(sessionStorage.getItem("idCategory"));
 watch(route, () => {
@@ -155,28 +167,46 @@ const getNameForum = async (id) => {
       console.log(error);
     });
 };
+const onFinish = async () => {
+  await axios
+    .post(`post`, {
+      thread_id: formState.thread_id,
+      content: formState.content,
+    })
+    .then((response) => {
+      window.location.reload();
+    })
+    .catch((error) => {
+      Swal.fire({
+        title: error.response.data.message + "!",
+        //   text: response.data.message + "!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    });
+};
+
 const getPost = async (id) => {
   await axios
     .get(`thread/${id}/posts`)
     .then((response) => {
       post.value = response.data.data;
-
       console.log(post);
     })
     .catch((error) => {
       console.log(error);
     });
 };
-const getImg = () => {
-  axios
-    .get("view-image")
-    .then((response) => {
-      // Xử lý dữ liệu từ API nếu cần
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+// const getImg = () => {
+//   axios
+//     .get("view-image")
+//     .then((response) => {
+//       // Xử lý dữ liệu từ API nếu cần
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// };
 
 const ForumId = result;
 watch(
@@ -188,6 +218,6 @@ watch(
 onMounted(() => {
   getNameForum(result);
   getPost(result);
-  getImg();
+  // getImg();
 });
 </script>
