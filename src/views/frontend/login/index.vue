@@ -149,6 +149,8 @@ const onFinish = () => {
       console.log(response.data);
       if (status === 200) {
         sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("user_id", response.data.user.id);
+
         router.push("/");
         const Toast = Swal.mixin({
           toast: true,

@@ -63,6 +63,7 @@ const onFinish = (values) => {
       name: formState.forumGroups.name,
       description: formState.forumGroups.description,
       slug: formState.forumGroups.slug,
+      user_id: sessionStorage.getItem("user_id"),
     })
     .then(function (response) {
       Swal.fire({

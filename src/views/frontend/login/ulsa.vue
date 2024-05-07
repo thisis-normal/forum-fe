@@ -20,9 +20,7 @@
       "
       class="row"
     >
-      <div
-        class="col-6 d-flex flex-column justify-content-center align-items-center"
-      >
+      <div class="col-6 d-flex flex-column justify-content-center align-items-center">
         <h1>Đăng nhập với ULSA</h1>
         <a-form
           :model="formState"
@@ -52,9 +50,7 @@
           <a-form-item
             class="m-0 mb-2"
             name="password"
-            :rules="[
-              { required: true, message: 'vui lòng nhập mật khẩu của bạn!' },
-            ]"
+            :rules="[{ required: true, message: 'vui lòng nhập mật khẩu của bạn!' }]"
           >
             <label for="">Mật khẩu</label>
             <a-input-password v-model:value="formState.password" size="large">
@@ -65,9 +61,7 @@
           </a-form-item>
           <div class="d-flex" style="justify-content: space-between">
             <div>
-              <a-checkbox v-model:checked="formState.remember"
-                >Ghi nhớ tôi</a-checkbox
-              >
+              <a-checkbox v-model:checked="formState.remember">Ghi nhớ tôi</a-checkbox>
             </div>
           </div>
 
@@ -103,9 +97,7 @@
         </a-form>
       </div>
       <div class="col-6" style="display: flex; align-items: center">
-        <div
-          style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"
-        ></div>
+        <div style="border-left: 2px solid rgba(0, 0, 0, 0.3); height: 90%"></div>
       </div>
     </div>
   </div>
@@ -133,6 +125,8 @@ const onFinish = () => {
       if (response.status === 200) {
         router.push("/");
         sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("user_id", response.data.user.id);
+
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
